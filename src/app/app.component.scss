@@ -1,7 +1,8 @@
 /* src/app/app.component.scss */
 
 // Importa le variabili globali dal tuo file _variables.scss
-@use '../styles/variables' as vars; // <-- Percorso corretto (risale da app/ a src/, poi scende in styles/)
+@use '../styles/variables' as vars;
+@use '../styles/mixins' as mixins; // Assicurati che sia importato se usato
 
 /*
  * Struttura Flexbox per il layout principale.
@@ -15,17 +16,18 @@
 
 /*
  * Contenuto principale
+ * Lo sfondo è ora gestito globalmente dal body in src/styles.scss
  */
 .main-content {
-  // Percorso immagine: Assicurati che 'sfondo.jpeg' sia in src/assets/sfondo/
-  background-image: url('../assets/sfondo/sfondo.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  // RIMOSSE LE SEGUENTI RIGHE PER L'IMMAGINE DI SFONDO
+  // background-image: url('../assets/sfondo/sfondo.jpeg');
+  // background-size: cover;
+  // background-position: center;
+  // background-repeat: no-repeat;
   min-height: calc(100vh - 64px); /* 64px è l’altezza tipica della mat-toolbar */
-  padding: vars.$spacing-xl; // Usa la tua variabile per il padding
-  // Assicurati che il contenuto abbia un colore di base per il testo
-  color: vars.$color-text-dark; // Usa la tua variabile per il testo scuro
+  // Il padding e il colore del testo sono ora gestiti in src/styles.scss per .main-content
+  // padding: vars.$spacing-xl; // Rimosso se già in src/styles.scss
+  // color: vars.$color-text-dark; // Rimosso se già in src/styles.scss
   flex-grow: 1; // Permette al main-content di espandersi e spingere il footer in basso
 }
 
