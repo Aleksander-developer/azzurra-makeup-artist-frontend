@@ -1,0 +1,92 @@
+/* src/app/shared/components/footer/footer.component.scss */
+
+@use '../../../../styles/variables' as vars;
+@use '../../../../styles/mixins' as mixins;
+
+/* --- Layout Principale del Footer --- */
+.footer-container {
+  background: vars.$color-text-dark; // Usa la tua variabile per il colore scuro
+  color: vars.$color-white;
+  font-family: vars.$font-family-primary; // Usa il tuo font primario
+  padding: vars.$spacing-lg vars.$spacing-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-lg; // Usa variabile per il gap (1.5rem = $spacing-lg)
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(vars.$color-accent, 0.2); // Usa la tua variabile accent
+}
+
+/* --- Sezione Icone Social --- */
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md; // Usa variabile per il gap (0.75rem = $spacing-md)
+
+  a {
+    color: vars.$color-white; // Usa il tuo bianco per le icone non hover
+    font-size: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform vars.$transition-speed-normal ease, color vars.$transition-speed-normal ease, text-shadow vars.$transition-speed-normal ease;
+
+    i, mat-icon {
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+
+    &:hover {
+      color: vars.$color-vibrant-fuchsia; // Usa il tuo fucsia acceso
+      transform: translateY(-4px);
+      text-shadow: 0 0 12px rgba(vars.$color-vibrant-fuchsia, 0.7); // Usa il tuo fucsia
+    }
+  }
+}
+
+/* --- Separatore Decorativo --- */
+.footer-separator {
+  height: 1px;
+  width: 80%;
+  max-width: 500px;
+  background: linear-gradient(to right, transparent, rgba(vars.$color-accent, 0.4), transparent); // Usa la tua variabile accent
+}
+
+/* --- Barra Inferiore (Copyright & Developer Credit) --- */
+.footer-bottom-bar {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center; /* Centra il contenuto orizzontalmente */
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: vars.$font-size-base * 0.8; // 0.8rem
+  color: vars.$color-text-light; // Usa la tua variabile per il testo chiaro
+  gap: vars.$spacing-xs; /* Spazio tra copyright e developer credit */
+}
+
+.footer-copyright {
+  padding: vars.$spacing-xs; // 0.5rem
+  text-align: center; /* Centra il testo */
+}
+
+.developer-credit {
+  white-space: nowrap; /* Evita che il testo si spezzi */
+  a {
+    color: vars.$color-accent; /* Colore del link per il developer */
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* --- Media Query per Responsività --- */
+@media (max-width: vars.$breakpoint-md) {
+  .footer-bottom-bar {
+    flex-direction: column;
+    gap: vars.$spacing-md; // 1rem
+  }
+}

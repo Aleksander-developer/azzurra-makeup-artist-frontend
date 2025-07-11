@@ -1,0 +1,236 @@
+/* src/app/pages/servizi/servizi.component.scss */
+
+@use '../../../styles/variables' as vars;
+@use '../../../styles/mixins' as mixins;
+
+.servizi-container {
+  padding: vars.$spacing-xl vars.$spacing-lg;
+  max-width: 1200px;
+  margin: vars.$spacing-xxl auto; /* Margine superiore per distacco dalla navbar */
+  background-color: rgba(vars.$color-background-light, 0.95); /* Sfondo leggermente opaco */
+  border-radius: vars.$border-radius-lg;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: vars.$color-text-dark;
+  font-family: vars.$font-family-primary;
+  text-align: center;
+}
+
+.page-title {
+  font-family: vars.$font-family-secondary;
+  font-size: 3rem;
+  color: vars.$color-vibrant-fuchsia;
+  margin-bottom: vars.$spacing-md;
+  text-shadow: 0 0 10px rgba(vars.$color-vibrant-fuchsia, 0.4);
+}
+
+.page-subtitle {
+  font-size: 1.2rem;
+  color: vars.$color-text-light;
+  margin-bottom: vars.$spacing-xxl;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Sezione Trucco Sposa (In Evidenza) --- */
+.service-highlight-card {
+  display: flex;
+  flex-direction: row; /* Desktop: contenuto a sinistra, immagine a destra */
+  align-items: center;
+  gap: vars.$spacing-xl;
+  background: linear-gradient(135deg, vars.$color-light-pink-bg 0%, lighten(vars.$color-light-pink-bg, 5%) 100%);
+  border: 1px solid rgba(vars.$color-vibrant-fuchsia, 0.3);
+  border-radius: vars.$border-radius-xl;
+  padding: vars.$spacing-xl;
+  margin-bottom: vars.$spacing-xxl;
+  box-shadow: 0 8px 25px rgba(vars.$color-vibrant-fuchsia, 0.2);
+  text-align: left;
+
+  .highlight-content {
+    flex: 1;
+    padding-right: vars.$spacing-lg;
+  }
+
+  .highlight-title {
+    font-family: vars.$font-family-secondary;
+    font-size: 2.5rem;
+    color: vars.$color-vibrant-fuchsia;
+    margin-bottom: vars.$spacing-md;
+    text-shadow: 0 0 8px rgba(vars.$color-vibrant-fuchsia, 0.3);
+  }
+
+  .highlight-description {
+    font-size: 1.1rem;
+    line-height: vars.$line-height-base;
+    color: vars.$color-text-dark;
+    margin-bottom: vars.$spacing-lg;
+  }
+
+  .highlight-image-container {
+    flex-shrink: 0;
+    width: 40%;
+    max-width: 400px;
+    border-radius: vars.$border-radius-lg;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .highlight-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  button {
+    font-size: 1.1rem;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    border-radius: vars.$border-radius-md;
+    transition: all vars.$transition-speed-normal vars.$transition-ease;
+    mat-icon {
+      margin-left: vars.$spacing-xs;
+    }
+  }
+}
+
+/* --- Sezioni Altri Servizi --- */
+.other-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: vars.$spacing-xl;
+  margin-top: vars.$spacing-xxl;
+}
+
+.service-card {
+  background-color: vars.$color-white;
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$border-radius-md;
+  transition: transform vars.$transition-speed-normal vars.$transition-ease, box-shadow vars.$transition-speed-normal vars.$transition-ease;
+  text-align: left;
+  padding-bottom: vars.$spacing-md; /* Per dare spazio alle azioni */
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(vars.$color-vibrant-fuchsia, 0.15);
+  }
+
+  mat-card-header {
+    padding: vars.$spacing-md;
+    mat-card-title {
+      font-family: vars.$font-family-secondary;
+      font-size: 1.6rem;
+      color: vars.$color-dark-purple-text;
+      margin-bottom: vars.$spacing-xxs;
+    }
+    mat-card-subtitle {
+      font-size: 0.9rem;
+      color: vars.$color-text-light;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 200px; /* Altezza fissa per le immagini delle card */
+    object-fit: cover;
+    border-radius: vars.$border-radius-md vars.$border-radius-md 0 0;
+  }
+
+  mat-card-content {
+    padding: vars.$spacing-md;
+    p {
+      font-size: 1rem;
+      line-height: vars.$line-height-base;
+      color: vars.$color-text-dark;
+      margin-bottom: 0; /* Rimuovi margine inferiore predefinito */
+    }
+  }
+
+  mat-card-actions {
+    padding: vars.$spacing-md;
+    display: flex;
+    justify-content: flex-end; /* Allinea il bottone a destra */
+    button {
+      font-size: 0.9rem;
+      padding: vars.$spacing-xs vars.$spacing-sm;
+      border-radius: vars.$border-radius-sm;
+      mat-icon {
+        font-size: 18px;
+        margin-left: vars.$spacing-xxs;
+      }
+    }
+  }
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: vars.$breakpoint-lg) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+  .highlight-title {
+    font-size: 2rem;
+  }
+  .highlight-description {
+    font-size: 1rem;
+  }
+  .service-highlight-card {
+    flex-direction: column; /* Stack colonne su schermi medi */
+    .highlight-content {
+      padding-right: 0;
+      text-align: center;
+    }
+    .highlight-image-container {
+      width: 80%; /* Immagine più grande in modalità colonna */
+      max-width: 500px;
+      margin-top: vars.$spacing-lg;
+    }
+  }
+}
+
+@media (max-width: vars.$breakpoint-md) {
+  .servizi-container {
+    padding: vars.$spacing-lg vars.$spacing-md;
+    margin-top: vars.$spacing-xl;
+  }
+  .page-title {
+    font-size: 2rem;
+  }
+  .page-subtitle {
+    font-size: 1rem;
+    margin-bottom: vars.$spacing-xl;
+  }
+  .service-highlight-card {
+    padding: vars.$spacing-lg;
+    gap: vars.$spacing-lg;
+    .highlight-title {
+      font-size: 1.8rem;
+    }
+    .highlight-description {
+      font-size: 0.95rem;
+    }
+    .highlight-image-container {
+      width: 95%;
+    }
+  }
+  .other-services-grid {
+    grid-template-columns: 1fr; /* Una colonna su mobile */
+    gap: vars.$spacing-lg;
+  }
+}
+
+@media (max-width: vars.$breakpoint-sm) {
+  .page-title {
+    font-size: 1.8rem;
+  }
+  .highlight-title {
+    font-size: 1.5rem;
+  }
+  .service-highlight-card button {
+    font-size: 0.9rem;
+    padding: vars.$spacing-xs vars.$spacing-sm;
+  }
+  .service-card mat-card-title {
+    font-size: 1.4rem;
+  }
+  .service-card p {
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,84 @@
+<!-- src/app/pages/contatti/contatti.component.html -->
+
+<section class="contatti-container mat-elevation-z4">
+  <h1 class="page-title">
+    <mat-icon class="title-icon">brush</mat-icon> Contattami per la Tua Bellezza
+  </h1>
+  <p class="page-subtitle">
+    Sono qui per rispondere a ogni tua domanda e aiutarti a realizzare il look perfetto. Compila il modulo o contattami direttamente!
+  </p>
+
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input matInput placeholder="Il tuo nome" formControlName="nome" />
+      <mat-error *ngIf="contactForm.get('nome')?.invalid && contactForm.get('nome')?.touched">
+        Inserisci un nome valido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" placeholder="email@example.com" formControlName="email" />
+      <mat-error *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+        Email non valida
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cellulare (opzionale)</mat-label>
+      <input matInput type="tel" placeholder="+39 345 1234567" formControlName="cellulare" />
+      <mat-error *ngIf="contactForm.get('cellulare')?.invalid && contactForm.get('cellulare')?.touched">
+        Inserisci un numero di cellulare valido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Messaggio</mat-label>
+      <textarea matInput rows="6" placeholder="Scrivi qui il tuo messaggio" formControlName="messaggio"></textarea>
+      <mat-error *ngIf="contactForm.get('messaggio')?.invalid && contactForm.get('messaggio')?.touched">
+        Messaggio troppo breve
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Messaggio di successo -->
+    <div *ngIf="successMessage" class="success-message">
+      <mat-icon>check_circle_outline</mat-icon> {{ successMessage }}
+    </div>
+
+    <!-- Messaggio di errore (se presente) -->
+    <div *ngIf="errorMessage" class="error-message-ui">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid || isLoading">
+      <div *ngIf="isLoading" class="button-loading-content">
+        <mat-spinner diameter="20"></mat-spinner>
+        <span>Invio in corso...</span>
+      </div>
+      <ng-container *ngIf="!isLoading">
+        Invia Messaggio
+      </ng-container>
+    </button>
+  </form>
+
+  <!-- Sezione Info Dirette -->
+  <div class="direct-contact-info">
+    <h2>Oppure Contattami Direttamente:</h2>
+    <div class="contact-methods">
+      <a href="tel:+391234567890" class="contact-method-item mat-elevation-z2">
+        <mat-icon>phone</mat-icon>
+        <span>+39 346 960 4243</span>
+      </a>
+      <a href="mailto:azzurra@email.com" class="contact-method-item mat-elevation-z2">
+        <mat-icon>email</mat-icon>
+        <span>azzurraangius95&#64;email.com</span> <!-- CORRETTO QUI -->
+      </a>
+      <a href="https://wa.me/393469604243" target="_blank" class="contact-method-item mat-elevation-z2">
+        <i class="fab fa-whatsapp"></i>
+        <span>WhatsApp Chat</span>
+      </a>
+    </div>
+  </div>
+
+</section>

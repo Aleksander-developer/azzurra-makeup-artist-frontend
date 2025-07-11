@@ -1,0 +1,56 @@
+<!-- src/app/pages/servizi/servizi.component.html -->
+
+<section class="servizi-container">
+  <h1 class="page-title">I Miei Servizi di Bellezza</h1>
+  <p class="page-subtitle">Offro un'ampia gamma di servizi di make-up e hairstyling, pensati per ogni tua esigenza speciale.</p>
+
+  <!-- Sezione Trucco Sposa (in evidenza) -->
+  <div class="service-highlight-card mat-elevation-z6">
+    <div class="highlight-content">
+      <h2 class="highlight-title">✨ Trucco Sposa: Il Tuo Giorno, La Tua Bellezza Perfetta</h2>
+      <p class="highlight-description">
+        Il giorno del tuo matrimonio è unico e merita un look indimenticabile. Offro un servizio di trucco sposa personalizzato, studiato per esaltare la tua bellezza naturale e garantirti una tenuta impeccabile per tutta la giornata. Dalla consulenza iniziale alla prova trucco, sarò al tuo fianco per realizzare il make-up dei tuoi sogni, che si adatti perfettamente al tuo abito, al tema del matrimonio e alla tua personalità.
+      </p>
+      <button mat-raised-button color="accent" routerLink="/trucco-sposa" aria-label="Scopri di più sul Trucco Sposa">
+        Scopri il Servizio Trucco Sposa
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+    <div class="highlight-image-container">
+      <img src="https://placehold.co/600x400/FFC0CB/FFFFFF?text=Trucco+Sposa" alt="Trucco Sposa" class="highlight-image">
+    </div>
+  </div>
+
+  <!-- Sezioni Altri Servizi -->
+  <div class="other-services-grid">
+    <!-- Card Servizio Cerimonia -->
+    <mat-card class="service-card mat-elevation-z3">
+      <mat-card-header>
+        <mat-card-title>🌸 Trucco Cerimonia</mat-card-title>
+        <mat-card-subtitle>Eleganza per ogni occasione speciale</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://placehold.co/400x250/E6E6FA/333333?text=Trucco+Cerimonia" alt="Trucco Cerimonia">
+      <mat-card-content>
+        <p>Che tu sia invitata a un matrimonio, una laurea o un evento importante, realizzo un make-up sofisticato che ti farà sentire a tuo agio e radiosa.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" routerLink="/contatti" aria-label="Richiedi informazioni sul Trucco Cerimonia">Richiedi Info</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Card Servizio Eventi -->
+    <mat-card class="service-card mat-elevation-z3">
+      <mat-card-header>
+        <mat-card-title>🎉 Trucco Eventi & Servizi Fotografici</mat-card-title>
+        <mat-card-subtitle>Per essere impeccabile sotto i riflettori</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://placehold.co/400x250/FFB6C1/333333?text=Trucco+Eventi" alt="Trucco Eventi">
+      <mat-card-content>
+        <p>Dal make-up per eventi serali, feste a tema, fino ai servizi fotografici e video, creo look d'impatto e duraturi, perfetti per ogni tipo di illuminazione.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" routerLink="/contatti" aria-label="Richiedi informazioni sul Trucco Eventi">Richiedi Info</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>

@@ -1,0 +1,45 @@
+<!-- src/app/shared/components/navbar/navbar.component.html -->
+<mat-toolbar color="primary" class="toolbar-custom">
+
+  <!-- Sezione sinistra (solo desktop) -->
+  <div class="nav-links-container desktop-links">
+    <a mat-button routerLink="/home" aria-label="Vai alla Home Page">Home</a>
+    <a mat-button routerLink="/trucco-sposa" aria-label="Scopri i servizi di Trucco Sposa">Trucco Sposa</a>
+    <a mat-button routerLink="/portfolio" aria-label="Esplora il mio Portfolio">Portfolio</a>
+    <a mat-button *ngIf="isLoggedIn" routerLink="/admin/portfolio-manager" aria-label="Gestisci Portfolio (Area Admin)">Gestione Portfolio</a>
+  </div>
+
+  <!-- Logo centrale -->
+  <a routerLink="/home" class="brand-link" aria-label="Torna alla Home Page - Azzurra Angius">
+    Azzurra Angius
+  </a>
+
+  <!-- Sezione destra (solo desktop) -->
+  <div class="nav-links-container desktop-links">
+    <a mat-button routerLink="/servizi" aria-label="Visualizza tutti i Servizi">Servizi</a>
+    <a mat-button routerLink="/contatti" aria-label="Contatta Azzurra Angius">Contatti</a>
+    <a mat-button routerLink="/chi-sono" aria-label="Scopri di più su Chi Sono">Chi sono</a>
+
+    <button *ngIf="!isLoggedIn" mat-stroked-button color="accent" routerLink="/login" aria-label="Accedi all'area riservata">Login</button>
+    <button *ngIf="isLoggedIn" mat-stroked-button color="warn" (click)="logout()" aria-label="Effettua il Logout">Logout</button>
+  </div>
+
+  <!-- Bottone menu (solo mobile) -->
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button" aria-label="Apri menu di navigazione">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+</mat-toolbar>
+
+<!-- Menu mobile -->
+<mat-menu #menu="matMenu">
+  <button mat-menu-item routerLink="/home" aria-label="Vai alla Home Page (Mobile)">Home</button>
+  <button mat-menu-item routerLink="/trucco-sposa" aria-label="Scopri i servizi di Trucco Sposa (Mobile)">Trucco Sposa</button>
+  <button mat-menu-item routerLink="/portfolio" aria-label="Esplora il mio Portfolio (Mobile)">Portfolio</button>
+  <button mat-menu-item routerLink="/servizi" aria-label="Visualizza tutti i Servizi (Mobile)">Servizi</button>
+  <button mat-menu-item routerLink="/contatti" aria-label="Contatta Azzurra Angius (Mobile)">Contatti</button>
+  <button mat-menu-item routerLink="/chi-sono" aria-label="Scopri di più su Chi Sono (Mobile)">Chi sono</button>
+  <button *ngIf="isLoggedIn" mat-menu-item routerLink="/admin/portfolio-manager" aria-label="Gestisci Portfolio (Area Admin Mobile)">Gestione Portfolio</button>
+  <button *ngIf="!isLoggedIn" mat-menu-item routerLink="/login" aria-label="Accedi (Mobile)">Login</button>
+  <button *ngIf="isLoggedIn" mat-menu-item (click)="logout()" aria-label="Esci (Mobile)">Logout</button>
+</mat-menu>

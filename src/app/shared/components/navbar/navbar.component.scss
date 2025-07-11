@@ -1,0 +1,93 @@
+/* src/app/shared/components/navbar/navbar.component.scss */
+
+// Importa le variabili globali dal tuo file _variables.scss usando @use
+@use '../../../../styles/variables' as vars; // <-- CAMBIATO A @use
+@use '../../../../styles/mixins' as mixins;   // <-- CAMBIATO A @use
+
+// Variabili specifiche della navbar (se non sono globali)
+// Mappiamo i colori del tuo progetto funzionante alle tue variabili esistenti
+$darkest-bg: vars.$color-vibrant-fuchsia; // Usa il tuo fucsia acceso
+$brand-link-color: vars.$color-white;     // Usa il tuo bianco
+
+.toolbar-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $darkest-bg !important; // Usa la variabile locale (che è il tuo fucsia)
+  padding: 0 vars.$spacing-md; // Usa variabile globale per il padding
+  font-family: vars.$font-family-primary; // Usa la tua variabile globale per il font primario
+  height: 64px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.brand-link {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: $brand-link-color; // Usa la variabile locale (che è il tuo bianco)
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: lighten($brand-link-color, 10%); // Usa la variabile locale
+  }
+}
+
+.nav-links-container {
+  display: flex;
+  gap: vars.$spacing-md; // Usa variabile globale per la spaziatura
+}
+
+.desktop-links a {
+  color: vars.$color-white; // Usa vars.$color-white
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    color: vars.$color-accent; // Usa vars.$color-accent (il tuo fucsia)
+    transform: translateY(-2px);
+  }
+}
+
+.menu-button {
+  display: none;
+  color: vars.$color-white; // Usa vars.$color-white
+}
+
+// Media query per dispositivi mobili
+@media (max-width: vars.$breakpoint-md) { // Usa variabile globale per il breakpoint
+  .desktop-links {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .brand-link {
+    font-size: 1.2rem;
+  }
+}
+
+// Stili per il menu di Angular Material (mat-menu)
+.mat-menu-panel {
+  background-color: vars.$color-white; // Sfondo bianco per il menu
+  border: 1px solid rgba(vars.$color-accent, 0.2); // Usa vars.$color-accent
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.mat-menu-item {
+  color: vars.$color-text-dark; // Usa vars.$color-text-dark
+  font-family: vars.$font-family-primary; // Usa la tua variabile globale per il font primario
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(vars.$color-vibrant-fuchsia, 0.1); // Sfondo fucsia leggero al hover
+    color: vars.$color-vibrant-fuchsia; // Testo fucsia al hover
+  }
+}

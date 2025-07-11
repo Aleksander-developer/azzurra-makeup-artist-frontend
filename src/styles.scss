@@ -1,1 +1,67 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+
+// Aggiungi box-sizing globalmente per un comportamento CSS prevedibile
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+// Importa le variabili e i mixin globali
+@import 'styles/variables';
+@import 'styles/mixins';
+
+/* Stili globali per il body e elementi base */
+body {
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $color-text-dark;
+  background-image: url('assets/sfondo/sfondo.jpeg'); // Percorso corretto per l'immagine di sfondo
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; // Per far sì che l'immagine rimanga fissa durante lo scroll
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-secondary;
+  color: $color-text-dark;
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+}
+
+a {
+  color: $color-accent;
+  text-decoration: none;
+  transition: color $transition-speed-normal $transition-ease;
+  &:hover {
+    color: darken($color-accent, 10%);
+  }
+}
+
+/* Stili per il contenitore principale dell'app (app-container in app.component.html) */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Stili per il contenitore del contenuto principale (main-content in app.component.html) */
+.main-content {
+  flex: 1; /* Permette al main-content di espandersi e spingere il footer in basso */
+  padding: $spacing-xl; /* Padding uniforme su tutti i lati */
+  max-width: 1200px; /* Larghezza massima del contenuto */
+  margin: $spacing-md auto; /* Margine superiore/inferiore, centrato orizzontalmente */
+  width: calc(100% - ($spacing-xl * 2)); /* La larghezza si adatta allo spazio disponibile, tenendo conto del padding */
+  background-color: rgba($color-background-light, 0.9); /* Sfondo leggermente opaco per il contenuto */
+  border-radius: $border-radius-lg;
+  box-shadow: $color-shadow-light;
+}
+
+/* Stili per le icone Material (se non gestiti altrove) */
+mat-icon {
+  vertical-align: middle;
+}

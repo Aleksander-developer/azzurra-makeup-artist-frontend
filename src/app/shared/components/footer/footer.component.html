@@ -1,0 +1,38 @@
+<!-- src/app/shared/components/footer/footer.component.html -->
+<footer class="footer-container">
+  <div class="footer-socials">
+    <!-- <a [href]="githubUrl" target="_blank" aria-label="GitHub Profile" mat-icon-button>
+      <i class="fab fa-github"></i>
+    </a> -->
+    <a [href]="'mailto:' + emailAddress" aria-label="Send Email" mat-icon-button>
+      <mat-icon>email</mat-icon>
+    </a>
+    <a [href]="linkedinUrl" target="_blank" aria-label="LinkedIn Profile" mat-icon-button>
+      <i class="fab fa-linkedin"></i>
+    </a>
+    <a [href]="instagramUrl" target="_blank" aria-label="Instagram Profile" mat-icon-button>
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a [href]="facebookUrl" target="_blank" aria-label="Facebook Profile" mat-icon-button>
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a [href]="whatsappLink" target="_blank" aria-label="WhatsApp Chat" mat-icon-button>
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a [href]="'tel:' + phoneNumber" aria-label="Call Phone" mat-icon-button>
+      <mat-icon>phone</mat-icon>
+    </a>
+  </div>
+
+  <div class="footer-separator"></div>
+
+  <div class="footer-bottom-bar">
+    <div class="footer-copyright">
+      <span>&copy; {{ currentYear }} Azzurra Angius.</span>
+      <!-- Nuovo link "Realizzato da" -->
+      <span class="developer-credit">
+        Realizzato da <a [href]="developerWebsiteUrl" target="_blank" rel="noopener noreferrer">Aleksander Nikolli</a>
+      </span>
+    </div>
+  </div>
+</footer>
