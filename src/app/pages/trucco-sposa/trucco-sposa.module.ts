@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { TruccoSposaRoutingModule } from './trucco-sposa-routing.module';
 import { TruccoSposaComponent } from './trucco-sposa.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +14,10 @@ import { TruccoSposaComponent } from './trucco-sposa.component';
   ],
   imports: [
     CommonModule,
-    TruccoSposaRoutingModule
+    TruccoSposaRoutingModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class TruccoSposaModule { }
