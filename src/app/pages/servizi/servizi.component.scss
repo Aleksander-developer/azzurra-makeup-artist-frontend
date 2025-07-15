@@ -4,10 +4,10 @@
 @use '../../../styles/mixins' as mixins;
 
 .servizi-container {
-  padding: vars.$spacing-xl vars.$spacing-lg;
-  max-width: 1200px;
-  margin: vars.$spacing-xxl auto; /* Margine superiore per distacco dalla navbar */
-  background-color: rgba(vars.$color-background-light, 0.95); /* Sfondo leggermente opaco */
+  padding: vars.$spacing-lg vars.$spacing-md; /* Ridotto: da xl/lg a lg/md */
+  max-width: 1300px; /* Aumentato: da 1200px a 1300px */
+  margin: vars.$spacing-xl auto; /* Ridotto: da xxl a xl */
+  background-color: rgba(vars.$color-background-light, 0.95);
   border-radius: vars.$border-radius-lg;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: vars.$color-text-dark;
@@ -35,13 +35,13 @@
 /* --- Sezione Trucco Sposa (In Evidenza) --- */
 .service-highlight-card {
   display: flex;
-  flex-direction: row; /* Desktop: contenuto a sinistra, immagine a destra */
+  flex-direction: row;
   align-items: center;
-  gap: vars.$spacing-xl;
+  gap: vars.$spacing-lg; /* Ridotto: da xl a lg */
   background: linear-gradient(135deg, vars.$color-light-pink-bg 0%, lighten(vars.$color-light-pink-bg, 5%) 100%);
   border: 1px solid rgba(vars.$color-vibrant-fuchsia, 0.3);
   border-radius: vars.$border-radius-xl;
-  padding: vars.$spacing-xl;
+  padding: vars.$spacing-lg; /* Ridotto: da xl a lg */
   margin-bottom: vars.$spacing-xxl;
   box-shadow: 0 8px 25px rgba(vars.$color-vibrant-fuchsia, 0.2);
   text-align: left;
@@ -96,7 +96,7 @@
 .other-services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: vars.$spacing-xl;
+  gap: vars.$spacing-lg; /* Ridotto: da xl a lg */
   margin-top: vars.$spacing-xxl;
 }
 
@@ -106,7 +106,7 @@
   border-radius: vars.$border-radius-md;
   transition: transform vars.$transition-speed-normal vars.$transition-ease, box-shadow vars.$transition-speed-normal vars.$transition-ease;
   text-align: left;
-  padding-bottom: vars.$spacing-md; /* Per dare spazio alle azioni */
+  padding-bottom: vars.$spacing-sm; /* Ridotto: da md a sm */
 
   &:hover {
     transform: translateY(-5px);
@@ -114,7 +114,7 @@
   }
 
   mat-card-header {
-    padding: vars.$spacing-md;
+    padding: vars.$spacing-sm; /* Ridotto: da md a sm */
     mat-card-title {
       font-family: vars.$font-family-secondary;
       font-size: 1.6rem;
@@ -129,25 +129,25 @@
 
   img {
     width: 100%;
-    height: 200px; /* Altezza fissa per le immagini delle card */
+    height: 200px;
     object-fit: cover;
     border-radius: vars.$border-radius-md vars.$border-radius-md 0 0;
   }
 
   mat-card-content {
-    padding: vars.$spacing-md;
+    padding: vars.$spacing-sm; /* Ridotto: da md a sm */
     p {
       font-size: 1rem;
       line-height: vars.$line-height-base;
       color: vars.$color-text-dark;
-      margin-bottom: 0; /* Rimuovi margine inferiore predefinito */
+      margin-bottom: 0;
     }
   }
 
   mat-card-actions {
-    padding: vars.$spacing-md;
+    padding: vars.$spacing-sm; /* Ridotto: da md a sm */
     display: flex;
-    justify-content: flex-end; /* Allinea il bottone a destra */
+    justify-content: flex-end;
     button {
       font-size: 0.9rem;
       padding: vars.$spacing-xs vars.$spacing-sm;
@@ -172,19 +172,18 @@
     font-size: 1rem;
   }
   .service-highlight-card {
-    flex-direction: column; /* Stack colonne su schermi medi */
+    flex-direction: column;
     .highlight-content {
       padding-right: 0;
       text-align: center;
     }
     .highlight-image-container {
-      width: 80%; /* Immagine più grande in modalità colonna */
+      width: 80%;
       max-width: 500px;
-      margin-top: vars.$spacing-lg;
+      margin-bottom: vars.$spacing-lg;
     }
   }
 }
-
 @media (max-width: vars.$breakpoint-md) {
   .servizi-container {
     padding: vars.$spacing-lg vars.$spacing-md;
@@ -206,16 +205,32 @@
     .highlight-description {
       font-size: 0.95rem;
     }
-    .highlight-image-container {
-      width: 95%;
+    button {
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
     }
   }
   .other-services-grid {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
-    gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-md;
+  }
+  .service-card {
+    img {
+      height: 180px;
+    }
+    mat-card-header {
+      mat-card-title {
+        font-size: 1.4rem;
+      }
+    }
+    mat-card-content p {
+      font-size: 0.9rem;
+    }
+    mat-card-actions button {
+      font-size: 0.8rem;
+    }
   }
 }
-
 @media (max-width: vars.$breakpoint-sm) {
   .page-title {
     font-size: 1.8rem;
@@ -223,14 +238,10 @@
   .highlight-title {
     font-size: 1.5rem;
   }
-  .service-highlight-card button {
+  .highlight-description {
     font-size: 0.9rem;
-    padding: vars.$spacing-xs vars.$spacing-sm;
   }
-  .service-card mat-card-title {
-    font-size: 1.4rem;
-  }
-  .service-card p {
-    font-size: 0.9rem;
+  .service-card mat-card-header mat-card-title {
+    font-size: 1.2rem;
   }
 }

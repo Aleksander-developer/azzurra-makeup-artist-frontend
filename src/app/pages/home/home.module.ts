@@ -1,9 +1,12 @@
+// src/app/pages/home/home.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-import { SharedModule } from '../../shared/shared/shared.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -13,7 +16,10 @@ import { SharedModule } from '../../shared/shared/shared.module';
   imports: [
     CommonModule,
     HomeRoutingModule,
-    SharedModule
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    // SharedModule // <-- RIMUOVI O COMMENTA QUESTA RIGA SE PRESENTE
   ]
 })
 export class HomeModule { }

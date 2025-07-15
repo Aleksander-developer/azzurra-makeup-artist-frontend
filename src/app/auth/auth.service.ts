@@ -1,46 +1,74 @@
 // src/app/auth/auth.service.ts
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs'; // Importa BehaviorSubject e Observable
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core'; // Importa PLATFORM_ID e Inject
+import { isPlatformBrowser } from '@angular/common'; // Importa isPlatformBrowser
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { map, delay, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root' // Rende il servizio disponibile a livello globale
+  providedIn: 'root'
 })
 export class AuthService {
-  // BehaviorSubject per tenere traccia dello stato di login.
-  // Inizia con 'false' (non loggato).
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this._isLoggedIn.asObservable();
 
-  // Observable pubblico per permettere ai componenti di sottoscriversi allo stato di login.
-  isLoggedIn$: Observable<boolean> = this._isLoggedIn.asObservable();
+  private readonly MOCK_EMAIL = 'azzurraangius95@gmail.com';
+  private readonly MOCK_PASSWORD = 'AzzuBestMakeupArtist';
 
-  constructor() {
-    // In un'applicazione reale, qui potresti controllare il localStorage
-    // per vedere se l'utente era già loggato da una sessione precedente.
-    // Esempio:
-    // const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    // this._isLoggedIn.next(loggedIn);
+  // Aggiungi un flag per controllare se siamo nel browser
+  private isBrowser: boolean;
+
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object // Inietta PLATFORM_ID
+  ) {
+    // Determina se il codice sta eseguendo nel browser
+    this.isBrowser = isPlatformBrowser(this.platformId);
+
+    // Accedi a localStorage solo se siamo nel browser
+    if (this.isBrowser) {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        this._isLoggedIn.next(true);
+      }
+    }
   }
 
-  // Metodo per simulare il login
-  login(): void {
-    // In un'applicazione reale, qui avresti la logica di autenticazione (es. chiamata API)
-    console.log('Tentativo di login...');
-    this._isLoggedIn.next(true); // Imposta lo stato di login a true
-    // localStorage.setItem('isLoggedIn', 'true'); // Salva lo stato
-    console.log('Utente loggato.');
+  login(email: string, password: string): Observable<{ token: string }> {
+    return of(null).pipe(
+      delay(1000),
+      map(() => {
+        if (email === this.MOCK_EMAIL && password === this.MOCK_PASSWORD) {
+          const mockToken = 'mock_jwt_token_12345';
+          // Accedi a localStorage solo se siamo nel browser
+          if (this.isBrowser) {
+            localStorage.setItem('auth_token', mockToken);
+          }
+          this._isLoggedIn.next(true);
+          console.log('Login successful!');
+          return { token: mockToken };
+        } else {
+          console.error('Login failed: Invalid credentials');
+          throw { code: 'auth/invalid-credential', message: 'Credenziali non valide.' };
+        }
+      }),
+      catchError(err => {
+        return throwError(() => err);
+      })
+    );
   }
 
-  // Metodo per simulare il logout
   logout(): void {
-    // In un'applicazione reale, qui avresti la logica di logout (es. invalidazione token)
-    console.log('Tentativo di logout...');
-    this._isLoggedIn.next(false); // Imposta lo stato di login a false
-    // localStorage.removeItem('isLoggedIn'); // Rimuovi lo stato
-    console.log('Utente sloggato.');
+    // Accedi a localStorage solo se siamo nel browser
+    if (this.isBrowser) {
+      localStorage.removeItem('auth_token');
+    }
+    this._isLoggedIn.next(false);
+    this.router.navigate(['/login']);
+    console.log('Logout successful!');
   }
 
-  // Metodo per ottenere lo stato attuale di login (sincrono)
-  get isLoggedIn(): boolean {
-    return this._isLoggedIn.value;
+  checkLoginStatus(): boolean {
+    return this._isLoggedIn.getValue();
   }
 }

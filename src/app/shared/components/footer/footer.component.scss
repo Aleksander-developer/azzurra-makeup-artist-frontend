@@ -5,16 +5,36 @@
 
 /* --- Layout Principale del Footer --- */
 .footer-container {
-  background: vars.$color-text-dark; // Usa la tua variabile per il colore scuro
-  color: vars.$color-white;
-  font-family: vars.$font-family-primary; // Usa il tuo font primario
+  // --- NUOVI STILI PER LO SFONDO CON IMMAGINE ---
+  background-image: url('../../../../assets/sfondo/sfondo.png'); // Percorso alla tua immagine
+  background-size: 150px auto; // Rendi l'immagine piccola (es. 150px di larghezza, altezza automatica)
+  background-repeat: repeat; // Ripeti l'immagine per coprire lo sfondo
+  background-position: center center; // Centra l'immagine iniziale
+  position: relative;
+  overflow: hidden;
+
+  // Overlay scuro per migliorare il contrasto del testo
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(vars.$color-text-dark, 0.7); // Overlay scuro (70% opacità)
+    z-index: -1; // Metti l'overlay dietro il contenuto del footer
+  }
+  // --- FINE NUOVI STILI SFONDO CON IMMAGINE ---
+
+  color: vars.$color-white; // Colore del testo chiaro per contrasto
+  font-family: vars.$font-family-primary;
   padding: vars.$spacing-lg vars.$spacing-md;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: vars.$spacing-lg; // Usa variabile per il gap (1.5rem = $spacing-lg)
+  gap: vars.$spacing-lg;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
-  border-top: 1px solid rgba(vars.$color-accent, 0.2); // Usa la tua variabile accent
+  border-top: 1px solid rgba(vars.$color-accent, 0.2);
 }
 
 /* --- Sezione Icone Social --- */
@@ -22,10 +42,10 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: vars.$spacing-md; // Usa variabile per il gap (0.75rem = $spacing-md)
+  gap: vars.$spacing-md;
 
   a {
-    color: vars.$color-white; // Usa il tuo bianco per le icone non hover
+    color: vars.$color-vibrant-fuchsia; // Rendi le icone fucsia per contrasto
     font-size: 26px;
     display: inline-flex;
     align-items: center;
@@ -36,12 +56,13 @@
       font-size: 26px;
       width: 26px;
       height: 26px;
+      text-shadow: 0 0 6px rgba(vars.$color-vibrant-fuchsia, 0.8); // AGGIUNTO: Ombra leggera per le icone
     }
 
     &:hover {
-      color: vars.$color-vibrant-fuchsia; // Usa il tuo fucsia acceso
+      color: lighten(vars.$color-vibrant-fuchsia, 15%); // Schiarisci all'hover
       transform: translateY(-4px);
-      text-shadow: 0 0 12px rgba(vars.$color-vibrant-fuchsia, 0.7); // Usa il tuo fucsia
+      text-shadow: 0 0 12px rgba(vars.$color-vibrant-fuchsia, 0.7);
     }
   }
 }
@@ -51,7 +72,7 @@
   height: 1px;
   width: 80%;
   max-width: 500px;
-  background: linear-gradient(to right, transparent, rgba(vars.$color-accent, 0.4), transparent); // Usa la tua variabile accent
+  background: linear-gradient(to right, transparent, rgba(vars.$color-accent, 0.4), transparent);
 }
 
 /* --- Barra Inferiore (Copyright & Developer Credit) --- */
@@ -59,24 +80,18 @@
   width: 100%;
   max-width: 1200px;
   display: flex;
-  justify-content: center; /* Centra il contenuto orizzontalmente */
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  font-size: vars.$font-size-base * 0.8; // 0.8rem
-  color: vars.$color-text-light; // Usa la tua variabile per il testo chiaro
-  gap: vars.$spacing-xs; /* Spazio tra copyright e developer credit */
-}
+  font-size: vars.$font-size-base * 0.8;
+  color: vars.$color-white; // Mantieni il testo bianco per leggibilità
+  gap: vars.$spacing-xs;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6); // AGGIUNTO: Ombra leggera per il testo del copyright
 
-.footer-copyright {
-  padding: vars.$spacing-xs; // 0.5rem
-  text-align: center; /* Centra il testo */
-}
-
-.developer-credit {
-  white-space: nowrap; /* Evita che il testo si spezzi */
-  a {
-    color: vars.$color-accent; /* Colore del link per il developer */
+  .developer-credit a {
+    color: vars.$color-vibrant-fuchsia; // Rendi il link developer fucsia
     font-weight: bold;
+    text-shadow: 0 0 4px rgba(vars.$color-vibrant-fuchsia, 0.6); // AGGIUNTO: Ombra leggera per il link developer
     &:hover {
       text-decoration: underline;
     }
@@ -87,6 +102,6 @@
 @media (max-width: vars.$breakpoint-md) {
   .footer-bottom-bar {
     flex-direction: column;
-    gap: vars.$spacing-md; // 1rem
+    gap: vars.$spacing-md;
   }
 }

@@ -5,165 +5,227 @@
 
 .portfolio-detail-container {
   padding: vars.$spacing-xl vars.$spacing-lg;
-  max-width: 1000px; /* Larghezza leggermente più stretta per il dettaglio */
+  max-width: 1000px;
   margin: vars.$spacing-xxl auto;
-  background-color: rgba(vars.$color-background-light, 0.98); /* Sfondo quasi opaco */
+  background-color: rgba(vars.$color-background-light, 0.95);
   border-radius: vars.$border-radius-lg;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: vars.$color-text-dark;
   font-family: vars.$font-family-primary;
   text-align: center;
 }
 
-.back-button {
-  margin-bottom: vars.$spacing-xl;
-  align-self: flex-start; /* Allinea a sinistra */
-  font-size: 1rem;
-  padding: vars.$spacing-xs vars.$spacing-md;
-  border-radius: vars.$border-radius-md;
-  mat-icon {
-    margin-right: vars.$spacing-xs;
-    font-size: 18px;
-  }
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(vars.$color-primary, 0.3);
-  }
-}
-
-.detail-title {
-  font-family: vars.$font-family-secondary;
-  font-size: 3.2rem;
-  color: vars.$color-vibrant-fuchsia;
-  margin-bottom: vars.$spacing-sm;
-  text-shadow: 0 0 10px rgba(vars.$color-vibrant-fuchsia, 0.4);
-}
-
-.detail-subtitle {
-  font-size: 1.5rem;
-  color: vars.$color-dark-purple-text; /* Viola scuro */
-  margin-bottom: vars.$spacing-md;
-}
-
-.detail-description {
-  font-size: 1.1rem;
-  line-height: vars.$line-height-base;
-  color: vars.$color-text-dark;
-  margin-bottom: vars.$spacing-xxl;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.image-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Grid flessibile */
-  gap: vars.$spacing-xl; /* Spazio tra le immagini */
-  margin-top: vars.$spacing-xxl;
-}
-
-.gallery-item {
-  background-color: vars.$color-white;
-  border-radius: vars.$border-radius-lg;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform vars.$transition-speed-normal vars.$transition-ease, box-shadow vars.$transition-speed-normal vars.$transition-ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(vars.$color-secondary, 0.2); /* Ombra lavanda all'hover */
-  }
-
-  .gallery-image {
-    width: 100%;
-    height: 300px; /* Altezza fissa per le immagini della galleria */
-    object-fit: cover;
-    display: block;
-  }
-
-  .image-description {
-    padding: vars.$spacing-md;
-    font-size: 0.95rem;
-    color: vars.$color-text-dark;
-    line-height: vars.$line-height-base;
-    text-align: left;
-  }
-}
-
-.not-found-message {
-  padding: vars.$spacing-xl;
-  background-color: rgba(vars.$color-light-pink-bg, 0.5);
-  border-radius: vars.$border-radius-lg;
-  margin-top: vars.$spacing-xxl;
+.loading-spinner, .no-item-found {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: vars.$spacing-md;
+  justify-content: center;
+  padding: vars.$spacing-xxl;
+  color: vars.$color-text-light;
+  font-size: 1.1rem;
+
+  mat-spinner {
+    margin-bottom: vars.$spacing-md;
+  }
+
   mat-icon {
     font-size: 48px;
     color: vars.$color-accent;
+    margin-bottom: vars.$spacing-md;
   }
-  p {
-    font-size: 1.2rem;
-    color: vars.$color-text-dark;
+
+  h2 {
+    font-family: vars.$font-family-secondary;
+    color: vars.$color-dark-purple-text;
+    margin-bottom: vars.$spacing-sm;
   }
+
   button {
+    margin-top: vars.$spacing-lg;
+    background-color: vars.$color-vibrant-fuchsia;
+    color: vars.$color-white;
+    font-weight: 600;
+    border-radius: vars.$border-radius-md;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken(vars.$color-vibrant-fuchsia, 10%);
+    }
+  }
+}
+
+.detail-card {
+  background-color: vars.$color-white;
+  border-radius: vars.$border-radius-lg;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-align: left;
+
+  mat-card-header {
+    padding: vars.$spacing-lg vars.$spacing-xl;
+    background-color: vars.$color-light-pink-bg;
+    border-bottom: 1px solid vars.$color-border;
+  }
+
+  .detail-title {
+    font-family: vars.$font-family-secondary;
+    font-size: 2.5rem;
+    color: vars.$color-dark-purple-text;
+    margin-bottom: vars.$spacing-xs;
+  }
+
+  .detail-subtitle {
+    font-size: 1.2rem;
+    color: vars.$color-text-light;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    display: block; /* Rimuove lo spazio extra sotto l'immagine */
+  }
+
+  mat-card-content {
+    padding: vars.$spacing-xl;
+  }
+
+  .detail-description {
+    font-size: 1.1rem;
+    line-height: vars.$line-height-lg;
+    color: vars.$color-text-dark;
+    margin-bottom: vars.$spacing-lg;
+  }
+
+  .detail-category {
+    display: inline-block;
+    background-color: vars.$color-light-pink-bg;
+    color: vars.$color-dark-pink-text;
+    padding: 0.4rem 0.8rem;
+    border-radius: vars.$border-radius-md;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
     margin-top: vars.$spacing-md;
   }
+
+  .gallery-section {
+    margin-top: vars.$spacing-xxl;
+    border-top: 1px solid vars.$color-border;
+    padding-top: vars.$spacing-xl;
+
+    h3 {
+      font-family: vars.$font-family-secondary;
+      font-size: 1.8rem;
+      color: vars.$color-dark-pink-text;
+      margin-bottom: vars.$spacing-lg;
+      text-align: center;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: vars.$spacing-lg;
+      justify-content: center;
+
+      .gallery-item {
+        background-color: vars.$color-background-light;
+        border-radius: vars.$border-radius-md;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+        img {
+          width: 100%;
+          height: 200px; /* Altezza fissa per le immagini della galleria */
+          object-fit: cover;
+          display: block;
+        }
+
+        .gallery-description {
+          padding: vars.$spacing-sm;
+          font-size: 0.9rem;
+          color: vars.$color-text-light;
+          text-align: center;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  mat-card-actions {
+    padding: vars.$spacing-md vars.$spacing-xl vars.$spacing-xl;
+    justify-content: flex-end;
+
+    button {
+      background-color: vars.$color-accent;
+      color: vars.$color-white;
+      font-weight: 600;
+      border-radius: vars.$border-radius-md;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(vars.$color-accent, 10%);
+      }
+    }
+  }
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: vars.$breakpoint-lg) {
-  .detail-title {
-    font-size: 2.8rem;
-  }
-  .detail-subtitle {
-    font-size: 1.3rem;
-  }
-  .image-gallery {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-}
-
+/* Responsive adjustments */
 @media (max-width: vars.$breakpoint-md) {
   .portfolio-detail-container {
     padding: vars.$spacing-lg vars.$spacing-md;
     margin-top: vars.$spacing-xl;
   }
-  .back-button {
-    margin-bottom: vars.$spacing-lg;
-  }
-  .detail-title {
-    font-size: 2.2rem;
-  }
-  .detail-subtitle {
-    font-size: 1.1rem;
-  }
-  .detail-description {
-    font-size: 1rem;
-    margin-bottom: vars.$spacing-xl;
-  }
-  .image-gallery {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
-    gap: vars.$spacing-md;
-  }
-  .gallery-item .gallery-image {
-    height: 250px;
-  }
-  .gallery-item .image-description {
-    font-size: 0.9rem;
+  .detail-card {
+    mat-card-header {
+      padding: vars.$spacing-md vars.$spacing-lg;
+    }
+    .detail-title {
+      font-size: 2rem;
+    }
+    .detail-subtitle {
+      font-size: 1rem;
+    }
+    mat-card-content {
+      padding: vars.$spacing-lg;
+    }
+    .detail-description {
+      font-size: 1rem;
+    }
+    .gallery-section {
+      h3 {
+        font-size: 1.5rem;
+      }
+      .image-gallery {
+        grid-template-columns: 1fr;
+        .gallery-item img {
+          height: 250px;
+        }
+      }
+    }
+    mat-card-actions {
+      padding: vars.$spacing-md vars.$spacing-lg;
+    }
   }
 }
 
 @media (max-width: vars.$breakpoint-sm) {
-  .detail-title {
-    font-size: 1.8rem;
+  .portfolio-detail-container {
+    padding: vars.$spacing-md;
+    margin: vars.$spacing-lg auto;
   }
-  .detail-subtitle {
-    font-size: 1rem;
-  }
-  .back-button {
-    font-size: 0.9rem;
-    padding: vars.$spacing-xs vars.$spacing-sm;
+  .detail-card {
+    .detail-title {
+      font-size: 1.8rem;
+    }
+    .detail-subtitle {
+      font-size: 0.9rem;
+    }
+    .gallery-section {
+      h3 {
+        font-size: 1.3rem;
+      }
+    }
   }
 }

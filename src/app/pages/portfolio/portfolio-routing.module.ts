@@ -1,12 +1,17 @@
+// src/app/pages/portfolio/portfolio-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PortfolioComponent } from './portfolio.component';
-import { PortfolioDetailComponent } from './portfolio-detail/portfolio-detail.component';
+import { PortfolioDetailComponent } from './portfolio-detail/portfolio-detail.component'; // <-- ASSICURATI CHE SIA IMPORTATO
+
 
 const routes: Routes = [
-  { path: '', component: PortfolioComponent },
   {
-    path: ':id', // Corrisponde a /portfolio/:id (es. /portfolio/trucco-sposa-giulia)
+    path: '', // Corrisponde a /portfolio
+    component: PortfolioComponent
+  },
+  {
+    path: ':id', // <-- RIATTIVA QUESTA ROTTA
     component: PortfolioDetailComponent
   }
 ];

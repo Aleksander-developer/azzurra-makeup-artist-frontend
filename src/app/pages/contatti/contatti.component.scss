@@ -4,8 +4,8 @@
 @use '../../../styles/mixins' as mixins;
 
 .contatti-container {
-  max-width: 800px;
-  margin: vars.$spacing-xxl auto;
+  max-width: 900px; /* Aumentato: da 800px a 900px */
+  margin: vars.$spacing-xl auto; /* Ridotto: da xxl a xl */
   padding: 1.5rem;
   background: vars.$color-white;
   color: vars.$color-text-dark;
@@ -46,7 +46,7 @@
 form.contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem; /* Ridotto: da 1.5rem a 1rem */
   margin-bottom: vars.$spacing-xl;
 
   mat-form-field {
@@ -173,7 +173,7 @@ form.contact-form {
 
 /* --- Sezione Info Dirette --- */
 .direct-contact-info {
-  margin-top: vars.$spacing-xxl;
+  margin-top: vars.$spacing-xl; /* Ridotto: da xxl a xl */
   text-align: center;
 
   h2 {
@@ -186,10 +186,10 @@ form.contact-form {
   .contact-methods {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* MANTIENI QUESTO PER CENTRARE */
-    gap: vars.$spacing-md;
-    max-width: 600px; /* Limita la larghezza del contenitore per un centraggio migliore */
-    margin: 0 auto; /* Centra il contenitore stesso */
+    justify-content: center;
+    gap: vars.$spacing-sm; /* Ridotto: da md a sm */
+    max-width: 700px; /* Aumentato: da 600px a 700px */
+    margin: 0 auto;
   }
 
   .contact-method-item {
@@ -203,9 +203,9 @@ form.contact-form {
     text-decoration: none;
     color: vars.$color-text-dark;
     transition: all vars.$transition-speed-normal vars.$transition-ease;
-    flex: 1 1 auto; /* Permette agli item di espandersi ma con un max-width */
-    max-width: 180px; /* Larghezza massima per evitare che siano troppo larghi su desktop */
-    min-width: 120px; /* Larghezza minima per evitare che siano troppo piccoli */
+    flex: 1 1 auto;
+    max-width: 180px;
+    min-width: 120px;
 
     mat-icon, .fab {
       font-size: 36px;
@@ -266,13 +266,13 @@ form.contact-form {
   .direct-contact-info {
     margin-top: vars.$spacing-xl;
     .contact-methods {
-      flex-direction: column; /* Stack metodi di contatto */
+      flex-direction: column;
       gap: vars.$spacing-sm;
-      max-width: 100%; /* Permetti di espandersi su mobile */
+      max-width: 100%;
     }
     .contact-method-item {
-      width: 100%; /* Occupano tutta la larghezza disponibile */
-      max-width: none; /* Rimuovi max-width su mobile */
+      width: 100%;
+      max-width: none;
     }
   }
 }

@@ -11,7 +11,7 @@ export interface PortfolioItem {
   title: string;
   subtitle: string;
   description: string;
-  mainImage: string; // Immagine principale per la card del portfolio
+  mainImage: string | undefined; // Immagine principale per la card del portfolio
   category: string; // Es. 'Sposa', 'Cerimonia', 'Eventi'
   images: PortfolioImage[]; // Array di immagini per la pagina di dettaglio
 }

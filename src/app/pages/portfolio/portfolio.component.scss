@@ -3,7 +3,7 @@
 @use '../../../styles/variables' as vars;
 @use '../../../styles/mixins' as mixins;
 
-.portfolio-container {
+.portfolio-page-container {
   padding: vars.$spacing-xl vars.$spacing-lg;
   max-width: 1200px;
   margin: vars.$spacing-xxl auto;
@@ -21,6 +21,15 @@
   color: vars.$color-vibrant-fuchsia;
   margin-bottom: vars.$spacing-md;
   text-shadow: 0 0 10px rgba(vars.$color-vibrant-fuchsia, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-sm;
+
+  .title-icon {
+    font-size: 3rem;
+    color: vars.$color-vibrant-fuchsia;
+  }
 }
 
 .page-subtitle {
@@ -33,134 +42,148 @@
   line-height: vars.$line-height-base;
 }
 
+.loading-spinner, .no-items-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: vars.$spacing-xxl;
+  color: vars.$color-text-light;
+  font-size: 1.1rem;
+
+  mat-spinner {
+    margin-bottom: vars.$spacing-md;
+  }
+
+  mat-icon {
+    font-size: 48px;
+    color: vars.$color-accent;
+    margin-bottom: vars.$spacing-md;
+  }
+}
+
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: vars.$spacing-xl; /* Spazio tra le card */
-  justify-content: center; /* Centra le card se non riempiono tutta la riga */
-  margin-top: vars.$spacing-xxl;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: vars.$spacing-lg;
+  justify-content: center;
+  margin-top: vars.$spacing-xl;
 }
 
 .portfolio-card {
   background-color: vars.$color-white;
-  border: 1px solid rgba(vars.$color-primary, 0.2);
   border-radius: vars.$border-radius-lg;
-  overflow: hidden; /* Assicura che l'immagine rispetti i bordi arrotondati */
-  transition: transform vars.$transition-speed-normal vars.$transition-ease, box-shadow vars.$transition-speed-normal vars.$transition-ease;
-  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
   display: flex;
-  flex-direction: column; /* Contenuto in colonna */
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-8px); /* Effetto sollevamento più marcato */
-    box-shadow: 0 12px 25px rgba(vars.$color-vibrant-fuchsia, 0.25); /* Ombra più intensa e fucsia */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
 
   img {
     width: 100%;
-    height: 220px; /* Altezza fissa per le immagini delle card */
-    object-fit: cover; /* Assicura che l'immagine copra l'area senza distorcersi */
-    display: block;
+    height: 200px; /* Altezza fissa per le immagini */
+    object-fit: cover; /* Assicura che l'immagine copra l'area */
+    border-bottom: 1px solid vars.$color-border;
   }
 
   mat-card-content {
     padding: vars.$spacing-md;
-    flex-grow: 1; /* Permette al contenuto di espandersi */
+    flex-grow: 1;
+    text-align: left;
   }
 
   .card-title {
     font-family: vars.$font-family-secondary;
-    font-size: 1.8rem;
-    color: vars.$color-vibrant-fuchsia;
+    font-size: 1.5rem;
+    color: vars.$color-dark-purple-text;
+    margin-top: 0;
     margin-bottom: vars.$spacing-xs;
   }
 
   .card-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: vars.$color-text-light;
-    margin-bottom: vars.$spacing-md;
+    margin-bottom: vars.$spacing-sm;
   }
 
-  .card-description {
-    font-size: 0.95rem;
-    line-height: vars.$line-height-base;
-    color: vars.$color-text-dark;
-    margin-bottom: vars.$spacing-md;
+  .card-category {
+    display: inline-block;
+    background-color: vars.$color-light-pink-bg;
+    color: vars.$color-dark-pink-text;
+    padding: 0.3rem 0.6rem;
+    border-radius: vars.$border-radius-sm;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
   mat-card-actions {
-    padding: vars.$spacing-md;
-    display: flex;
+    padding: vars.$spacing-sm vars.$spacing-md vars.$spacing-md;
     justify-content: flex-end; /* Allinea il bottone a destra */
-    border-top: 1px solid rgba(vars.$color-border, 0.5); /* Separatore sottile */
 
     button {
-      font-size: 1rem;
-      padding: vars.$spacing-xs vars.$spacing-md;
+      background-color: vars.$color-accent;
+      color: vars.$color-white;
+      font-weight: 600;
       border-radius: vars.$border-radius-md;
-      mat-icon {
-        margin-left: vars.$spacing-xs;
-        font-size: 18px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(vars.$color-accent, 10%);
       }
     }
   }
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: vars.$breakpoint-lg) {
-  .page-title {
-    font-size: 2.5rem;
-  }
-  .portfolio-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: vars.$spacing-lg;
-  }
-  .portfolio-card .card-title {
-    font-size: 1.6rem;
-  }
-}
-
+/* Responsive adjustments */
 @media (max-width: vars.$breakpoint-md) {
-  .portfolio-container {
+  .portfolio-page-container {
     padding: vars.$spacing-lg vars.$spacing-md;
     margin-top: vars.$spacing-xl;
   }
   .page-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    .title-icon {
+      font-size: 2.5rem;
+    }
   }
   .page-subtitle {
     font-size: 1rem;
     margin-bottom: vars.$spacing-xl;
   }
   .portfolio-grid {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: vars.$spacing-md;
   }
-  .portfolio-card {
-    img {
-      height: 180px;
-    }
-    .card-title {
-      font-size: 1.4rem;
-    }
-    .card-subtitle {
-      font-size: 0.9rem;
-    }
-    .card-description {
-      font-size: 0.85rem;
-    }
-    mat-card-actions button {
-      font-size: 0.9rem;
-      padding: vars.$spacing-xs vars.$spacing-sm;
-    }
+  .portfolio-card img {
+    height: 180px;
+  }
+  .portfolio-card .card-title {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: vars.$breakpoint-sm) {
+  .portfolio-page-container {
+    padding: vars.$spacing-md;
+    margin: vars.$spacing-lg auto;
+  }
   .page-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    .title-icon {
+      font-size: 2rem;
+    }
   }
   .page-subtitle {
     font-size: 0.9rem;
+  }
+  .portfolio-grid {
+    grid-template-columns: 1fr; /* Una colonna su mobile */
   }
 }

@@ -1,4 +1,4 @@
-// src/app/pages/home/home.component.scss
+/* src/app/pages/home/home.component.scss */
 @use '../../../styles/variables' as vars;
 @use '../../../styles/mixins' as mixins;
 
@@ -7,17 +7,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 64px); // Altezza viewport meno navbar
-  padding: vars.$spacing-lg; // Usa variabile per il padding
+  min-height: calc(100vh - 64px);
+  padding: vars.$spacing-md; /* Ridotto: da lg a md */
   text-align: center;
-  background-color: vars.$color-light-pink-bg; // Sfondo rosa chiaro dal tuo vecchio progetto
-  color: vars.$color-text-dark; // Colore testo di default
+  background-color: vars.$color-light-pink-bg;
+  color: vars.$color-text-dark;
 }
 
 h1 {
   font-size: 3rem;
   font-weight: bold;
-  color: vars.$color-vibrant-fuchsia; // Il tuo fucsia acceso
+  color: vars.$color-vibrant-fuchsia;
   margin-bottom: vars.$spacing-sm;
 }
 
@@ -25,14 +25,14 @@ h3 {
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: vars.$spacing-xs;
-  color: vars.$color-text-dark; // Colore testo scuro
+  color: vars.$color-text-dark;
 }
 
 h4 {
   font-size: 1.5rem;
   font-weight: 500;
   margin-bottom: vars.$spacing-md;
-  color: vars.$color-text-light; // Colore testo più chiaro
+  color: vars.$color-text-light;
 }
 
 p {
@@ -59,7 +59,7 @@ p {
 
   p {
     font-size: 1rem;
-    padding: 0 vars.$spacing-sm; // Padding laterale su mobile
+    padding: 0 vars.$spacing-sm;
   }
 }
 
@@ -71,21 +71,21 @@ p {
 
 // animazioni
 .animated-block {
-  background: rgba(vars.$color-white, 0.85); // Sfondo bianco leggermente trasparente
-  border-radius: vars.$border-radius-lg; // Bordi arrotondati
-  padding: vars.$spacing-lg vars.$spacing-xxl; // Padding generoso
-  max-width: 600px;
-  margin: vars.$spacing-lg auto;
-  box-shadow: 0 8px 20px rgba(vars.$color-vibrant-fuchsia, 0.2); // Ombra con fucsia acceso
-  color: vars.$color-dark-purple-text; // Colore testo specifico
-  font-family: vars.$font-family-primary; // Usa il font primario
+  background: rgba(vars.$color-white, 0.85);
+  border-radius: vars.$border-radius-lg;
+  padding: vars.$spacing-md vars.$spacing-xl; /* Ridotto: da lg/xxl a md/xl */
+  max-width: 700px; /* Aumentato: da 600px a 700px */
+  margin: vars.$spacing-md auto; /* Ridotto: da lg a md */
+  box-shadow: 0 8px 20px rgba(vars.$color-vibrant-fuchsia, 0.2);
+  color: vars.$color-dark-purple-text;
+  font-family: vars.$font-family-primary;
   text-align: center;
 
   h5 {
     font-weight: 600;
     font-size: 1.5rem;
     margin-bottom: vars.$spacing-md;
-    color: vars.$color-accent; // Fucsia per evidenziare il titolo
+    color: vars.$color-accent;
     letter-spacing: 0.05em;
   }
 
@@ -93,7 +93,7 @@ p {
     font-size: 1rem;
     line-height: vars.$line-height-base;
     margin-bottom: vars.$spacing-md;
-    color: vars.$color-dark-pink-text; // Colore testo specifico
+    color: vars.$color-dark-pink-text;
   }
 
   span {
@@ -101,7 +101,7 @@ p {
     margin: vars.$spacing-lg 0;
     font-weight: 700;
     font-size: 1.1rem;
-    color: darken(vars.$color-vibrant-fuchsia, 5%); // Fucsia leggermente più scuro
+    color: darken(vars.$color-vibrant-fuchsia, 5%);
     border-top: 2px solid darken(vars.$color-vibrant-fuchsia, 5%);
     border-bottom: 2px solid darken(vars.$color-vibrant-fuchsia, 5%);
     padding: 0.25rem vars.$spacing-md;
@@ -126,25 +126,25 @@ p {
 
 // garanzie
 .guarantees-block {
-  margin-top: vars.$spacing-xxl; // Spazio superiore
-  padding: vars.$spacing-lg vars.$spacing-md;
-  background-color: rgba(vars.$color-vibrant-fuchsia, 0.05); // Rosa molto chiaro e trasparente
-  border-radius: vars.$border-radius-md; // Bordi arrotondati
+  margin-top: vars.$spacing-xl; /* Ridotto: da xxl a xl */
+  padding: vars.$spacing-md vars.$spacing-sm; /* Ridotto: da lg/md a md/sm */
+  background-color: rgba(vars.$color-vibrant-fuchsia, 0.05);
+  border-radius: vars.$border-radius-md;
   text-align: center;
-  color: vars.$color-dark-violet-text; // Viola scuro delicato
+  color: vars.$color-dark-violet-text;
 
   h5 {
     font-size: 1.5rem;
     margin-bottom: vars.$spacing-lg;
     font-weight: 600;
-    color: vars.$color-vibrant-fuchsia; // Fucsia per il titolo delle garanzie
+    color: vars.$color-vibrant-fuchsia;
   }
 
   .guarantees-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: vars.$spacing-lg;
+    gap: vars.$spacing-md; /* Ridotto: da lg a md */
 
     .guarantee-item {
       flex: 1 1 200px;
@@ -152,18 +152,18 @@ p {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: vars.$spacing-xs; // Spazio tra icona, titolo e testo
+      gap: vars.$spacing-xs;
 
       mat-icon {
         font-size: 40px;
-        color: vars.$color-vibrant-fuchsia; // Fucsia acceso per le icone
+        color: vars.$color-vibrant-fuchsia;
       }
 
       h6 {
         font-weight: 600;
         font-size: 1.1rem;
         margin: 0;
-        color: vars.$color-text-dark; // Colore testo scuro
+        color: vars.$color-text-dark;
       }
 
       p {

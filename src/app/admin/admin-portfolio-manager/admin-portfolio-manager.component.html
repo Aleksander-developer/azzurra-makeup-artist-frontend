@@ -1,0 +1,187 @@
+<!-- src/app/admin/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
+<section class="portfolio-manager-container">
+  <h1 class="page-title">
+    <mat-icon class="title-icon">dashboard</mat-icon> Gestione Portfolio
+  </h1>
+  <p class="page-subtitle">Aggiungi, modifica o elimina i lavori del tuo portfolio e carica le immagini.</p>
+
+  <!-- Form per Aggiungere/Modificare un elemento del portfolio -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ editingItem ? 'Modifica Lavoro' : 'Aggiungi Nuovo Lavoro' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="portfolioForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Titolo</mat-label>
+          <input matInput formControlName="title" placeholder="Es. Trucco Sposa Classico" required>
+          <mat-error *ngIf="portfolioForm.get('title')?.invalid && portfolioForm.get('title')?.touched">
+            Il titolo è obbligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sottotitolo</mat-label>
+          <input matInput formControlName="subtitle" placeholder="Es. Look Naturale e Luminoso">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrizione</mat-label>
+          <textarea matInput formControlName="description" placeholder="Descrivi il lavoro in dettaglio..." rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Sezione per l'upload dell'immagine principale -->
+        <div class="image-upload-section">
+          <h3>Immagine Principale (Copertina) <span class="required-asterisk">*</span></h3>
+          <input type="file" #mainImageInput (change)="onMainImageSelected($event)" accept="image/*" style="display: none;">
+          <button mat-raised-button color="primary" type="button" (click)="mainImageInput.click()">
+            <mat-icon>upload_file</mat-icon> Carica Immagine Principale
+          </button>
+          <span class="file-name" *ngIf="mainImageFile">{{ mainImageFile.name }}</span>
+          <span class="file-name" *ngIf="!mainImageFile && editingItem?.mainImage">
+            Immagine attuale: <a [href]="editingItem?.mainImage || ''" target="_blank">Vedi</a>
+          </span>
+
+          <div *ngIf="mainImagePreview" class="image-preview-container">
+            <img [src]="mainImagePreview" alt="Anteprima Immagine Principale" class="image-preview">
+            <button mat-icon-button color="warn" (click)="removeMainImage()" class="remove-image-button" aria-label="Rimuovi immagine principale">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+          <mat-error *ngIf="portfolioForm.get('mainImage')?.invalid && (portfolioForm.get('mainImage')?.dirty || portfolioForm.get('mainImage')?.touched)">
+            L'immagine principale è obbligatoria.
+          </mat-error>
+          <mat-progress-spinner *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100"
+            [mode]="'determinate'" [value]="mainImageUploadProgress" [diameter]="20"></mat-progress-spinner>
+          <span *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100" class="upload-progress-text">
+            {{ mainImageUploadProgress | number:'1.0-0' }}%
+          </span>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Categoria</mat-label>
+          <mat-select formControlName="category" required>
+            <mat-option value="Sposa">Sposa</mat-option>
+            <mat-option value="Cerimonia">Cerimonia</mat-option>
+            <mat-option value="Editoriale">Editoriale</mat-option>
+            <mat-option value="Eventi">Eventi</mat-option>
+            <mat-option value="Altro">Altro</mat-option>
+          </mat-select>
+          <mat-error *ngIf="portfolioForm.get('category')?.invalid && portfolioForm.get('category')?.touched">
+            La categoria è obbligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Sezione per le immagini aggiuntive (galleria) -->
+        <div class="image-gallery-form">
+          <h3>Immagini della Galleria (Opzionale)</h3>
+          <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index" [formGroupName]="i" class="image-item-group">
+            <div class="gallery-image-wrapper">
+              <input type="file" #galleryImageInput (change)="onGalleryImageSelected($event, i)" accept="image/*" style="display: none;">
+              <button mat-raised-button color="accent" type="button" (click)="galleryImageInput.click()">
+                <mat-icon>upload_file</mat-icon> Carica Immagine {{i + 1}}
+              </button>
+              <span class="file-name" *ngIf="galleryImageFiles[i]">{{ galleryImageFiles[i]?.name }}</span>
+              <span class="file-name" *ngIf="!galleryImageFiles[i] && imageGroup.get('src')?.value">
+                Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
+              </span>
+
+              <div *ngIf="galleryImagePreviews[i]" class="image-preview-container">
+                <img [src]="galleryImagePreviews[i] || ''" alt="Anteprima Galleria {{i + 1}}" class="image-preview">
+                <button mat-icon-button color="warn" (click)="removeGalleryImage(i)" class="remove-image-button" aria-label="Rimuovi immagine galleria">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+              <mat-progress-spinner *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100"
+                [mode]="'determinate'" [value]="galleryImageUploadProgress[i]" [diameter]="20"></mat-progress-spinner>
+              <span *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100" class="upload-progress-text">
+                {{ galleryImageUploadProgress[i] | number:'1.0-0' }}%
+              </span>
+            </div>
+
+            <mat-form-field appearance="outline" class="gallery-description-field">
+              <mat-label>Descrizione Immagine {{i + 1}}</mat-label>
+              <input matInput formControlName="description" placeholder="Breve descrizione">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="gallery-description-field">
+              <mat-label>Testo Alternativo (Alt) Immagine {{i + 1}}</mat-label>
+              <input matInput formControlName="alt" placeholder="Testo per accessibilità">
+            </mat-form-field>
+            <button mat-icon-button color="warn" (click)="removeImage(i)" type="button" aria-label="Rimuovi immagine">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <button mat-stroked-button (click)="addImage()" type="button" class="add-image-button">
+            <mat-icon>add</mat-icon> Aggiungi Immagine Galleria
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message-ui">
+          <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="success-message">
+          <mat-icon>check_circle_outline</mat-icon> {{ successMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="portfolioForm.invalid || isLoading || uploadInProgress">
+            <span *ngIf="!isLoading && !uploadInProgress">{{ editingItem ? 'Salva Modifiche' : 'Aggiungi Lavoro' }}</span>
+            <span *ngIf="isLoading || uploadInProgress" class="button-loading-content">
+              <mat-spinner [diameter]="20"></mat-spinner>
+              <span>{{ isLoading ? 'Salvataggio...' : 'Caricamento Immagini...' }}</span>
+            </span>
+          </button>
+          <button mat-stroked-button color="accent" type="button" (click)="resetForm()" *ngIf="editingItem || portfolioForm.dirty">
+            Annulla / Nuovo Lavoro
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Lista degli elementi del portfolio esistenti -->
+  <mat-card class="list-card">
+    <mat-card-header>
+      <mat-card-title>Lavori Esistenti</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="portfolioItems.length === 0 && !isLoadingList" class="no-items-message">
+        <mat-icon>info</mat-icon> Nessun lavoro nel portfolio. Aggiungine uno!
+      </div>
+      <div *ngIf="isLoadingList" class="loading-spinner">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        <p>Caricamento lavori...</p>
+      </div>
+
+      <table mat-table [dataSource]="portfolioItems" class="full-width-table" *ngIf="portfolioItems.length > 0">
+        <!-- Colonna Titolo -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef> Titolo </th>
+          <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+        </ng-container>
+
+        <!-- Colonna Categoria -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef> Categoria </th>
+          <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+        </ng-container>
+
+        <!-- Colonna Azioni -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Azioni </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" (click)="editItem(element)" aria-label="Modifica lavoro">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteItem(element.id)" aria-label="Elimina lavoro">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</section>

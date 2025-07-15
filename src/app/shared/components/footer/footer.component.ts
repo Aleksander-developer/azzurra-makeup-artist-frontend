@@ -13,13 +13,13 @@ export class FooterComponent implements OnInit {
 
   // Le tue URL e numeri di contatto
   // githubUrl: string = 'https://github.com/tuo-profilo-github'; // AGGIORNA CON IL TUO LINK
-  linkedinUrl: string = 'https://www.linkedin.com/in/tuo-profilo-linkedin'; // AGGIORNA CON IL TUO LINK
-  instagramUrl: string = 'https://www.instagram.com/tuo-profilo-instagram'; // AGGIORNA CON IL TUO LINK
-  facebookUrl: string = 'https://www.facebook.com/tuo-profilo-facebook'; // AGGIORNA CON IL TUO LINK
+  linkedinUrl: string = 'http://linkedin.com/in/maria-azzurra-angius-2581301b3';
+  instagramUrl: string = 'https://www.instagram.com/azzurra_angius?igsh=MWNyODRqNmZqZXdqbg==';
+  facebookUrl: string = 'https://www.facebook.com/share/1E2KCeD1dz/?mibextid=wwXIfr';
 
   whatsappNumber: string = '393469604243'; // Il tuo numero WhatsApp senza il '+'
   phoneNumber: string = '393469604243'; // Il tuo numero di telefono
-  emailAddress: string = 'azzurraangius95@email.com'; // La tua email
+  emailAddress: string = 'azzurraangius95@gmail.com'; // La tua email
 
   // URL del sito web dello sviluppatore
   developerWebsiteUrl: string = 'https://aleksander-nikolli-developer.netlify.app/home';

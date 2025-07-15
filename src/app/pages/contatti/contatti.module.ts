@@ -1,3 +1,4 @@
+// src/app/pages/contatti/contatti.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,8 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
-import { SharedModule } from '../../shared/shared/shared.module';
+import { MatIconModule } from '@angular/material/icon'; // Assicurati che sia qui se usato direttamente
 
 
 @NgModule({
@@ -29,7 +29,7 @@ import { SharedModule } from '../../shared/shared/shared.module';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    SharedModule
+    // SharedModule // <-- RIMUOVI O COMMENTA QUESTA RIGA SE PRESENTE
   ]
 })
 export class ContattiModule { }

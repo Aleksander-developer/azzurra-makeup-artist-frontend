@@ -17,7 +17,7 @@ body {
   color: $color-text-dark;
 
   // Pattern di simboli make-up come sfondo del body
-  background-image: url('/assets/patterns/makeup-pattern.png'); // <-- DOVRAI CREARE O TROVARE QUESTA IMMAGINE
+  // background-image: url('/assets/patterns/makeup-pattern.png'); // <-- DOVRAI CREARE O TROVARE QUESTA IMMAGINE
   background-repeat: repeat; // Il pattern si ripeterà
   background-size: 150px; // Dimensione delle singole "tessere" del pattern
   background-position: center center;
@@ -72,3 +72,6 @@ a {
 mat-icon {
   vertical-align: middle;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

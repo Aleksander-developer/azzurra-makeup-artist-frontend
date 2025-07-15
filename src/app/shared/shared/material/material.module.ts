@@ -1,3 +1,4 @@
+// src/app/shared/shared/material/material.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -7,22 +8,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon'; // <-- IMPORTATO QUI
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSidenavModule } from '@angular/material/sidenav'; // Aggiunto per la sidenav nel layout
-import { MatListModule } from '@angular/material/list';     // Aggiunto per le liste nella sidenav
-import { MatProgressBarModule } from '@angular/material/progress-bar'; // Aggiunto per le progress bar
-
-// Altri moduli
-import { RouterModule } from '@angular/router'; // Necessario se i componenti Material usano routerLink (es. MatButton)
-import { LayoutModule } from '@angular/cdk/layout'; // Per funzionalità responsive (es. BreakpointObserver)
-import { ReactiveFormsModule } from '@angular/forms'; // Per i form reattivi
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+// Altri moduli
+import { RouterModule } from '@angular/router';
+import { LayoutModule } from '@angular/cdk/layout';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatToolbarModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule,
+    MatIconModule, // <-- INCLUSO NEGLI IMPORTS
     MatCardModule,
     MatGridListModule,
     MatChipsModule,
@@ -51,7 +51,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatToolbarModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule,
+    MatIconModule, // <-- INCLUSO NEGLI EXPORTS
     MatCardModule,
     MatGridListModule,
     MatChipsModule,

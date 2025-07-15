@@ -42,7 +42,7 @@ export class ContattiComponent implements OnInit {
       console.log('Invio dati:', formData);
 
       // Assicurati che environment.apiUrl sia definito nel tuo file environment.ts
-      this.http.post(`${environment.apiUrl}/contatti`, formData).subscribe({
+      this.http.post(`${environment.firebaseConfig}/contatti`, formData).subscribe({
         next: () => {
           this.successMessage = 'Messaggio inviato con successo!';
 

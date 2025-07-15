@@ -1,1 +1,54 @@
-<p>login works!</p>
+<!-- src/app/pages/login/login.component.html -->
+
+<section class="login-container">
+  <h1 class="page-title">
+    <mat-icon class="title-icon">lock</mat-icon> Area Riservata
+  </h1>
+  <p class="page-subtitle">Accedi per gestire il tuo portfolio e i contenuti del sito.</p>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <!-- Campo Email -->
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Inserisci la tua email" required>
+      <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">L'email è obbligatoria.</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Inserisci un'email valida.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Campo Password -->
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Inserisci la tua password" required>
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" aria-label="Toggle password visibility">
+        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        La password è obbligatoria.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Messaggio di errore o successo dall'API -->
+    <div *ngIf="errorMessage" class="error-message-ui">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="success-message">
+      <mat-icon>check_circle_outline</mat-icon> {{ successMessage }}
+    </div>
+
+    <!-- Bottone di Login -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
+      <span *ngIf="!isLoading">Accedi</span>
+      <span *ngIf="isLoading" class="button-loading-content">
+        <mat-spinner [diameter]="20"></mat-spinner>
+        <span>Accesso in corso...</span>
+      </span>
+    </button>
+  </form>
+
+  <div class="info-section">
+    <p>Se hai problemi ad accedere, contatta l'amministratore.</p>
+    <!-- Potrebbe esserci un link per la registrazione o il recupero password qui, se implementati -->
+  </div>
+</section>

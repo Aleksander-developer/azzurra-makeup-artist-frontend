@@ -4,10 +4,10 @@
 @use '../../../styles/mixins' as mixins;
 
 .chi-sono-container {
-  padding: vars.$spacing-xl vars.$spacing-lg;
-  max-width: 1200px;
-  margin: vars.$spacing-xxl auto; /* Margine superiore per distacco dalla navbar */
-  background-color: rgba(vars.$color-background-light, 0.95); /* Sfondo leggermente opaco */
+  padding: vars.$spacing-lg vars.$spacing-md; /* Ridotto: da xl/lg a lg/md */
+  max-width: 1300px; /* Aumentato: da 1200px a 1300px */
+  margin: vars.$spacing-xl auto; /* Ridotto: da xxl a xl */
+  background-color: rgba(vars.$color-background-light, 0.95);
   border-radius: vars.$border-radius-lg;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: vars.$color-text-dark;
@@ -36,22 +36,22 @@
 /* --- Sezione About Me (Introduzione e Filosofia) --- */
 .about-me-section {
   display: flex;
-  flex-direction: row; /* Immagine a sinistra, contenuto a destra */
+  flex-direction: row;
   align-items: center;
-  gap: vars.$spacing-xl;
+  gap: vars.$spacing-lg; /* Ridotto: da xl a lg */
   background-color: vars.$color-white;
-  border: 1px solid rgba(vars.$color-primary, 0.2); /* Bordo rosa chiaro */
-  border-radius: vars.$border-radius-xl; /* Molto arrotondato */
-  padding: vars.$spacing-xxl;
+  border: 1px solid rgba(vars.$color-primary, 0.2);
+  border-radius: vars.$border-radius-xl;
+  padding: vars.$spacing-xl; /* Ridotto: da xxl a xl */
   margin-bottom: vars.$spacing-xxl;
-  box-shadow: 0 8px 25px rgba(vars.$color-primary, 0.2); /* Ombra rosata */
+  box-shadow: 0 8px 25px rgba(vars.$color-primary, 0.2);
   text-align: left;
 
   .about-me-image-container {
     flex-shrink: 0;
     width: 40%;
     max-width: 400px;
-    border-radius: vars.$border-radius-xl; /* Molto arrotondato */
+    border-radius: vars.$border-radius-xl;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
@@ -86,9 +86,9 @@
 /* --- Sezione Formazione e Qualifiche --- */
 .qualifications-section {
   background-color: vars.$color-white;
-  border: 1px solid rgba(vars.$color-secondary, 0.2); /* Bordo lavanda */
+  border: 1px solid rgba(vars.$color-secondary, 0.2);
   border-radius: vars.$border-radius-lg;
-  padding: vars.$spacing-xl;
+  padding: vars.$spacing-lg; /* Ridotto: da xl a lg */
   margin-bottom: vars.$spacing-xxl;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -96,13 +96,13 @@
   .section-heading {
     font-family: vars.$font-family-secondary;
     font-size: 2.2rem;
-    color: vars.$color-dark-purple-text; /* Viola scuro */
+    color: vars.$color-dark-purple-text;
     margin-bottom: vars.$spacing-xl;
   }
 
   .qualification-item {
     display: flex;
-    align-items: flex-start; /* Allinea icona e testo in alto */
+    align-items: flex-start;
     gap: vars.$spacing-md;
     margin-bottom: vars.$spacing-lg;
     text-align: left;
@@ -112,17 +112,17 @@
 
     .qualification-icon {
       font-size: 36px;
-      color: vars.$color-secondary; /* Icona lavanda */
-      flex-shrink: 0; /* Impedisce all'icona di restringersi */
+      color: vars.$color-secondary;
+      flex-shrink: 0;
     }
 
     p {
       font-size: 1.1rem;
       line-height: vars.$line-height-base;
       color: vars.$color-text-dark;
-      margin: 0; /* Rimuovi margine predefinito */
+      margin: 0;
       strong {
-        color: vars.$color-vibrant-fuchsia; /* Fucsia per il testo importante */
+        color: vars.$color-vibrant-fuchsia;
       }
     }
   }
@@ -130,22 +130,22 @@
 
 /* --- Call to Action Finale (riutilizzato da Trucco Sposa) --- */
 .cta-section {
-  background: linear-gradient(45deg, vars.$color-primary 0%, darken(vars.$color-primary, 10%) 100%); /* Gradiente rosa chiaro */
+  background: linear-gradient(45deg, vars.$color-primary 0%, darken(vars.$color-primary, 10%) 100%);
   color: vars.$color-text-dark;
   text-align: center;
-  padding: vars.$spacing-xxl vars.$spacing-lg;
-  margin-top: vars.$spacing-xxl;
+  padding: vars.$spacing-xl vars.$spacing-md; /* Ridotto: da xxl/lg a xl/md */
+  margin-top: vars.$spacing-xl; /* Ridotto: da xxl a xl */
   border-radius: vars.$border-radius-xl;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0px 8px 25px rgba(vars.$color-primary, 0.4); /* Ombra rosata */
+  box-shadow: 0px 8px 25px rgba(vars.$color-primary, 0.4);
 
   h2 {
     font-family: vars.$font-family-secondary;
     font-size: 2.5rem;
     margin-bottom: vars.$spacing-md;
-    color: vars.$color-dark-pink-text; /* Testo rosa scuro */
+    color: vars.$color-dark-pink-text;
   }
   p {
     font-size: 1.3rem;
@@ -156,7 +156,7 @@
     font-size: 1.3rem;
     padding: 1rem 3rem;
     border-radius: vars.$border-radius-xl;
-    background-color: vars.$color-vibrant-fuchsia; /* Fucsia acceso */
+    background-color: vars.$color-vibrant-fuchsia;
     color: vars.$color-white;
     border: 2px solid vars.$color-vibrant-fuchsia;
     transition: all vars.$transition-speed-normal vars.$transition-ease;
@@ -175,13 +175,13 @@
     font-size: 2.5rem;
   }
   .about-me-section {
-    flex-direction: column; /* Stack colonne su schermi medi */
+    flex-direction: column;
     .about-me-content {
       padding-left: 0;
       text-align: center;
     }
     .about-me-image-container {
-      width: 80%; /* Immagine più grande in modalità colonna */
+      width: 80%;
       max-width: 500px;
       margin-bottom: vars.$spacing-lg;
     }
@@ -190,7 +190,7 @@
     font-size: 2rem;
   }
   .qualification-item {
-    flex-direction: column; /* Stack icona e testo su schermi medi */
+    flex-direction: column;
     align-items: center;
     text-align: center;
     gap: vars.$spacing-xs;

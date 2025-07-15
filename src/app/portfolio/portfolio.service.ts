@@ -1,76 +1,190 @@
 // src/app/portfolio/portfolio.service.ts
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs'; // Per simulare chiamate asincrone
-import { PortfolioItem } from '../pages/portfolio/portfolio-item.model';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Observable, of, throwError } from 'rxjs';
+import { map, finalize } from 'rxjs/operators';
+
+// Importa le funzioni Firestore e Storage necessarie
+import {
+  getFirestore, collection, doc, getDoc,
+  addDoc, updateDoc, deleteDoc, onSnapshot,
+  Firestore, DocumentData, QuerySnapshot, DocumentReference, DocumentSnapshot
+} from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, StorageReference } from 'firebase/storage';
+
+import { PortfolioItem, PortfolioImage } from '../pages/portfolio/portfolio-item.model'; // Assicurati che il percorso sia corretto
+
+// Dichiarazione globale per db (inizializzato in main.ts)
+declare const db: Firestore;
+declare const appId: string; // Variabile globale per l'ID dell'app
+declare const firebaseApp: any; // Dichiarazione per l'app Firebase (inizializzata in main.ts)
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
+  private portfolioCollectionName = 'portfolioItems'; // Nome della collezione Firestore
+  private isBrowser: boolean;
+  private firestoreDb: Firestore | undefined;
+  private currentAppId: string | undefined;
+  private firebaseStorage: any; // Riferimento a Firebase Storage
 
-  // Dati di esempio per il portfolio
-  private portfolioItems: PortfolioItem[] = [
-    {
-      id: 'trucco-sposa-giulia',
-      title: 'Eleganza Sposa: Giulia',
-      subtitle: 'Make-up e Acconciatura Sposa',
-      description: 'Un look etereo e luminoso per Giulia, sposa radiosa in una cornice classica romana.',
-      mainImage: 'https://placehold.co/600x400/F8C8DC/4A2A4A?text=Sposa+Giulia',
-      category: 'Sposa',
-      images: [
-        { src: 'https://placehold.co/800x600/F8C8DC/4A2A4A?text=Giulia+1', alt: 'Trucco sposa Giulia primo piano', description: 'Primo piano del trucco occhi, con toni neutri e luminosi.' },
-        { src: 'https://placehold.co/800x600/E6E6FA/333333?text=Giulia+2', alt: 'Acconciatura sposa Giulia', description: 'Acconciatura raccolta con dettagli floreali, elegante e raffinata.' },
-        { src: 'https://placehold.co/800x600/FFC0CB/FFFFFF?text=Giulia+3', alt: 'Trucco sposa Giulia figura intera', description: 'Look completo di trucco e acconciatura, in armonia con l\'abito.' },
-      ]
-    },
-    {
-      id: 'trucco-cerimonia-chiara',
-      title: 'Incanto Cerimonia: Chiara',
-      subtitle: 'Make-up per Evento Serale',
-      description: 'Un make-up sofisticato per un evento di gala, con focus su labbra intense e occhi definiti.',
-      mainImage: 'https://placehold.co/600x400/E6E6FA/333333?text=Cerimonia+Chiara',
-      category: 'Cerimonia',
-      images: [
-        { src: 'https://placehold.co/800x600/E6E6FA/333333?text=Chiara+1', alt: 'Trucco cerimonia Chiara', description: 'Dettaglio del trucco serale con eyeliner grafico.' },
-        { src: 'https://placehold.co/800x600/FFB6C1/333333?text=Chiara+2', alt: 'Chiara in posa', description: 'Look completo per un evento elegante.' },
-      ]
-    },
-    {
-      id: 'trucco-editoriale-lara',
-      title: 'Visione Artistica: Lara',
-      subtitle: 'Make-up per Shooting Fotografico',
-      description: 'Un look audace e creativo per un servizio fotografico di moda.',
-      mainImage: 'https://placehold.co/600x400/FFB6C1/333333?text=Editoriale+Lara',
-      category: 'Eventi',
-      images: [
-        { src: 'https://placehold.co/800x600/FFB6C1/333333?text=Lara+1', alt: 'Trucco editoriale Lara', description: 'Make-up artistico con dettagli glitter.' },
-        { src: 'https://placehold.co/800x600/F8C8DC/4A2A4A?text=Lara+2', alt: 'Lara in studio', description: 'Scatto dietro le quinte del servizio fotografico.' },
-      ]
-    },
-    {
-      id: 'trucco-sposa-sofia',
-      title: 'Incanto Naturale: Sofia',
-      subtitle: 'Trucco Sposa Naturale',
-      description: 'Un make-up leggero e luminoso per esaltare la bellezza naturale di Sofia nel suo giorno più bello.',
-      mainImage: 'https://placehold.co/600x400/FFDAB9/696969?text=Sposa+Sofia',
-      category: 'Sposa',
-      images: [
-        { src: 'https://placehold.co/800x600/FFDAB9/696969?text=Sofia+1', alt: 'Trucco sposa Sofia primo piano', description: 'Focus sul trucco occhi e incarnato luminoso.' },
-        { src: 'https://placehold.co/800x600/ADD8E6/4682B4?text=Sofia+2', alt: 'Sofia con velo', description: 'Acconciatura semplice e velo leggero.' },
-      ]
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    if (this.isBrowser) {
+      this.firestoreDb = (window as any).db;
+      this.currentAppId = (window as any).appId;
+      // Inizializza Storage solo se siamo nel browser e firebaseApp è disponibile
+      if ((window as any).firebaseApp) {
+        this.firebaseStorage = getStorage((window as any).firebaseApp);
+      } else {
+        console.error('Firebase App non è stato inizializzato correttamente in window.firebaseApp');
+      }
+
+      if (!this.firestoreDb) {
+        console.error('Firestore DB non è stato inizializzato correttamente in window.db');
+      }
+      if (!this.currentAppId) {
+        console.error('App ID non è stato inizializzato correttamente in window.appId');
+      }
     }
-  ];
-
-  constructor() { }
-
-  // Restituisce tutti gli elementi del portfolio
-  getPortfolioItems(): Observable<PortfolioItem[]> {
-    return of(this.portfolioItems);
   }
 
-  // Restituisce un singolo elemento del portfolio per ID
+  /**
+   * Carica un file su Firebase Storage e restituisce l'URL di download.
+   * @param file Il file da caricare.
+   * @param path Il percorso in cui salvare il file (es. 'portfolio-images/').
+   * @returns Un Observable che emette l'URL di download del file.
+   */
+  uploadFile(file: File, path: string): Observable<string> {
+    if (!this.isBrowser || !this.firebaseStorage) {
+      return throwError(() => new Error('Firebase Storage non disponibile o non inizializzato.'));
+    }
+
+    // Crea un riferimento al percorso nel bucket di Storage
+    const filePath = `${path}/${Date.now()}_${file.name}`; // Nome file unico
+    const storageRef: StorageReference = ref(this.firebaseStorage, filePath);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return new Observable(observer => {
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Puoi gestire il progresso qui se vuoi
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log('Upload is ' + progress + '% done'); // Commentato per evitare spam in console
+          // observer.next(progress); // Se vuoi emettere il progresso
+        },
+        (error: any) => { // Tipizzato error
+          console.error('Errore durante l\'upload:', error);
+          observer.error(error);
+        },
+        () => {
+          // Upload completato, ottieni l'URL di download
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => {
+            observer.next(downloadURL);
+            observer.complete();
+          }).catch((urlError: any) => { // Tipizzato urlError
+            console.error('Errore nell\'ottenere l\'URL di download:', urlError);
+            observer.error(urlError);
+          });
+        }
+      );
+    });
+  }
+
+  // --- Metodi Firestore esistenti ---
+
+  getPortfolioItems(): Observable<PortfolioItem[]> {
+    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
+      console.warn('Firestore non disponibile o non inizializzato (non nel browser o db/appId mancanti). Restituisco array vuoto.');
+      return of([]);
+    }
+
+    const portfolioCollectionRef = collection(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`);
+    return new Observable(observer => {
+      const unsubscribe = onSnapshot(portfolioCollectionRef, (snapshot: QuerySnapshot<DocumentData>) => {
+        const items: PortfolioItem[] = [];
+        snapshot.forEach((docData: DocumentData) => {
+          // Assicurati che 'id' sia una stringa e che i dati siano tipizzati correttamente
+          items.push({ id: docData['id'], ...docData['data']() } as PortfolioItem); // Usare docData.data()
+        });
+        observer.next(items);
+      }, (error: any) => {
+        console.error("Errore nel recupero degli elementi del portfolio:", error);
+        observer.error(error);
+      });
+
+      return { unsubscribe };
+    });
+  }
+
   getPortfolioItemById(id: string): Observable<PortfolioItem | undefined> {
-    const item = this.portfolioItems.find(p => p.id === id);
-    return of(item);
+    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
+      console.warn('Firestore non disponibile o non inizializzato. Restituisco undefined.');
+      return of(undefined);
+    }
+
+    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
+    return new Observable(observer => {
+      getDoc(docRef).then((docSnap: DocumentSnapshot<DocumentData>) => {
+        if (docSnap.exists()) {
+          observer.next({ id: docSnap.id, ...docSnap.data() } as PortfolioItem);
+        } else {
+          observer.next(undefined);
+        }
+        observer.complete();
+      }).catch((error: any) => {
+        console.error("Errore nel recupero dell'elemento portfolio per ID:", error);
+        observer.error(error);
+      });
+    });
+  }
+
+  addPortfolioItem(item: Omit<PortfolioItem, 'id'>): Observable<string> {
+    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
+      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
+    }
+    const portfolioCollectionRef = collection(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`);
+    return new Observable(observer => {
+      addDoc(portfolioCollectionRef, item).then((docRef: DocumentReference) => {
+        observer.next(docRef.id);
+        observer.complete();
+      }).catch((error: any) => {
+        console.error("Errore nell'aggiunta dell'elemento portfolio:", error);
+        observer.error(error);
+      });
+    });
+  }
+
+  updatePortfolioItem(id: string, item: Partial<PortfolioItem>): Observable<void> {
+    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
+      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
+    }
+    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
+    return new Observable(observer => {
+      updateDoc(docRef, item).then(() => {
+        observer.next();
+        observer.complete();
+      }).catch((error: any) => {
+        console.error("Errore nell'aggiornamento dell'elemento portfolio:", error);
+        observer.error(error);
+      });
+    });
+  }
+
+  deletePortfolioItem(id: string): Observable<void> {
+    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
+      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
+    }
+    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
+    return new Observable(observer => {
+      deleteDoc(docRef).then(() => {
+        observer.next();
+        observer.complete();
+      }).catch((error: any) => {
+        console.error("Errore nell'eliminazione dell'elemento portfolio:", error);
+        observer.error(error);
+      });
+    });
   }
 }
