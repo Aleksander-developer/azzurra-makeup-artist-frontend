@@ -1,5 +1,4 @@
-/* src/app/pages/contatti/contatti.component.scss */
-
+// src/app/pages/contatti/contatti.component.scss
 @use '../../../styles/variables' as vars;
 @use '../../../styles/mixins' as mixins;
 
@@ -216,7 +215,9 @@ form.contact-form {
     span {
       font-size: 1rem;
       font-weight: 500;
-      white-space: nowrap;
+      // Rimosso white-space: nowrap; per permettere il wrapping
+      overflow-wrap: break-word; // Permette il wrapping di parole lunghe
+      text-align: center; // Centra il testo su più righe
     }
 
     &:hover {
@@ -293,5 +294,9 @@ form.contact-form {
   }
   .direct-contact-info h2 {
     font-size: 1.5rem;
+  }
+  // Regolazione specifica per l'email su schermi molto piccoli
+  .direct-contact-info .contact-method-item span {
+    font-size: 0.85rem; // Riduci la dimensione del font per l'email su schermi piccoli
   }
 }

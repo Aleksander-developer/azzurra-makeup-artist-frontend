@@ -1,4 +1,4 @@
-/* src/app/shared/components/footer/footer.component.scss */
+// src/app/shared/components/footer/footer.component.scss
 
 @use '../../../../styles/variables' as vars;
 @use '../../../../styles/mixins' as mixins;
@@ -87,13 +87,19 @@
   color: vars.$color-white; // Mantieni il testo bianco per leggibilità
   gap: vars.$spacing-xs;
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.6); // AGGIUNTO: Ombra leggera per il testo del copyright
+  text-align: center; // Centra il testo quando si rompe su più righe
 
-  .developer-credit a {
-    color: vars.$color-vibrant-fuchsia; // Rendi il link developer fucsia
-    font-weight: bold;
-    text-shadow: 0 0 4px rgba(vars.$color-vibrant-fuchsia, 0.6); // AGGIUNTO: Ombra leggera per il link developer
-    &:hover {
-      text-decoration: underline;
+  .developer-credit {
+    // Assicurati che "Realizzato da Aleksander Nikolli" rimanga insieme
+    white-space: nowrap; // Impedisce il wrapping all'interno di questo span
+    
+    a {
+      color: vars.$color-vibrant-fuchsia; // Rendi il link developer fucsia
+      font-weight: bold;
+      text-shadow: 0 0 4px rgba(vars.$color-vibrant-fuchsia, 0.6); // AGGIUNTO: Ombra leggera per il link developer
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -101,7 +107,17 @@
 /* --- Media Query per Responsività --- */
 @media (max-width: vars.$breakpoint-md) {
   .footer-bottom-bar {
-    flex-direction: column;
-    gap: vars.$spacing-md;
+    flex-direction: column; // Forze le due parti su righe separate
+    gap: vars.$spacing-sm; // Riduci il gap quando sono in colonna
+    font-size: vars.$font-size-base * 0.9; // Aumenta leggermente la dimensione del font per leggibilità
+  }
+  .footer-socials {
+    gap: vars.$spacing-sm; // Riduci il gap anche qui per schermi più piccoli
+  }
+}
+
+@media (max-width: vars.$breakpoint-sm) { // Per schermi ancora più piccoli (es. iPhone X)
+  .footer-bottom-bar {
+    font-size: vars.$font-size-base * 0.85; // Riduci leggermente il font
   }
 }
