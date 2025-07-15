@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../../environments/environment'; // Importa l'ambiente corretto (environment.ts o environment.prod.ts)
+import { environment } from '../../environments/environment.prod'; // Importa l'ambiente corretto (environment.ts o environment.prod.ts)
 
 @Component({
   selector: 'app-contatti',
