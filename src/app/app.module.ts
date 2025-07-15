@@ -5,12 +5,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared/shared.module'; // <-- ASSICURATI CHE IL PERCORSO SIA CORRETTO
+import { SharedModule } from './shared/shared/shared.module';
 import { AuthService } from './auth/auth.service';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http'; // <-- Importante: HttpClient già configurato
 
-// Importa i moduli delle pagine (se non sono lazy-loaded, altrimenti non servono qui)
-// Li lascio qui per sicurezza, ma se il tuo routing è lazy-loaded, non sono strettamente necessari.
+// Importa i moduli delle pagine
 import { HomeModule } from './pages/home/home.module';
 import { ChiSonoModule } from './pages/chi-sono/chi-sono.module';
 import { PortfolioModule } from './pages/portfolio/portfolio.module';
@@ -42,7 +41,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
   ],
   providers: [
     AuthService,
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch()), // <-- Questo è il provider per HttpClient
     provideClientHydration(),
     provideAnimationsAsync()
   ],

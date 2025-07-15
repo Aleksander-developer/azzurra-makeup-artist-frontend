@@ -7,12 +7,11 @@
 
   [functions.node_bundler_config]
     inject = ["node_modules/buffer/index.js"]
-    # AGGIUNGI QUESTO: Tratta questi moduli come esterni
     external = [
       "@grpc/grpc-js",
       "@grpc/proto-loader",
-      "buffer", # Anche se lo iniettiamo, a volte è utile escluderlo dal bundling
-      "fs",     # Moduli Node.js built-in che non esistono nelle Edge Functions
+      "buffer",
+      "fs",
       "path",
       "os",
       "crypto",

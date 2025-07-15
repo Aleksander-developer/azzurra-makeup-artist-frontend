@@ -1,190 +1,148 @@
 // src/app/portfolio/portfolio.service.ts
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Observable, of, throwError } from 'rxjs';
-import { map, finalize } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'; // Importa HttpClient
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../environments/environment.prod'; // Importa l'ambiente per l'URL del backend
 
-// Importa le funzioni Firestore e Storage necessarie
-import {
-  getFirestore, collection, doc, getDoc,
-  addDoc, updateDoc, deleteDoc, onSnapshot,
-  Firestore, DocumentData, QuerySnapshot, DocumentReference, DocumentSnapshot
-} from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, StorageReference } from 'firebase/storage';
-
-import { PortfolioItem, PortfolioImage } from '../pages/portfolio/portfolio-item.model'; // Assicurati che il percorso sia corretto
-
-// Dichiarazione globale per db (inizializzato in main.ts)
-declare const db: Firestore;
-declare const appId: string; // Variabile globale per l'ID dell'app
-declare const firebaseApp: any; // Dichiarazione per l'app Firebase (inizializzata in main.ts)
+import { PortfolioItem } from '../pages/portfolio/portfolio-item.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
-  private portfolioCollectionName = 'portfolioItems'; // Nome della collezione Firestore
-  private isBrowser: boolean;
-  private firestoreDb: Firestore | undefined;
-  private currentAppId: string | undefined;
-  private firebaseStorage: any; // Riferimento a Firebase Storage
+  private apiUrl = environment.apiUrl; // URL del tuo backend su Render
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-    if (this.isBrowser) {
-      this.firestoreDb = (window as any).db;
-      this.currentAppId = (window as any).appId;
-      // Inizializza Storage solo se siamo nel browser e firebaseApp è disponibile
-      if ((window as any).firebaseApp) {
-        this.firebaseStorage = getStorage((window as any).firebaseApp);
-      } else {
-        console.error('Firebase App non è stato inizializzato correttamente in window.firebaseApp');
-      }
+  constructor(private http: HttpClient) { } // Inietta HttpClient
 
-      if (!this.firestoreDb) {
-        console.error('Firestore DB non è stato inizializzato correttamente in window.db');
-      }
-      if (!this.currentAppId) {
-        console.error('App ID non è stato inizializzato correttamente in window.appId');
-      }
+  // Metodo helper per la gestione degli errori HTTP
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Errore lato client o di rete
+      errorMessage = `Client Error: ${error.error.message}`;
+    } else {
+      // Errore lato server
+      errorMessage = `Server Error: ${error.status} - ${error.message || ''}\n${JSON.stringify(error.error)}`;
     }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 
   /**
-   * Carica un file su Firebase Storage e restituisce l'URL di download.
-   * @param file Il file da caricare.
-   * @param path Il percorso in cui salvare il file (es. 'portfolio-images/').
-   * @returns Un Observable che emette l'URL di download del file.
+   * Recupera tutti gli elementi del portfolio dal backend.
+   * @returns Un Observable di un array di PortfolioItem.
    */
-  uploadFile(file: File, path: string): Observable<string> {
-    if (!this.isBrowser || !this.firebaseStorage) {
-      return throwError(() => new Error('Firebase Storage non disponibile o non inizializzato.'));
-    }
-
-    // Crea un riferimento al percorso nel bucket di Storage
-    const filePath = `${path}/${Date.now()}_${file.name}`; // Nome file unico
-    const storageRef: StorageReference = ref(this.firebaseStorage, filePath);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    return new Observable(observer => {
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          // Puoi gestire il progresso qui se vuoi
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          // console.log('Upload is ' + progress + '% done'); // Commentato per evitare spam in console
-          // observer.next(progress); // Se vuoi emettere il progresso
-        },
-        (error: any) => { // Tipizzato error
-          console.error('Errore durante l\'upload:', error);
-          observer.error(error);
-        },
-        () => {
-          // Upload completato, ottieni l'URL di download
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => {
-            observer.next(downloadURL);
-            observer.complete();
-          }).catch((urlError: any) => { // Tipizzato urlError
-            console.error('Errore nell\'ottenere l\'URL di download:', urlError);
-            observer.error(urlError);
-          });
-        }
-      );
-    });
-  }
-
-  // --- Metodi Firestore esistenti ---
-
   getPortfolioItems(): Observable<PortfolioItem[]> {
-    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
-      console.warn('Firestore non disponibile o non inizializzato (non nel browser o db/appId mancanti). Restituisco array vuoto.');
-      return of([]);
-    }
-
-    const portfolioCollectionRef = collection(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`);
-    return new Observable(observer => {
-      const unsubscribe = onSnapshot(portfolioCollectionRef, (snapshot: QuerySnapshot<DocumentData>) => {
-        const items: PortfolioItem[] = [];
-        snapshot.forEach((docData: DocumentData) => {
-          // Assicurati che 'id' sia una stringa e che i dati siano tipizzati correttamente
-          items.push({ id: docData['id'], ...docData['data']() } as PortfolioItem); // Usare docData.data()
-        });
-        observer.next(items);
-      }, (error: any) => {
-        console.error("Errore nel recupero degli elementi del portfolio:", error);
-        observer.error(error);
-      });
-
-      return { unsubscribe };
-    });
+    return this.http.get<PortfolioItem[]>(`${this.apiUrl}/api/portfolio`).pipe(
+      catchError(this.handleError)
+    );
   }
 
+  /**
+   * Recupera un singolo elemento del portfolio per ID dal backend.
+   * @param id L'ID dell'elemento del portfolio.
+   * @returns Un Observable dell'elemento PortfolioItem o undefined se non trovato.
+   */
   getPortfolioItemById(id: string): Observable<PortfolioItem | undefined> {
-    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
-      console.warn('Firestore non disponibile o non inizializzato. Restituisco undefined.');
-      return of(undefined);
-    }
-
-    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
-    return new Observable(observer => {
-      getDoc(docRef).then((docSnap: DocumentSnapshot<DocumentData>) => {
-        if (docSnap.exists()) {
-          observer.next({ id: docSnap.id, ...docSnap.data() } as PortfolioItem);
-        } else {
-          observer.next(undefined);
-        }
-        observer.complete();
-      }).catch((error: any) => {
-        console.error("Errore nel recupero dell'elemento portfolio per ID:", error);
-        observer.error(error);
-      });
-    });
+    return this.http.get<PortfolioItem>(`${this.apiUrl}/api/portfolio/${id}`).pipe(
+      catchError(this.handleError),
+      map(item => item || undefined) // Assicura che ritorni undefined se non trovato
+    );
   }
 
-  addPortfolioItem(item: Omit<PortfolioItem, 'id'>): Observable<string> {
-    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
-      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
-    }
-    const portfolioCollectionRef = collection(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`);
-    return new Observable(observer => {
-      addDoc(portfolioCollectionRef, item).then((docRef: DocumentReference) => {
-        observer.next(docRef.id);
-        observer.complete();
-      }).catch((error: any) => {
-        console.error("Errore nell'aggiunta dell'elemento portfolio:", error);
-        observer.error(error);
-      });
+  /**
+   * Aggiunge un nuovo elemento del portfolio al backend.
+   * Gestisce l'upload di file tramite FormData.
+   * @param item I dati testuali del portfolio item.
+   * @param mainImageFile Il file dell'immagine principale.
+   * @param galleryFiles Un array di file per le immagini della galleria.
+   * @returns Un Observable dell'ID del nuovo elemento.
+   */
+  addPortfolioItem(
+    item: Omit<PortfolioItem, 'id' | 'mainImage' | 'images'>, // Dati testuali
+    mainImageFile: File,
+    galleryFiles: File[],
+    imagesData: { description: string; alt: string; isNew?: boolean; src?: string }[] // Dettagli testuali per le immagini della galleria
+  ): Observable<string> {
+    const formData = new FormData();
+    formData.append('title', item.title);
+    if (item.subtitle) formData.append('subtitle', item.subtitle);
+    if (item.description) formData.append('description', item.description);
+    formData.append('category', item.category);
+
+    // Aggiungi l'immagine principale
+    formData.append('mainImage', mainImageFile, mainImageFile.name);
+
+    // Aggiungi le immagini della galleria e i loro dettagli testuali
+    galleryFiles.forEach((file, index) => {
+      formData.append('galleryImages', file, file.name);
     });
+    // Invia i dettagli testuali delle immagini della galleria come stringa JSON
+    formData.append('images', JSON.stringify(imagesData));
+
+    return this.http.post<{ _id: string }>(`${this.apiUrl}/api/portfolio`, formData).pipe(
+      map(response => response._id), // Il backend restituisce _id
+      catchError(this.handleError)
+    );
   }
 
-  updatePortfolioItem(id: string, item: Partial<PortfolioItem>): Observable<void> {
-    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
-      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
+
+  /**
+   * Aggiorna un elemento del portfolio esistente nel backend.
+   * Gestisce l'upload di nuove immagini e l'aggiornamento dei dettagli.
+   * @param id L'ID dell'elemento da aggiornare.
+   * @param item I dati testuali aggiornati.
+   * @param mainImageFile Il nuovo file dell'immagine principale (opzionale).
+   * @param galleryFiles Un array di nuovi file per le immagini della galleria (opzionale).
+   * @param imagesData Dettagli testuali per tutte le immagini della galleria (esistenti e nuove).
+   * @returns Un Observable che completa quando l'aggiornamento è finito.
+   */
+  updatePortfolioItem(
+    id: string,
+    item: Partial<Omit<PortfolioItem, 'id' | 'mainImage' | 'images'>>,
+    mainImageFile: File | null, // null se non cambi, File se ne carichi una nuova
+    galleryFiles: File[],
+    imagesData: { description: string; alt: string; isNew?: boolean; src?: string }[]
+  ): Observable<void> {
+    const formData = new FormData();
+
+    // Aggiungi i campi testuali solo se sono stati modificati
+    if (item.title !== undefined) formData.append('title', item.title);
+    if (item.subtitle !== undefined) formData.append('subtitle', item.subtitle);
+    if (item.description !== undefined) formData.append('description', item.description);
+    if (item.category !== undefined) formData.append('category', item.category);
+
+    // Gestione immagine principale
+    if (mainImageFile) {
+      formData.append('mainImage', mainImageFile, mainImageFile.name);
+    } else if (mainImageFile === null) {
+      // Se mainImageFile è null, significa che l'immagine principale è stata rimossa
+      formData.append('mainImage', '');
     }
-    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
-    return new Observable(observer => {
-      updateDoc(docRef, item).then(() => {
-        observer.next();
-        observer.complete();
-      }).catch((error: any) => {
-        console.error("Errore nell'aggiornamento dell'elemento portfolio:", error);
-        observer.error(error);
-      });
+
+    // Aggiungi le nuove immagini della galleria
+    galleryFiles.forEach((file) => {
+      formData.append('galleryImages', file, file.name);
     });
+
+    // Invia tutti i dettagli delle immagini della galleria (esistenti e nuove)
+    formData.append('images', JSON.stringify(imagesData));
+
+    return this.http.put<void>(`${this.apiUrl}/api/portfolio/${id}`, formData).pipe(
+      catchError(this.handleError)
+    );
   }
 
+
+  /**
+   * Elimina un elemento del portfolio dal backend.
+   * @param id L'ID dell'elemento da eliminare.
+   * @returns Un Observable che completa quando l'eliminazione è finita.
+   */
   deletePortfolioItem(id: string): Observable<void> {
-    if (!this.isBrowser || !this.firestoreDb || !this.currentAppId) {
-      return throwError(() => new Error('Firestore non disponibile o non inizializzato.'));
-    }
-    const docRef = doc(this.firestoreDb, `artifacts/${this.currentAppId}/public/data/${this.portfolioCollectionName}`, id);
-    return new Observable(observer => {
-      deleteDoc(docRef).then(() => {
-        observer.next();
-        observer.complete();
-      }).catch((error: any) => {
-        console.error("Errore nell'eliminazione dell'elemento portfolio:", error);
-        observer.error(error);
-      });
-    });
+    return this.http.delete<void>(`${this.apiUrl}/api/portfolio/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 }

@@ -1,4 +1,4 @@
-<!-- src/app/admin/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
+<!-- src/app/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
 <section class="portfolio-manager-container">
   <h1 class="page-title">
     <mat-icon class="title-icon">dashboard</mat-icon> Gestione Portfolio
@@ -38,7 +38,7 @@
             <mat-icon>upload_file</mat-icon> Carica Immagine Principale
           </button>
           <span class="file-name" *ngIf="mainImageFile">{{ mainImageFile.name }}</span>
-          <span class="file-name" *ngIf="!mainImageFile && editingItem?.mainImage">
+          <span class="file-name" *ngIf="!mainImageFile && editingItem?.mainImage && !mainImagePreview">
             Immagine attuale: <a [href]="editingItem?.mainImage || ''" target="_blank">Vedi</a>
           </span>
 
@@ -48,14 +48,12 @@
               <mat-icon>cancel</mat-icon>
             </button>
           </div>
-          <mat-error *ngIf="portfolioForm.get('mainImage')?.invalid && (portfolioForm.get('mainImage')?.dirty || portfolioForm.get('mainImage')?.touched)">
-            L'immagine principale è obbligatoria.
-          </mat-error>
-          <mat-progress-spinner *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100"
+          <!-- Rimosso il progress spinner per l'upload dell'immagine principale, dato che il progresso è gestito a livello di servizio -->
+          <!-- <mat-progress-spinner *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100"
             [mode]="'determinate'" [value]="mainImageUploadProgress" [diameter]="20"></mat-progress-spinner>
           <span *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100" class="upload-progress-text">
             {{ mainImageUploadProgress | number:'1.0-0' }}%
-          </span>
+          </span> -->
         </div>
 
         <mat-form-field appearance="outline">
@@ -77,26 +75,27 @@
           <h3>Immagini della Galleria (Opzionale)</h3>
           <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index" [formGroupName]="i" class="image-item-group">
             <div class="gallery-image-wrapper">
-              <input type="file" #galleryImageInput (change)="onGalleryImageSelected($event, i)" accept="image/*" style="display: none;">
+              <input type="file" #galleryImageInput (change)="onGalleryImagesSelected($event)" accept="image/*" style="display: none;">
               <button mat-raised-button color="accent" type="button" (click)="galleryImageInput.click()">
                 <mat-icon>upload_file</mat-icon> Carica Immagine {{i + 1}}
               </button>
-              <span class="file-name" *ngIf="galleryImageFiles[i]">{{ galleryImageFiles[i]?.name }}</span>
-              <span class="file-name" *ngIf="!galleryImageFiles[i] && imageGroup.get('src')?.value">
+              <span class="file-name" *ngIf="galleryFiles[i]">{{ galleryFiles[i]!.name }}</span>
+              <span class="file-name" *ngIf="!galleryFiles[i] && imageGroup.get('src')?.value">
                 Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
               </span>
 
               <div *ngIf="galleryImagePreviews[i]" class="image-preview-container">
                 <img [src]="galleryImagePreviews[i] || ''" alt="Anteprima Galleria {{i + 1}}" class="image-preview">
-                <button mat-icon-button color="warn" (click)="removeGalleryImage(i)" class="remove-image-button" aria-label="Rimuovi immagine galleria">
+                <button mat-icon-button color="warn" (click)="removeImageGroup(i)" class="remove-image-button" aria-label="Rimuovi immagine galleria">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </div>
-              <mat-progress-spinner *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100"
+              <!-- Rimosso il progress spinner per l'upload delle immagini della galleria -->
+              <!-- <mat-progress-spinner *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100"
                 [mode]="'determinate'" [value]="galleryImageUploadProgress[i]" [diameter]="20"></mat-progress-spinner>
               <span *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100" class="upload-progress-text">
                 {{ galleryImageUploadProgress[i] | number:'1.0-0' }}%
-              </span>
+              </span> -->
             </div>
 
             <mat-form-field appearance="outline" class="gallery-description-field">
@@ -107,11 +106,11 @@
               <mat-label>Testo Alternativo (Alt) Immagine {{i + 1}}</mat-label>
               <input matInput formControlName="alt" placeholder="Testo per accessibilità">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeImage(i)" type="button" aria-label="Rimuovi immagine">
+            <button mat-icon-button color="warn" (click)="removeImageGroup(i)" type="button" aria-label="Rimuovi immagine">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <button mat-stroked-button (click)="addImage()" type="button" class="add-image-button">
+          <button mat-stroked-button (click)="addImageGroup()" type="button" class="add-image-button">
             <mat-icon>add</mat-icon> Aggiungi Immagine Galleria
           </button>
         </div>
@@ -124,14 +123,14 @@
         </div>
 
         <div class="form-actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="portfolioForm.invalid || isLoading || uploadInProgress">
-            <span *ngIf="!isLoading && !uploadInProgress">{{ editingItem ? 'Salva Modifiche' : 'Aggiungi Lavoro' }}</span>
-            <span *ngIf="isLoading || uploadInProgress" class="button-loading-content">
+          <button mat-raised-button color="primary" type="submit" [disabled]="portfolioForm.invalid || loading || isUploading">
+            <span *ngIf="!loading && !isUploading">{{ editingItem ? 'Salva Modifiche' : 'Aggiungi Lavoro' }}</span>
+            <span *ngIf="loading || isUploading" class="button-loading-content">
               <mat-spinner [diameter]="20"></mat-spinner>
-              <span>{{ isLoading ? 'Salvataggio...' : 'Caricamento Immagini...' }}</span>
+              <span>{{ loading ? 'Salvataggio...' : 'Caricamento Immagini...' }}</span>
             </span>
           </button>
-          <button mat-stroked-button color="accent" type="button" (click)="resetForm()" *ngIf="editingItem || portfolioForm.dirty">
+          <button mat-stroked-button color="accent" type="button" (click)="clearForm()" *ngIf="editingItem || portfolioForm.dirty">
             Annulla / Nuovo Lavoro
           </button>
         </div>
@@ -145,10 +144,10 @@
       <mat-card-title>Lavori Esistenti</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div *ngIf="portfolioItems.length === 0 && !isLoadingList" class="no-items-message">
+      <div *ngIf="portfolioItems.length === 0 && !loading" class="no-items-message">
         <mat-icon>info</mat-icon> Nessun lavoro nel portfolio. Aggiungine uno!
       </div>
-      <div *ngIf="isLoadingList" class="loading-spinner">
+      <div *ngIf="loading" class="loading-spinner">
         <mat-spinner [diameter]="50"></mat-spinner>
         <p>Caricamento lavori...</p>
       </div>
