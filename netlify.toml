@@ -1,25 +1,10 @@
-# netlify.toml
-
 [build]
-  # Il comando di build che Netlify eseguirà per compilare la tua app Angular
   command = "ng build --configuration production"
-  # La directory che Netlify pubblicherà (l'output della build del browser)
-  # Assicurati che questo percorso corrisponda al tuo "outputPath" in angular.json per la build del browser
   publish = "dist/azzurra-makeup-artist/browser"
 
-# Configurazione specifica per le Edge Functions di Netlify
 [functions]
-  # Specifica che le Edge Functions dovrebbero usare il bundler 'esbuild'.
-  # Questo è importante per una migliore compatibilità con i moduli Node.js
-  # che potrebbero essere inclusi nella tua build SSR.
   node_bundler = "esbuild"
 
-  # Configurazione aggiuntiva per il bundler esbuild
   [functions.node_bundler_config]
-    # Questa opzione dice a esbuild di "iniettare" un polyfill per l'oggetto globale 'Buffer'.
-    # 'Buffer' è un oggetto nativo di Node.js che non è presente nell'ambiente
-    # delle Edge Functions di Netlify. Includendo il percorso al polyfill del pacchetto 'buffer',
-    # rendiamo 'Buffer' disponibile all'interno della tua Edge Function SSR.
-    # Il percorso 'node_modules/buffer/index.js' punta al file principale del pacchetto 'buffer',
-    # che è il polyfill standard per il browser/ambiente non-Node.js.
     inject = ["node_modules/buffer/index.js"]
+
