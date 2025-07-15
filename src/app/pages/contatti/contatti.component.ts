@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment'; // Importa l'ambiente corretto (environment.ts o environment.prod.ts)
 
 @Component({
   selector: 'app-contatti',
@@ -15,6 +15,9 @@ export class ContattiComponent implements OnInit {
   successMessage: string = '';
   errorMessage: string = '';
   isLoading: boolean = false;
+
+  // URL del backend, preso dall'ambiente
+  private backendUrl = environment.apiUrl; // <-- USA environment.apiUrl
 
   constructor(
     private fb: FormBuilder,
@@ -36,17 +39,19 @@ export class ContattiComponent implements OnInit {
     this.errorMessage = '';
 
     if (this.contactForm.valid) {
-      this.isLoading = true; // Imposta isLoading a true all'inizio della richiesta
+      this.isLoading = true;
       const formData = this.contactForm.value;
 
       console.log('Invio dati:', formData);
 
-      // Assicurati che environment.apiUrl sia definito nel tuo file environment.ts
-      this.http.post(`${environment.firebaseConfig}/contatti`, formData).subscribe({
+      // Invia la richiesta POST al tuo backend su Render
+      // Assicurati che il tuo backend su Render abbia un endpoint /api/contatti che accetta richieste POST
+      this.http.post(`${this.backendUrl}/api/contatti`, formData).subscribe({ // <-- CORRETTO L'URL
         next: () => {
           this.successMessage = 'Messaggio inviato con successo!';
+          this.snackBar.open(this.successMessage, 'Chiudi', { duration: 3000 }); // Mostra snackBar per successo
 
-          // --- LOGICA DI RESET DEFINITIVA E FORZATA ---
+          // Logica di reset del form
           this.contactForm.reset({
             nome: '',
             email: '',
@@ -54,6 +59,7 @@ export class ContattiComponent implements OnInit {
             messaggio: ''
           });
 
+          // Resetta lo stato dei controlli per rimuovere le classi di validazione
           setTimeout(() => {
             Object.keys(this.contactForm.controls).forEach(key => {
               const control = this.contactForm.get(key);
@@ -79,6 +85,8 @@ export class ContattiComponent implements OnInit {
       });
     } else {
       this.contactForm.markAllAsTouched();
+      this.errorMessage = 'Per favore, compila correttamente tutti i campi obbligatori.';
+      this.snackBar.open(this.errorMessage, 'Chiudi', { duration: 5000 });
     }
   }
 }
