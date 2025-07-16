@@ -5,8 +5,10 @@ import { PortfolioService } from '../../portfolio/portfolio.service';
 import { PortfolioItem, PortfolioImage } from '../../pages/portfolio/portfolio-item.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs'; // Importa Observable
+import { Observable } from 'rxjs';
 import { ConfirmationDialogComponent } from '../admin/shared/confirmation-dialog/confirmation-dialog.component';
+// CORREZIONE QUI: Assicurati che il percorso sia corretto per la tua struttura di progetto
+
 
 @Component({
   selector: 'app-admin-portfolio-manager',
@@ -18,18 +20,16 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
   portfolioItems: PortfolioItem[] = [];
   editingItem: PortfolioItem | null = null;
   mainImageFile: File | null = null;
-  galleryFiles: File[] = []; // Nuovi file della galleria da caricare
+  galleryFiles: File[] = [];
 
-  // Variabili per lo stato di caricamento e i messaggi
-  loading = false; // Per il caricamento generale (es. lista portfolio)
-  isUploading = false; // Per indicare che un upload di file è in corso
-  mainImagePreview: string | ArrayBuffer | null = null; // Per l'anteprima dell'immagine principale
-  galleryImagePreviews: (string | ArrayBuffer | null)[] = []; // Per le anteprime delle immagini della galleria
+  loading = false;
+  isUploading = false;
+  mainImagePreview: string | ArrayBuffer | null = null;
+  galleryImagePreviews: (string | ArrayBuffer | null)[] = [];
 
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
-  // Colonne per la tabella Material
   displayedColumns: string[] = ['title', 'category', 'actions'];
 
   @ViewChild('mainImageInput') mainImageInput!: ElementRef<HTMLInputElement>;
@@ -57,26 +57,25 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       subtitle: [''],
       description: [''],
       category: ['', Validators.required],
-      images: this.fb.array([]) // Array di FormGroup per le immagini della galleria
+      images: this.fb.array([])
     });
   }
 
-  get imagesFormArray(): FormArray { // Getter per accedere all'array di form
+  get imagesFormArray(): FormArray {
     return this.portfolioForm.get('images') as FormArray;
   }
 
   addImageGroup(image?: PortfolioImage): void {
     this.imagesFormArray.push(this.fb.group({
-      src: [image ? image.src : ''], // URL per immagini esistenti
+      src: [image ? image.src : ''],
       description: [image ? image.description : ''],
       alt: [image ? image.alt : ''],
-      isNew: [image ? false : true] // Flag per nuove immagini caricate
+      isNew: [image ? false : true]
     }));
   }
 
   removeImageGroup(index: number): void {
     this.imagesFormArray.removeAt(index);
-    // Rimuovi anche l'immagine dal preview e dal file array se presente
     if (this.galleryFiles[index]) {
       this.galleryFiles.splice(index, 1);
     }
@@ -104,7 +103,6 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.mainImageFile = input.files[0];
-      // Mostra l'anteprima
       const reader = new FileReader();
       reader.onload = () => {
         this.mainImagePreview = reader.result;
@@ -126,10 +124,10 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files) {
       const newFiles = Array.from(input.files);
-      this.galleryFiles = [...this.galleryFiles, ...newFiles]; // Aggiungi ai file esistenti
+      this.galleryFiles = [...this.galleryFiles, ...newFiles];
 
       newFiles.forEach(file => {
-        this.addImageGroup(); // Aggiunge un gruppo vuoto per i dettagli testuali
+        this.addImageGroup();
         const reader = new FileReader();
         reader.onload = () => {
           this.galleryImagePreviews.push(reader.result);
@@ -137,9 +135,9 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         reader.readAsDataURL(file);
       });
     } else {
-      // Se non ci sono file selezionati, non azzerare l'array esistente
+      // If no files selected, do not clear existing array
     }
-    if (this.galleryImagesInput) this.galleryImagesInput.nativeElement.value = ''; // Resetta l'input file
+    if (this.galleryImagesInput) this.galleryImagesInput.nativeElement.value = '';
   }
 
   editItem(item: PortfolioItem): void {
@@ -241,6 +239,14 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
   }
 
   deleteItem(id: string): void {
+    // AGGIUNTO LOG E CONTROLLO ID
+    console.log('Tentativo di eliminare elemento con ID:', id);
+    if (!id) {
+      this.snackBar.open('Impossibile eliminare: ID elemento non valido.', 'Chiudi', { duration: 3000 });
+      console.error('ID elemento non valido per l\'eliminazione:', id);
+      return;
+    }
+
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '300px',
       data: { message: 'Sei sicuro di voler eliminare questo elemento del portfolio?' }
