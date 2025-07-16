@@ -48,12 +48,6 @@
               <mat-icon>cancel</mat-icon>
             </button>
           </div>
-          <!-- Rimosso il progress spinner per l'upload dell'immagine principale, dato che il progresso è gestito a livello di servizio -->
-          <!-- <mat-progress-spinner *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100"
-            [mode]="'determinate'" [value]="mainImageUploadProgress" [diameter]="20"></mat-progress-spinner>
-          <span *ngIf="mainImageUploadProgress > 0 && mainImageUploadProgress < 100" class="upload-progress-text">
-            {{ mainImageUploadProgress | number:'1.0-0' }}%
-          </span> -->
         </div>
 
         <mat-form-field appearance="outline">
@@ -73,29 +67,31 @@
         <!-- Sezione per le immagini aggiuntive (galleria) -->
         <div class="image-gallery-form">
           <h3>Immagini della Galleria (Opzionale)</h3>
+
+          <!-- Un singolo input file nascosto per tutte le immagini della galleria -->
+          <input type="file" #singleGalleryImageInput (change)="onGalleryImagesSelected($event)" accept="image/*" style="display: none;">
+
+          <!-- Loop attraverso i controlli del FormArray -->
           <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index" [formGroupName]="i" class="image-item-group">
             <div class="gallery-image-wrapper">
-              <input type="file" #galleryImageInput (change)="onGalleryImagesSelected($event)" accept="image/*" style="display: none;">
-              <button mat-raised-button color="accent" type="button" (click)="galleryImageInput.click()">
+              <!-- Il pulsante ora chiama openGalleryFileInput e gli passa l'indice -->
+              <button mat-raised-button color="accent" type="button" (click)="openGalleryFileInput(i)">
                 <mat-icon>upload_file</mat-icon> Carica Immagine {{i + 1}}
               </button>
-              <span class="file-name" *ngIf="galleryFiles[i]">{{ galleryFiles[i]!.name }}</span>
-              <span class="file-name" *ngIf="!galleryFiles[i] && imageGroup.get('src')?.value">
+              <!-- Mostra il nome del file se è un nuovo file caricato -->
+              <span class="file-name" *ngIf="galleryFiles[i]">{{ galleryFiles[i].name }}</span>
+              <!-- Mostra il link all'immagine esistente se non c'è un nuovo file -->
+              <span class="file-name" *ngIf="!galleryFiles[i] && imageGroup.get('src')?.value && !galleryImagePreviews[i]">
                 Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
               </span>
 
+              <!-- Anteprima dell'immagine -->
               <div *ngIf="galleryImagePreviews[i]" class="image-preview-container">
                 <img [src]="galleryImagePreviews[i] || ''" alt="Anteprima Galleria {{i + 1}}" class="image-preview">
                 <button mat-icon-button color="warn" (click)="removeImageGroup(i)" class="remove-image-button" aria-label="Rimuovi immagine galleria">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </div>
-              <!-- Rimosso il progress spinner per l'upload delle immagini della galleria -->
-              <!-- <mat-progress-spinner *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100"
-                [mode]="'determinate'" [value]="galleryImageUploadProgress[i]" [diameter]="20"></mat-progress-spinner>
-              <span *ngIf="galleryImageUploadProgress[i] > 0 && galleryImageUploadProgress[i] < 100" class="upload-progress-text">
-                {{ galleryImageUploadProgress[i] | number:'1.0-0' }}%
-              </span> -->
             </div>
 
             <mat-form-field appearance="outline" class="gallery-description-field">
@@ -110,7 +106,7 @@
               <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <button mat-stroked-button (click)="addImageGroup()" type="button" class="add-image-button">
+          <button mat-stroked-button (click)="addNewImageGroup()" type="button" class="add-image-button">
             <mat-icon>add</mat-icon> Aggiungi Immagine Galleria
           </button>
         </div>
