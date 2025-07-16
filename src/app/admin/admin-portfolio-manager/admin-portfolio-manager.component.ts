@@ -1,5 +1,5 @@
 // src/app/admin/admin-portfolio-manager/admin-portfolio-manager.component.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { PortfolioService } from '../../portfolio/portfolio.service';
 import { PortfolioItem, PortfolioImage } from '../../pages/portfolio/portfolio-item.model';
@@ -7,9 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmationDialogComponent } from '../admin/shared/confirmation-dialog/confirmation-dialog.component';
-// Assicurati che il percorso sia corretto per la tua struttura di progetto
-// Ho usato il percorso comune per un modulo 'shared/components'
-
+// **IMPORTANTE:** Assicurati che il percorso sia corretto per la tua struttura di progetto
+// Basato sul tuo ultimo file, dovrebbe essere questo:
 
 @Component({
   selector: 'app-admin-portfolio-manager',
@@ -44,7 +43,8 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private portfolioService: PortfolioService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef // **NUOVO:** Inietta ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -87,17 +87,18 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     console.log('Aggiunta nuovo gruppo immagine (pulsante)');
     const newFormGroup = this.createImageGroup();
 
-    // Aggiungi un placeholder per il file e la preview per mantenere la sincronizzazione degli indici
+    // Aggiungi il FormGroup all'array
+    this.imagesFormArray.push(newFormGroup);
+    // Poi aggiorna gli array ausiliari per mantenere la sincronizzazione degli indici
     this.galleryFiles.push(null as any);
     this.galleryImagePreviews.push(null);
 
-    // Usa setTimeout per posticipare l'aggiunta del FormGroup
-    setTimeout(() => {
-      this.imagesFormArray.push(newFormGroup);
-      console.log('imagesFormArray length dopo addNew (delayed):', this.imagesFormArray.length);
-      console.log('galleryFiles length dopo addNew (delayed):', this.galleryFiles.length);
-      console.log('galleryImagePreviews length dopo addNew (delayed):', this.galleryImagePreviews.length);
-    }, 0);
+    console.log('imagesFormArray length dopo addNew:', this.imagesFormArray.length);
+    console.log('galleryFiles length dopo addNew:', this.galleryFiles.length);
+    console.log('galleryImagePreviews length dopo addNew:', this.galleryImagePreviews.length);
+
+    // **NUOVO:** Forza la change detection dopo aver modificato il FormArray
+    this.cdr.detectChanges();
   }
 
   // Rimuove un gruppo di form e i dati associati
@@ -117,6 +118,9 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       console.log('imagesFormArray length dopo remove:', this.imagesFormArray.length);
       console.log('galleryFiles length dopo remove:', this.galleryFiles.length);
       console.log('galleryImagePreviews length dopo remove:', this.galleryImagePreviews.length);
+
+      // **NUOVO:** Forza la change detection dopo aver modificato il FormArray
+      this.cdr.detectChanges();
     } else {
       console.warn('Tentativo di rimuovere un gruppo immagine con indice non valido:', index);
     }
@@ -211,9 +215,8 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     } else {
       console.log(`Nessun file selezionato per l'immagine galleria all'indice ${formGroupIndex}.`);
     }
-    // Resetta l'input file per permettere di selezionare lo stesso file più volte
-    // if (input) input.value = ''; // Rimosso perché già fatto in openGalleryFileInput
-    this.currentGalleryImageIndex = null; // Resetta l'indice dopo l'operazione
+    // Resetta l'indice dopo l'operazione
+    this.currentGalleryImageIndex = null;
   }
 
 
@@ -241,17 +244,17 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     item.images?.forEach(img => {
       console.log('Aggiunta immagine esistente in editing:', img);
       const existingImageGroup = this.createImageGroup(img);
+      this.imagesFormArray.push(existingImageGroup); // Push direttamente
       this.galleryImagePreviews.push(img.src);
       this.galleryFiles.push(null as any); // Placeholder per i file non caricati
-
-      // Usa setTimeout per posticipare l'aggiunta del FormGroup
-      setTimeout(() => {
-        this.imagesFormArray.push(existingImageGroup);
-        console.log('imagesFormArray length dopo popolamento editing (delayed):', this.imagesFormArray.length);
-        console.log('galleryFiles length dopo popolamento editing (delayed):', this.galleryFiles.length);
-        console.log('galleryImagePreviews length dopo popolamento editing (delayed):', this.galleryImagePreviews.length);
-      }, 0);
     });
+
+    console.log('imagesFormArray length dopo popolamento editing:', this.imagesFormArray.length);
+    console.log('galleryFiles length dopo popolamento editing:', this.galleryFiles.length);
+    console.log('galleryImagePreviews length dopo popolamento editing:', this.galleryImagePreviews.length);
+
+    // **NUOVO:** Forza la change detection dopo aver popolato il FormArray in modalità edit
+    this.cdr.detectChanges();
 
     this.mainImageFile = null;
     if (this.mainImageInput) this.mainImageInput.nativeElement.value = '';
