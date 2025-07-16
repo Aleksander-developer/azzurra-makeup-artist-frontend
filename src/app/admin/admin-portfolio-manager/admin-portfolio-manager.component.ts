@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from '../admin/shared/confirmation-dialog
 // Assicurati che il percorso sia corretto per la tua struttura di progetto
 // Ho usato il percorso comune per un modulo 'shared/components'
 
+
 @Component({
   selector: 'app-admin-portfolio-manager',
   templateUrl: './admin-portfolio-manager.component.html',
