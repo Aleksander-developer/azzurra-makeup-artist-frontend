@@ -78,7 +78,7 @@
               <button mat-raised-button color="accent" type="button" (click)="openGalleryFileInput(i)">
                 <mat-icon>upload_file</mat-icon> Carica Immagine {{i + 1}}
               </button>
-              <!-- Mostra il nome del file se è un nuovo file caricato -->
+              <!-- Mostra il nome del file se è un nuovo file caricato (correzione warning) -->
               <span class="file-name" *ngIf="galleryFiles[i]">{{ galleryFiles[i].name }}</span>
               <!-- Mostra il link all'immagine esistente se non c'è un nuovo file -->
               <span class="file-name" *ngIf="!galleryFiles[i] && imageGroup.get('src')?.value && !galleryImagePreviews[i]">
