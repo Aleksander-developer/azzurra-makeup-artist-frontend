@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { PortfolioItem, PortfolioImage } from '../pages/portfolio/portfolio-item.model';
-import { environment } from '../environments/environment.prod'; // Assicurati che questo percorso sia corretto
+import { environment } from '../environments/environment'; // Assicurati che questo percorso sia corretto
 
 @Injectable({
   providedIn: 'root'

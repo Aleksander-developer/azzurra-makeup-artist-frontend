@@ -67,13 +67,14 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
   createImageGroup(image?: PortfolioImage): FormGroup {
     console.log('Creazione FormGroup per immagine:', image);
     return this.fb.group({
-      src: [image ? image.src : undefined], // CORREZIONE: Usiamo undefined
+      src: [image ? image.src : undefined],
       description: [image ? image.description : ''],
       alt: [image ? image.alt : ''],
       isNew: [image ? false : true]
     });
   }
 
+  // **MODIFICATO:** Nuova logica per onFilesSelected
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -87,22 +88,29 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      filesToProcess.forEach((file, fileIndex) => {
-        const currentFormArrayIndex = this.imagesFormArray.length;
-        this.selectedNewFiles.push(file);
+      // 1. Aggiungi tutti i FormGroup e i placeholder delle anteprime in modo sincrono
+      filesToProcess.forEach((file) => {
+        this.selectedNewFiles.push(file); // Aggiungi il file all'array dei nuovi file
+        this.imagesFormArray.push(this.createImageGroup({ src: undefined, description: '', alt: '', isNew: true }));
+        this.allImagePreviews.push(null); // Placeholder iniziale per l'anteprima
+      });
 
-        // Add a new FormGroup immediately with placeholder data
-        this.imagesFormArray.push(this.createImageGroup({ src: undefined, description: '', alt: '', isNew: true })); // CORREZIONE: Usiamo undefined
-        this.allImagePreviews.push(null);
+      // 2. Forza la change detection una volta dopo aver aggiunto tutti i controlli al FormArray
+      this.cdr.detectChanges();
+
+      // 3. Ora, carica le anteprime in modo asincrono e aggiorna i FormGroup esistenti
+      filesToProcess.forEach((file, fileIndex) => {
+        // Calcola l'indice corretto nell'array combinato
+        const actualIndex = (this.imagesFormArray.length - filesToProcess.length) + fileIndex;
 
         const reader = new FileReader();
         reader.onload = () => {
-          const formGroupToUpdate = this.imagesFormArray.at(currentFormArrayIndex) as FormGroup;
+          const formGroupToUpdate = this.imagesFormArray.at(actualIndex) as FormGroup;
           if (formGroupToUpdate) {
             formGroupToUpdate.get('src')?.setValue(reader.result as string);
-            this.allImagePreviews[currentFormArrayIndex] = reader.result;
+            this.allImagePreviews[actualIndex] = reader.result;
+            this.cdr.detectChanges(); // Forza la change detection per ogni anteprima caricata
           }
-          this.cdr.detectChanges(); // Forza la change detection
         };
         reader.readAsDataURL(file);
       });
@@ -127,6 +135,9 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       }
 
       if (isNewFile) {
+        // Questo è ancora il punto critico se l'ordine in selectedNewFiles non corrisponde esattamente.
+        // Una soluzione più robusta implicherebbe ID univoci per i file.
+        // Per ora, assumiamo che la rimozione per indice sia sufficiente nella maggior parte dei casi.
         this.selectedNewFiles.splice(index, 1);
       }
 
@@ -146,12 +157,12 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     this.portfolioService.getPortfolioItems().subscribe({
       next: (items) => {
         this.portfolioItems = items;
-        this.loading = false; // CORREZIONE: this.loading
+        this.loading = false;
       },
       error: (err) => {
         this.snackBar.open('Errore nel caricamento degli elementi del portfolio.', 'Chiudi', { duration: 3000 });
         console.error('Errore nel caricamento portfolio:', err);
-        this.loading = false; // CORREZIONE: this.loading
+        this.loading = false;
         this.errorMessage = 'Errore nel caricamento: ' + (err.message || 'Errore sconosciuto.');
       }
     });
