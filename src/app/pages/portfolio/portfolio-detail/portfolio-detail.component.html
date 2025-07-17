@@ -19,11 +19,17 @@
     <p class="item-category">Categoria: {{ portfolioItem.category }}</p>
     <p class="item-description">{{ portfolioItem.description }}</p>
 
-    <!-- **MODIFICATO:** Sezione per visualizzare TUTTE le immagini -->
+    <!-- Sezione per visualizzare TUTTE le immagini -->
     <div class="image-gallery">
-      <div *ngFor="let image of portfolioItem.images" class="gallery-image-item">
-        <img [src]="image.src || 'assets/placeholder.jpg'" [alt]="image.alt || portfolioItem.title" class="gallery-image" onerror="this.src='assets/placeholder.jpg'">
+      <div *ngFor="let image of portfolioItem.images; let i = index" class="gallery-image-item">
+        <!-- **MODIFICATO:** Aggiunto click event per aprire il fullscreen -->
+        <img [src]="image.src || 'assets/placeholder.jpg'" [alt]="image.alt || portfolioItem.title" class="gallery-image"
+             onerror="this.src='assets/placeholder.jpg'" (click)="openFullscreen(i)">
         <p *ngIf="image.description" class="image-description">{{ image.description }}</p>
+        <!-- Opzionale: pulsante fullscreen sull'immagine della galleria -->
+        <button mat-icon-button class="fullscreen-icon" (click)="openFullscreen(i)">
+          <mat-icon>fullscreen</mat-icon>
+        </button>
       </div>
     </div>
 
@@ -35,5 +41,23 @@
 
   <div *ngIf="!portfolioItem && !isLoading && !errorMessage" class="no-item-found">
     <mat-icon>sentiment_dissatisfied</mat-icon> Elemento portfolio non trovato.
+  </div>
+
+  <!-- **NUOVO:** Overlay per la visualizzazione fullscreen -->
+  <div *ngIf="showFullscreen && portfolioItem && portfolioItem.images && portfolioItem.images.length > 0" class="fullscreen-overlay" (click)="closeFullscreen()">
+    <button mat-icon-button class="fullscreen-close-button" (click)="closeFullscreen(); $event.stopPropagation();">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button mat-icon-button class="fullscreen-nav-button prev" (click)="prevFullscreenImage(); $event.stopPropagation();">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <img [src]="portfolioItem.images[fullscreenImageIndex].src || 'assets/placeholder.jpg'"
+         [alt]="portfolioItem.images[fullscreenImageIndex].alt || portfolioItem.title"
+         class="fullscreen-image"
+         onerror="this.src='assets/placeholder.jpg'"
+         (click)="$event.stopPropagation();"> <!-- Impedisce la chiusura al click sull'immagine -->
+    <button mat-icon-button class="fullscreen-nav-button next" (click)="nextFullscreenImage(); $event.stopPropagation();">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
   </div>
 </section>

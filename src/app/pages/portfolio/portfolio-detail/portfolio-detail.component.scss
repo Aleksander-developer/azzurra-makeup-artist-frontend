@@ -30,6 +30,7 @@
   justify-content: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: background-color 0.3s ease;
+  z-index: 10; // Assicurati che sia sopra altri elementi
 
   &:hover {
     background-color: darken(vars.$color-accent, 10%);
@@ -111,15 +112,14 @@
     text-align: justify;
   }
 
-  // **NUOVI STILI PER LA GALLERIA IMMAGINI**
   .image-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); // Griglia responsiva
-    gap: vars.$spacing-lg; // Spazio tra le immagini
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: vars.$spacing-lg;
     margin-top: vars.$spacing-xxl;
     padding-top: vars.$spacing-xl;
     border-top: 1px solid vars.$color-border;
-    justify-content: center; // Centra gli elementi nella griglia
+    justify-content: center;
   }
 
   .gallery-image-item {
@@ -129,8 +129,10 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    flex-direction: column; // Per impilare immagine e descrizione
-    align-items: center; // Centra il contenuto orizzontalmente
+    flex-direction: column;
+    align-items: center;
+    position: relative; // Per posizionare l'icona fullscreen
+    cursor: pointer; // Indica che l'elemento è cliccabile
 
     &:hover {
       transform: translateY(-5px);
@@ -139,8 +141,8 @@
 
     .gallery-image {
       width: 100%;
-      height: 250px; // Altezza fissa per uniformità
-      object-fit: cover; // Copre l'area mantenendo l'aspect ratio
+      height: 250px;
+      object-fit: cover;
       display: block;
     }
 
@@ -150,7 +152,28 @@
       color: vars.$color-text-light;
       text-align: center;
       margin: 0;
-      flex-grow: 1; // Permette alla descrizione di occupare lo spazio rimanente
+      flex-grow: 1;
+    }
+
+    .fullscreen-icon {
+      position: absolute;
+      bottom: vars.$spacing-sm;
+      right: vars.$spacing-sm;
+      background-color: rgba(vars.$color-dark-purple-text, 0.7);
+      color: vars.$color-white;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; // Inizialmente nascosto
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+
+      .gallery-image-item:hover & {
+        opacity: 1; // Mostra al hover
+      }
     }
   }
 
@@ -167,6 +190,83 @@
     }
   }
 }
+
+// **NUOVI STILI PER IL VISUALIZZATORE FULLSCREEN**
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9); // Sfondo scuro semi-trasparente
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; // Assicurati che sia sopra tutto
+  cursor: pointer; // Indica che cliccare fuori chiude
+}
+
+.fullscreen-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain; // Scala l'immagine per adattarsi senza tagliare
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: vars.$border-radius-md;
+  cursor: default; // Reimposta il cursore sull'immagine
+}
+
+.fullscreen-close-button {
+  position: absolute;
+  top: vars.$spacing-lg;
+  right: vars.$spacing-lg;
+  background-color: rgba(vars.$color-accent, 0.8);
+  color: vars.$color-white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 1001; // Sopra l'immagine
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: vars.$color-accent;
+  }
+}
+
+.fullscreen-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(vars.$color-dark-purple-text, 0.7);
+  color: vars.$color-white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 1001; // Sopra l'immagine
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: vars.$color-dark-purple-text;
+  }
+
+  &.prev {
+    left: vars.$spacing-lg;
+  }
+
+  &.next {
+    right: vars.$spacing-lg;
+  }
+}
+
 
 /* Responsive adjustments */
 @media (max-width: vars.$breakpoint-md) {
@@ -189,12 +289,17 @@
       font-size: 1rem;
     }
     .image-gallery {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); // Adatta per schermi medi
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: vars.$spacing-md;
     }
     .gallery-image-item .gallery-image {
       height: 200px;
     }
+  }
+  .fullscreen-close-button, .fullscreen-nav-button {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
   }
 }
 
@@ -223,10 +328,22 @@
       font-size: 0.95rem;
     }
     .image-gallery {
-      grid-template-columns: 1fr; // Una colonna su schermi molto piccoli
+      grid-template-columns: 1fr;
     }
     .gallery-image-item .gallery-image {
       height: 180px;
     }
+  }
+  .fullscreen-close-button, .fullscreen-nav-button {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    top: vars.$spacing-md; // Sposta un po' più in basso su mobile
+    &.prev { left: vars.$spacing-md; }
+    &.next { right: vars.$spacing-md; }
+  }
+  .fullscreen-image {
+    max-width: 95vw;
+    max-height: 85vh; // Lascia più spazio per i pulsanti su mobile
   }
 }
