@@ -36,7 +36,7 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     private portfolioService: PortfolioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef // Inietta ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -63,19 +63,18 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     return this.portfolioForm.get('images') as FormArray;
   }
 
-  // **MODIFICATO:** Re-inclusi description e alt nel FormGroup per le immagini
   createImageGroup(image?: PortfolioImage, file?: File): FormGroup {
     console.log('Creazione FormGroup per immagine:', image, 'File:', file);
     return this.fb.group({
       src: [image ? image.src : undefined],
-      description: [image ? image.description : ''], // Re-incluso con valore predefinito
-      alt: [image ? image.alt : ''], // Re-incluso con valore predefinito
+      description: [image ? image.description : ''], // Mantenuto per coerenza con il modello, anche se non visibile nel template
+      alt: [image ? image.alt : ''], // Mantenuto per coerenza con il modello, anche se non visibile nel template
       isNew: [image ? false : true],
       file: [file] // Memorizza l'oggetto File qui se è un nuovo caricamento
     });
   }
 
-  // **MODIFICATO:** Logica onFilesSelected rivista (senza setTimeout per push iniziale)
+  // **MODIFICATO:** Logica onFilesSelected con detach/reattach del ChangeDetectorRef
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -90,24 +89,27 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       }
 
       filesToProcess.forEach((file) => {
+        // Detach il change detector prima di modificare il FormArray
+        this.cdr.detach();
+
         // 1. Aggiungi FormGroup e placeholder anteprima in modo sincrono
         this.imagesFormArray.push(this.createImageGroup(undefined, file));
         this.allImagePreviews.push(null);
 
-        // 2. Forza la change detection immediatamente dopo l'aggiunta del FormGroup
-        //    Questo è cruciale per Angular per riconoscere il nuovo controllo nel template
+        // Reattach e forza la change detection immediatamente dopo aver modificato il FormArray
+        this.cdr.reattach();
         this.cdr.detectChanges();
-        console.log('FormGroup aggiunto e change detection forzata.');
+        console.log(`FormGroup aggiunto e change detection forzata.`);
 
-        // 3. Ottieni l'indice del FormGroup appena aggiunto
+        // Ottieni l'indice del FormGroup appena aggiunto
         const currentFormArrayIndex = this.imagesFormArray.length - 1;
 
-        // 4. Carica l'anteprima in modo asincrono
+        // Carica l'anteprima in modo asincrono
         const reader = new FileReader();
         reader.onload = () => {
           this.allImagePreviews[currentFormArrayIndex] = reader.result;
           // Forza la change detection dopo l'aggiornamento dell'anteprima
-          this.cdr.detectChanges();
+          this.cdr.detectChanges(); // Non serve Promise.resolve().then() qui se detach/reattach funziona
           console.log(`Anteprima caricata per indice ${currentFormArrayIndex}`);
         };
         reader.readAsDataURL(file);
@@ -184,7 +186,6 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
 
     item.images.forEach(img => {
       console.log('Aggiunta immagine esistente in editing:', img);
-      // Per le immagini esistenti, passiamo i loro src, description, alt originali
       this.imagesFormArray.push(this.createImageGroup({
         src: img.src,
         description: img.description,
@@ -232,15 +233,13 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
 
       if (formGroupValue.isNew && file instanceof File) {
         newFilesToUpload.push(file);
-        // Per le nuove immagini, inviamo description e alt come stringa vuota
         imagesMetadataToSend.push({
           src: undefined,
-          description: '',
-          alt: '',
+          description: formGroupValue.description,
+          alt: formGroupValue.alt,
           isNew: true
         });
       } else {
-        // Per le immagini esistenti, inviamo i loro valori attuali
         imagesMetadataToSend.push({
           src: formGroupValue.src,
           description: formGroupValue.description,
