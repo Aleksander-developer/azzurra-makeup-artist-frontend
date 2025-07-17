@@ -1,8 +1,8 @@
 // src/app/pages/portfolio/portfolio.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PortfolioService } from '../../portfolio/portfolio.service'; // Percorso corretto
-import { Subscription } from 'rxjs';
+import { PortfolioService } from '../../portfolio/portfolio.service';
 import { PortfolioItem } from './portfolio-item.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-portfolio',
@@ -12,6 +12,7 @@ import { PortfolioItem } from './portfolio-item.model';
 export class PortfolioComponent implements OnInit, OnDestroy {
   portfolioItems: PortfolioItem[] = [];
   isLoading = true;
+  errorMessage: string | null = null;
   private portfolioSubscription: Subscription | undefined;
 
   constructor(private portfolioService: PortfolioService) { }
@@ -28,16 +29,26 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   loadPortfolioItems(): void {
     this.isLoading = true;
+    this.errorMessage = null;
     this.portfolioSubscription = this.portfolioService.getPortfolioItems().subscribe({
-      next: (items) => {
+      next: (items: PortfolioItem[]) => {
         this.portfolioItems = items;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Errore nel caricamento del portfolio:', err);
+      error: (err: any) => {
+        this.errorMessage = 'Errore nel caricamento degli elementi del portfolio: ' + (err.message || 'Errore sconosciuto.');
         this.isLoading = false;
-        // Potresti aggiungere un messaggio di errore visibile all'utente qui
+        console.error(err);
       }
     });
+  }
+
+  // **NUOVO METODO:** Per ottenere un'immagine casuale da usare come copertina
+  getRandomCoverImage(item: PortfolioItem): string {
+    if (item.images && item.images.length > 0) {
+      const randomIndex = Math.floor(Math.random() * item.images.length);
+      return item.images[randomIndex].src || 'assets/placeholder.jpg'; // Usa un placeholder se src è undefined
+    }
+    return 'assets/placeholder.jpg'; // Immagine placeholder di fallback se non ci sono immagini
   }
 }

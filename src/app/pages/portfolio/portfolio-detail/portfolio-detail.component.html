@@ -1,41 +1,39 @@
 <!-- src/app/pages/portfolio/portfolio-detail/portfolio-detail.component.html -->
 <section class="portfolio-detail-container">
+  <button mat-icon-button class="back-button" routerLink="/portfolio">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
   <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner [diameter]="50"></mat-spinner>
-    <p>Caricamento dettagli...</p>
+    <mat-spinner></mat-spinner>
+    <p>Caricamento dettagli portfolio...</p>
   </div>
 
-  <div *ngIf="!isLoading && !portfolioItem" class="no-item-found">
-    <mat-icon>sentiment_dissatisfied</mat-icon>
-    <h2>Lavoro non trovato!</h2>
-    <p>Spiacenti, il lavoro che stai cercando non esiste o è stato rimosso.</p>
-    <button mat-raised-button color="primary" routerLink="/portfolio">Torna al Portfolio</button>
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error_outline</mat-icon> {{ errorMessage }}
   </div>
 
-  <mat-card *ngIf="!isLoading && portfolioItem" class="detail-card">
-    <mat-card-header>
-      <mat-card-title class="detail-title">{{ portfolioItem.title }}</mat-card-title>
-      <mat-card-subtitle class="detail-subtitle">{{ portfolioItem.subtitle }}</mat-card-subtitle>
-    </mat-card-header>
-    <img mat-card-image [src]="portfolioItem.mainImage" [alt]="portfolioItem.title" onerror="this.onerror=null;this.src='https://placehold.co/1200x800/E6E6FA/4A2A4A?text=Immagine+non+disponibile';" />
-    <mat-card-content>
-      <p class="detail-description">{{ portfolioItem.description }}</p>
-      <span class="detail-category">{{ portfolioItem.category }}</span>
+  <div *ngIf="portfolioItem && !isLoading" class="portfolio-content">
+    <h1 class="item-title">{{ portfolioItem.title }}</h1>
+    <h2 class="item-subtitle">{{ portfolioItem.subtitle }}</h2>
+    <p class="item-category">Categoria: {{ portfolioItem.category }}</p>
+    <p class="item-description">{{ portfolioItem.description }}</p>
 
-      <div class="gallery-section" *ngIf="portfolioItem.images && portfolioItem.images.length > 0">
-        <h3>Galleria Immagini</h3>
-        <div class="image-gallery">
-          <div *ngFor="let img of portfolioItem.images" class="gallery-item">
-            <img [src]="img.src" [alt]="img.alt || 'Immagine di galleria'" onerror="this.onerror=null;this.src='https://placehold.co/800x600/F8C8DC/4A2A4A?text=Immagine+non+disponibile';" />
-            <p *ngIf="img.description" class="gallery-description">{{ img.description }}</p>
-          </div>
-        </div>
+    <!-- **MODIFICATO:** Sezione per visualizzare TUTTE le immagini -->
+    <div class="image-gallery">
+      <div *ngFor="let image of portfolioItem.images" class="gallery-image-item">
+        <img [src]="image.src || 'assets/placeholder.jpg'" [alt]="image.alt || portfolioItem.title" class="gallery-image" onerror="this.src='assets/placeholder.jpg'">
+        <p *ngIf="image.description" class="image-description">{{ image.description }}</p>
       </div>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-raised-button color="accent" routerLink="/portfolio">
-        <mat-icon>arrow_back</mat-icon> Torna al Portfolio
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    </div>
+
+    <div class="item-dates">
+      <p>Creato il: {{ portfolioItem.createdAt | date:'shortDate' }}</p>
+      <p>Ultimo aggiornamento: {{ portfolioItem.updatedAt | date:'shortDate' }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="!portfolioItem && !isLoading && !errorMessage" class="no-item-found">
+    <mat-icon>sentiment_dissatisfied</mat-icon> Elemento portfolio non trovato.
+  </div>
 </section>

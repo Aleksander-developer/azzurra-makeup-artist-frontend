@@ -1,9 +1,9 @@
 // src/app/pages/portfolio/portfolio-detail/portfolio-detail.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PortfolioService } from '../../../portfolio/portfolio.service'; // Percorso corretto
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { PortfolioService } from '../../../portfolio/portfolio.service';
 import { PortfolioItem } from '../portfolio-item.model';
+import { Subscription } from 'rxjs'; // Importa Subscription
 
 @Component({
   selector: 'app-portfolio-detail',
@@ -13,25 +13,22 @@ import { PortfolioItem } from '../portfolio-item.model';
 export class PortfolioDetailComponent implements OnInit, OnDestroy {
   portfolioItem: PortfolioItem | undefined;
   isLoading = true;
+  errorMessage: string | null = null; // **ASSICURATI CHE QUESTA RIGA SIA PRESENTE**
   private routeSubscription: Subscription | undefined;
-  private portfolioSubscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private portfolioService: PortfolioService,
-    private router: Router
+    private portfolioService: PortfolioService
   ) { }
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe(params => {
-      const itemId = params.get('id');
-      if (itemId) {
-        this.loadPortfolioItem(itemId);
+      const id = params.get('id');
+      if (id) {
+        this.loadPortfolioItem(id);
       } else {
-        // Se non c'è ID nella rotta, reindirizza o mostra un errore
+        this.errorMessage = 'ID portfolio non fornito.';
         this.isLoading = false;
-        this.portfolioItem = undefined; // Assicurati che sia undefined per mostrare il messaggio "non trovato"
-        // this.router.navigate(['/portfolio']); // Potresti reindirizzare qui
       }
     });
   }
@@ -40,23 +37,20 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe();
     }
-    if (this.portfolioSubscription) {
-      this.portfolioSubscription.unsubscribe();
-    }
   }
 
   loadPortfolioItem(id: string): void {
     this.isLoading = true;
-    this.portfolioSubscription = this.portfolioService.getPortfolioItemById(id).subscribe({
-      next: (item) => {
+    this.errorMessage = null; // **ASSICURATI CHE QUESTA RIGA SIA PRESENTE**
+    this.portfolioService.getPortfolioItemById(id).subscribe({
+      next: (item: PortfolioItem) => {
         this.portfolioItem = item;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Errore nel caricamento del dettaglio portfolio:', err);
+      error: (err: any) => {
+        this.errorMessage = 'Errore nel caricamento del dettaglio del portfolio: ' + (err.message || 'Errore sconosciuto.');
         this.isLoading = false;
-        this.portfolioItem = undefined; // Assicurati che sia undefined per mostrare il messaggio "non trovato"
-        // this.router.navigate(['/portfolio']); // Potresti reindirizzare qui in caso di errore grave
+        console.error(err);
       }
     });
   }

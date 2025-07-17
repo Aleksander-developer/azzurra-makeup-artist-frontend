@@ -1,30 +1,31 @@
-<!-- src/app/pages/portfolio/portfolio.component.html -->
-<section class="portfolio-page-container">
+<section class="portfolio-container">
   <h1 class="page-title">
     <mat-icon class="title-icon">brush</mat-icon> Il Mio Portfolio
   </h1>
-  <p class="page-subtitle">Scopri alcuni dei miei lavori più recenti e rappresentativi.</p>
+  <p class="page-subtitle">Scopri i miei lavori più recenti e le mie creazioni.</p>
 
   <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner [diameter]="50"></mat-spinner>
+    <mat-spinner></mat-spinner>
     <p>Caricamento portfolio...</p>
   </div>
 
-  <div *ngIf="!isLoading && portfolioItems.length === 0" class="no-items-message">
-    <mat-icon>info</mat-icon> Nessun lavoro disponibile nel portfolio al momento.
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error_outline</mat-icon> {{ errorMessage }}
   </div>
 
   <div class="portfolio-grid" *ngIf="!isLoading && portfolioItems.length > 0">
     <mat-card *ngFor="let item of portfolioItems" class="portfolio-card" [routerLink]="['/portfolio', item.id]">
-      <img mat-card-image [src]="item.mainImage" [alt]="item.title" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E6E6FA/4A2A4A?text=Immagine+non+disponibile';" />
+      <!-- **MODIFICATO:** Usa getRandomCoverImage per l'immagine di copertina -->
+      <img mat-card-image [src]="getRandomCoverImage(item)" [alt]="item.title" onerror="this.src='assets/placeholder.jpg'">
       <mat-card-content>
-        <h2 class="card-title">{{ item.title }}</h2>
-        <p class="card-subtitle">{{ item.subtitle }}</p>
-        <span class="card-category">{{ item.category }}</span>
+        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-subtitle>{{ item.category }}</mat-card-subtitle>
+        <p>{{ item.subtitle }}</p>
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary">Vedi Dettagli</button>
-      </mat-card-actions>
     </mat-card>
+  </div>
+
+  <div *ngIf="!isLoading && portfolioItems.length === 0" class="no-items-message">
+    <mat-icon>info</mat-icon> Nessun lavoro nel portfolio da visualizzare.
   </div>
 </section>

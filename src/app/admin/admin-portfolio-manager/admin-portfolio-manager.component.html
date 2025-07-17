@@ -1,4 +1,5 @@
 <!-- src/app/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
+
 <section class="portfolio-manager-container">
   <h1 class="page-title">
     <mat-icon class="title-icon">dashboard</mat-icon> Gestione Portfolio
@@ -30,26 +31,6 @@
           <textarea matInput formControlName="description" placeholder="Descrivi il lavoro in dettaglio..." rows="3"></textarea>
         </mat-form-field>
 
-        <!-- Sezione per l'upload dell'immagine principale -->
-        <div class="image-upload-section">
-          <h3>Immagine Principale (Copertina) <span class="required-asterisk">*</span></h3>
-          <input type="file" #mainImageInput (change)="onMainImageSelected($event)" accept="image/*" style="display: none;">
-          <button mat-raised-button color="primary" type="button" (click)="mainImageInput.click()">
-            <mat-icon>upload_file</mat-icon> Carica Immagine Principale
-          </button>
-          <span class="file-name" *ngIf="mainImageFile">{{ mainImageFile.name }}</span>
-          <span class="file-name" *ngIf="!mainImageFile && editingItem?.mainImage && !mainImagePreview">
-            Immagine attuale: <a [href]="editingItem?.mainImage || ''" target="_blank">Vedi</a>
-          </span>
-
-          <div *ngIf="mainImagePreview" class="image-preview-container">
-            <img [src]="mainImagePreview" alt="Anteprima Immagine Principale" class="image-preview">
-            <button mat-icon-button color="warn" (click)="removeMainImage()" class="remove-image-button" aria-label="Rimuovi immagine principale">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </div>
-        </div>
-
         <mat-form-field appearance="outline">
           <mat-label>Categoria</mat-label>
           <mat-select formControlName="category" required>
@@ -64,34 +45,36 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Sezione per le immagini aggiuntive (galleria) -->
+        <!-- Sezione per il caricamento delle immagini della galleria -->
         <div class="image-gallery-form">
-          <h3>Immagini della Galleria (Opzionale)</h3>
+          <h3>Immagini del Portfolio <span class="required-asterisk">*</span></h3>
+          <p>Carica tutte le immagini per questo lavoro (max 10). La prima immagine caricata sarà la copertina predefinita, ma una casuale verrà mostrata nella lista.</p>
 
-          <!-- Un singolo input file nascosto per tutte le immagini della galleria -->
-          <input type="file" #singleGalleryImageInput (change)="onGalleryImagesSelected($event)" accept="image/*" style="display: none;">
+          <!-- Input file singolo per la selezione multipla -->
+          <input type="file" #galleryFileInput (change)="onFilesSelected($event)" accept="image/*" multiple style="display: none;">
+          <button mat-raised-button color="primary" type="button" (click)="galleryFileInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon> Seleziona Immagini
+          </button>
+          <span class="file-count" *ngIf="selectedNewFiles.length > 0">
+            {{ selectedNewFiles.length }} file selezionati.
+          </span>
 
-          <!-- Loop attraverso i controlli del FormArray -->
+          <!-- Loop attraverso i controlli del FormArray per gestire descrizione/alt e mostrare anteprime -->
           <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index" [formGroupName]="i" class="image-item-group">
             <div class="gallery-image-wrapper">
-              <!-- Il pulsante ora chiama openGalleryFileInput e gli passa l'indice -->
-              <button mat-raised-button color="accent" type="button" (click)="openGalleryFileInput(i)">
-                <mat-icon>upload_file</mat-icon> Carica Immagine {{i + 1}}
-              </button>
-              <!-- Mostra il nome del file se è un nuovo file caricato (correzione warning) -->
-              <span class="file-name" *ngIf="galleryFiles[i]">{{ galleryFiles[i].name }}</span>
-              <!-- Mostra il link all'immagine esistente se non c'è un nuovo file -->
-              <span class="file-name" *ngIf="!galleryFiles[i] && imageGroup.get('src')?.value && !galleryImagePreviews[i]">
-                Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
-              </span>
-
               <!-- Anteprima dell'immagine -->
-              <div *ngIf="galleryImagePreviews[i]" class="image-preview-container">
-                <img [src]="galleryImagePreviews[i] || ''" alt="Anteprima Galleria {{i + 1}}" class="image-preview">
-                <button mat-icon-button color="warn" (click)="removeImageGroup(i)" class="remove-image-button" aria-label="Rimuovi immagine galleria">
+              <div *ngIf="allImagePreviews[i]" class="image-preview-container">
+                <img [src]="allImagePreviews[i] || ''" alt="Anteprima Immagine {{i + 1}}" class="image-preview">
+                <button mat-icon-button color="warn" (click)="removeImage(i)" class="remove-image-button" aria-label="Rimuovi immagine">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </div>
+              <!-- Nome del file per i nuovi caricamenti -->
+              <span class="file-name" *ngIf="imageGroup.get('isNew')?.value && selectedNewFiles[i]">{{ selectedNewFiles[i].name }}</span>
+              <!-- Link per immagini esistenti -->
+              <span class="file-name" *ngIf="!imageGroup.get('isNew')?.value && imageGroup.get('src')?.value">
+                Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
+              </span>
             </div>
 
             <mat-form-field appearance="outline" class="gallery-description-field">
@@ -102,13 +85,11 @@
               <mat-label>Testo Alternativo (Alt) Immagine {{i + 1}}</mat-label>
               <input matInput formControlName="alt" placeholder="Testo per accessibilità">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeImageGroup(i)" type="button" aria-label="Rimuovi immagine">
+            <!-- Pulsante per rimuovere l'immagine dal form (e dall'upload se nuova) -->
+            <button mat-icon-button color="warn" (click)="removeImage(i)" type="button" aria-label="Rimuovi immagine">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <button mat-stroked-button (click)="addNewImageGroup()" type="button" class="add-image-button">
-            <mat-icon>add</mat-icon> Aggiungi Immagine Galleria
-          </button>
         </div>
 
         <div *ngIf="errorMessage" class="error-message-ui">
