@@ -74,64 +74,68 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  // **MODIFICATO:** Logica onFilesSelected rivista per gestire correttamente file multipli
+  // **MODIFICATO:** Logica onFilesSelected per aggiungere cumulativamente le immagini
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const selectedFiles = Array.from(input.files); // Tutti i file selezionati dall'utente
+      const newSelectedFiles = Array.from(input.files); // I file appena selezionati dall'utente
 
-      // Calcola quanti nuovi file possiamo aggiungere (max 10 totali)
-      const maxNewFilesToAdd = 10 - this.imagesFormArray.length;
-      const filesToProcess = selectedFiles.slice(0, maxNewFilesToAdd);
+      // Raccogli tutte le immagini attualmente nel FormArray (esistenti + nuove da precedenti selezioni)
+      const currentFormImages: { imageGroup: FormGroup, preview: string | ArrayBuffer | null }[] = [];
+      this.imagesFormArray.controls.forEach((control, index) => {
+        currentFormImages.push({
+          imageGroup: control as FormGroup,
+          preview: this.allImagePreviews[index]
+        });
+      });
 
-      if (filesToProcess.length === 0 && this.imagesFormArray.length >= 10) {
+      // Calcola quanti nuovi file possiamo aggiungere (limite totale di 10)
+      const maxNewFilesToAdd = 10 - currentFormImages.length;
+      const filesToActuallyAdd = newSelectedFiles.slice(0, maxNewFilesToAdd);
+
+      if (filesToActuallyAdd.length === 0 && currentFormImages.length >= 10) {
         this.snackBar.open('Massimo 10 immagini consentite per portfolio.', 'Chiudi', { duration: 3000 });
         return;
       }
 
-      // Salva le immagini esistenti se siamo in modalità di modifica
-      const existingImages = this.editingItem ? [...this.editingItem.images] : [];
-
-      // Pulisci completamente il FormArray e l'array delle anteprime
+      // Pulisci completamente il FormArray e l'array delle anteprime per ricostruirli
       this.imagesFormArray.clear();
       this.allImagePreviews = [];
 
-      // Aggiungi prima le immagini esistenti (se presenti)
-      existingImages.forEach(img => {
-        this.imagesFormArray.push(this.createImageGroup(img, undefined));
-        this.allImagePreviews.push(img.src || null);
+      // Aggiungi prima tutte le immagini che erano già nel form
+      currentFormImages.forEach(item => {
+        this.imagesFormArray.push(item.imageGroup);
+        this.allImagePreviews.push(item.preview);
       });
 
       // Aggiungi i nuovi file selezionati
-      filesToProcess.forEach((file) => {
+      filesToActuallyAdd.forEach((file) => {
         this.imagesFormArray.push(this.createImageGroup(undefined, file));
         this.allImagePreviews.push(null); // Placeholder per l'anteprima
       });
 
       // Forza la change detection UNA VOLTA dopo aver aggiunto tutti i FormGroups
       this.cdr.detectChanges();
-      console.log(`Tutti i FormGroups aggiunti. Change detection forzata.`);
+      console.log(`Tutti i FormGroups (esistenti + nuovi) aggiunti. Change detection forzata.`);
       console.log('imagesFormArray length dopo selezione file:', this.imagesFormArray.length);
 
-
       // Carica le anteprime per i file appena aggiunti
-      // Iteriamo su tutti i controlli per trovare quelli che hanno un 'file' (sono nuovi)
+      // Iteriamo solo sui nuovi controlli che non hanno ancora un'anteprima
       this.imagesFormArray.controls.forEach((control, index) => {
         const formGroupValue = control.value;
-        if (formGroupValue.isNew && formGroupValue.file instanceof File) {
+        if (formGroupValue.isNew && formGroupValue.file instanceof File && this.allImagePreviews[index] === null) {
           const file = formGroupValue.file;
           const reader = new FileReader();
           reader.onload = () => {
             this.allImagePreviews[index] = reader.result;
-            // Forza la change detection dopo l'aggiornamento dell'anteprima
-            this.cdr.detectChanges();
+            this.cdr.detectChanges(); // Forza la change detection dopo l'aggiornamento dell'anteprima
             console.log(`Anteprima caricata per indice ${index}`);
           };
           reader.readAsDataURL(file);
         }
       });
 
-      console.log('File selezionati per la galleria (totali):', filesToProcess.map(f => f.name));
+      console.log('File selezionati per la galleria (totali):', newSelectedFiles.map(f => f.name));
     }
     // Resetta l'input file per permettere la selezione degli stessi file di nuovo
     if (input) input.value = '';
