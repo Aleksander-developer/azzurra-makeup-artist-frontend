@@ -1,189 +1,161 @@
 /* src/app/pages/portfolio/portfolio.component.scss */
 
-@use '../../../styles/variables' as vars;
-@use '../../../styles/mixins' as mixins;
-
-.portfolio-page-container {
-  padding: vars.$spacing-xl vars.$spacing-lg;
+.portfolio-container {
+  padding: 20px;
   max-width: 1200px;
-  margin: vars.$spacing-xxl auto;
-  background-color: rgba(vars.$color-background-light, 0.95);
-  border-radius: vars.$border-radius-lg;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  color: vars.$color-text-dark;
-  font-family: vars.$font-family-primary;
+  margin: 0 auto;
   text-align: center;
 }
 
 .page-title {
-  font-family: vars.$font-family-secondary;
-  font-size: 3rem;
-  color: vars.$color-vibrant-fuchsia;
-  margin-bottom: vars.$spacing-md;
-  text-shadow: 0 0 10px rgba(vars.$color-vibrant-fuchsia, 0.4);
+  font-size: 2.5em;
+  color: #3f51b5; /* Colore primario Material Design */
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: vars.$spacing-sm;
 
   .title-icon {
-    font-size: 3rem;
-    color: vars.$color-vibrant-fuchsia;
+    font-size: 1.2em;
+    margin-right: 8px;
   }
 }
 
 .page-subtitle {
-  font-size: 1.2rem;
-  color: vars.$color-text-light;
-  margin-bottom: vars.$spacing-xxl;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: vars.$line-height-base;
+  font-size: 1.1em;
+  color: #607d8b;
+  margin-bottom: 30px;
 }
 
-.loading-spinner, .no-items-message {
+.loading-spinner, .error-message, .no-items-message {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #555;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: vars.$spacing-xxl;
-  color: vars.$color-text-light;
-  font-size: 1.1rem;
+  gap: 10px;
+}
 
-  mat-spinner {
-    margin-bottom: vars.$spacing-md;
-  }
+.error-message {
+  background-color: #ffe0b2; /* Arancione chiaro */
+  color: #e65100; /* Arancione scuro */
+}
 
-  mat-icon {
-    font-size: 48px;
-    color: vars.$color-accent;
-    margin-bottom: vars.$spacing-md;
-  }
+.no-items-message {
+  background-color: #e0f2f7; /* Azzurro chiaro */
+  color: #01579b; /* Azzurro scuro */
 }
 
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: vars.$spacing-lg;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
   justify-content: center;
-  margin-top: vars.$spacing-xl;
+  padding: 20px 0;
 }
 
 .portfolio-card {
-  background-color: vars.$color-white;
-  border-radius: vars.$border-radius-lg;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%; /* Assicura che le card abbiano la stessa altezza */
+  border-radius: 12px;
+  overflow: hidden; /* Nasconde ciò che esce dai bordi arrotondati */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  cursor: pointer; /* Indica che la card è interattiva (anche se ora c'è un pulsante) */
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 
-  img {
+  mat-card-image {
+    height: 200px; /* Altezza fissa per le immagini di copertina */
+    object-fit: cover; /* Assicura che l'immagine copra l'area senza distorsioni */
     width: 100%;
-    height: 200px; /* Altezza fissa per le immagini */
-    object-fit: cover; /* Assicura che l'immagine copra l'area */
-    border-bottom: 1px solid vars.$color-border;
   }
 
   mat-card-content {
-    padding: vars.$spacing-md;
-    flex-grow: 1;
-    text-align: left;
+    padding: 16px;
+    flex-grow: 1; /* Permette al contenuto di espandersi */
+    text-align: left; /* Allinea il testo a sinistra */
+
+    mat-card-title {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.9em;
+      color: #777;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.95em;
+      color: #555;
+      line-height: 1.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Limita a 3 righe */
+      -webkit-box-orient: vertical;
+    }
   }
 
-  .card-title {
-    font-family: vars.$font-family-secondary;
-    font-size: 1.5rem;
-    color: vars.$color-dark-purple-text;
-    margin-top: 0;
-    margin-bottom: vars.$spacing-xs;
-  }
-
-  .card-subtitle {
-    font-size: 0.95rem;
-    color: vars.$color-text-light;
-    margin-bottom: vars.$spacing-sm;
-  }
-
-  .card-category {
-    display: inline-block;
-    background-color: vars.$color-light-pink-bg;
-    color: vars.$color-dark-pink-text;
-    padding: 0.3rem 0.6rem;
-    border-radius: vars.$border-radius-sm;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  mat-card-actions {
-    padding: vars.$spacing-sm vars.$spacing-md vars.$spacing-md;
-    justify-content: flex-end; /* Allinea il bottone a destra */
+  .card-actions {
+    padding: 8px 16px 16px; /* Più padding in basso per il pulsante */
+    display: flex;
+    justify-content: center; /* Centra il pulsante */
+    align-items: center;
+    border-top: 1px solid #eee; /* Separatore sottile */
+    margin-top: auto; /* Spinge le azioni in fondo alla card */
 
     button {
-      background-color: vars.$color-accent;
-      color: vars.$color-white;
-      font-weight: 600;
-      border-radius: vars.$border-radius-md;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: darken(vars.$color-accent, 10%);
-      }
+      width: 100%; /* Rende il pulsante a piena larghezza */
+      border-radius: 8px; /* Angoli arrotondati per il pulsante */
+      padding: 10px 15px;
+      font-size: 1em;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px; /* Spazio tra icona e testo */
     }
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: vars.$breakpoint-md) {
-  .portfolio-page-container {
-    padding: vars.$spacing-lg vars.$spacing-md;
-    margin-top: vars.$spacing-xl;
-  }
+/* Media Queries per la responsività */
+@media (max-width: 768px) {
   .page-title {
-    font-size: 2.5rem;
-    .title-icon {
-      font-size: 2.5rem;
-    }
+    font-size: 2em;
   }
-  .page-subtitle {
-    font-size: 1rem;
-    margin-bottom: vars.$spacing-xl;
-  }
+
   .portfolio-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: vars.$spacing-md;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 10px;
   }
-  .portfolio-card img {
-    height: 180px;
-  }
-  .portfolio-card .card-title {
-    font-size: 1.3rem;
+
+  .portfolio-card {
+    mat-card-image {
+      height: 180px;
+    }
   }
 }
 
-@media (max-width: vars.$breakpoint-sm) {
-  .portfolio-page-container {
-    padding: vars.$spacing-md;
-    margin: vars.$spacing-lg auto;
-  }
+@media (max-width: 480px) {
   .page-title {
-    font-size: 2rem;
-    .title-icon {
-      font-size: 2rem;
-    }
+    font-size: 1.8em;
   }
-  .page-subtitle {
-    font-size: 0.9rem;
-  }
+
   .portfolio-grid {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
+    grid-template-columns: 1fr; /* Una colonna su schermi molto piccoli */
+    padding: 5px;
   }
 }

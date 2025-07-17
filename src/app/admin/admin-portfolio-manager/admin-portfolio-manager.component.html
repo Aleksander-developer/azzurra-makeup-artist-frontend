@@ -1,4 +1,4 @@
-
+<!-- src/app/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
 <section class="portfolio-manager-container">
   <h1 class="page-title">
     <mat-icon class="title-icon">dashboard</mat-icon> Gestione Portfolio
@@ -54,30 +54,34 @@
           <button mat-raised-button color="primary" type="button" (click)="galleryFileInput.click()">
             <mat-icon>add_photo_alternate</mat-icon> Seleziona Immagini
           </button>
-          <span class="file-count" *ngIf="selectedNewFiles.length > 0">
-            {{ selectedNewFiles.length }} file selezionati.
+          <!-- Conta le immagini nel FormArray -->
+          <span class="file-count" *ngIf="imagesFormArray.length > 0">
+            {{ imagesFormArray.length }} file selezionati.
           </span>
 
-          <!-- Loop attraverso i controlli del FormArray per gestire descrizione/alt e mostrare anteprime -->
-          <!-- **MODIFICATO:** Aggiunto trackBy -->
+          <!-- Loop attraverso i controlli del FormArray per gestire anteprime -->
           <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index; trackBy: trackByFn" [formGroupName]="i" class="image-item-group">
             <div class="gallery-image-wrapper">
               <!-- Anteprima dell'immagine -->
               <div *ngIf="allImagePreviews[i]" class="image-preview-container">
-                <!-- **MODIFICATO:** Alt text più robusto -->
-                <img [src]="allImagePreviews[i] || ''" [alt]="imageGroup.get('alt')?.value || 'Anteprima Immagine ' + (i + 1)" class="image-preview" onerror="this.src='assets/placeholder.jpg'">
+                <!-- L'alt text qui userà il titolo generale del portfolio o un fallback -->
+                <img [src]="allImagePreviews[i] || ''" [alt]="portfolioForm.get('title')?.value || 'Anteprima Immagine ' + (i + 1)" class="image-preview" onerror="this.src='assets/placeholder.jpg'">
                 <button mat-icon-button color="warn" (click)="removeImage(i)" class="remove-image-button" aria-label="Rimuovi immagine">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </div>
-              <!-- Nome del file per i nuovi caricamenti -->
-              <span class="file-name" *ngIf="imageGroup.get('isNew')?.value && selectedNewFiles[i]">{{ selectedNewFiles[i].name }}</span>
+              <!-- Mostra il nome del file dal FormGroup.file -->
+              <span class="file-name" *ngIf="imageGroup.get('isNew')?.value && imageGroup.get('file')?.value">
+                {{ imageGroup.get('file')?.value.name }}
+              </span>
               <!-- Link per immagini esistenti -->
               <span class="file-name" *ngIf="!imageGroup.get('isNew')?.value && imageGroup.get('src')?.value">
                 Immagine attuale: <a [href]="imageGroup.get('src')?.value || ''" target="_blank">Vedi</a>
               </span>
             </div>
 
+            <!-- **RIMOSSO/COMMENTATO:** Campi Descrizione Immagine e Testo Alternativo (Alt) per singola immagine -->
+            <!--
             <mat-form-field appearance="outline" class="gallery-description-field">
               <mat-label>Descrizione Immagine {{i + 1}}</mat-label>
               <input matInput formControlName="description" placeholder="Breve descrizione">
@@ -86,6 +90,7 @@
               <mat-label>Testo Alternativo (Alt) Immagine {{i + 1}}</mat-label>
               <input matInput formControlName="alt" placeholder="Testo per accessibilità">
             </mat-form-field>
+            -->
             <!-- Pulsante per rimuovere l'immagine dal form (e dall'upload se nuova) -->
             <button mat-icon-button color="warn" (click)="removeImage(i)" type="button" aria-label="Rimuovi immagine">
               <mat-icon>delete</mat-icon>

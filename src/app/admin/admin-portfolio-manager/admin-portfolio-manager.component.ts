@@ -6,7 +6,7 @@ import { PortfolioItem, PortfolioImage } from '../../pages/portfolio/portfolio-i
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ConfirmationDialogComponent } from '../admin/shared/confirmation-dialog/confirmation-dialog.component'; // Assicurati che il percorso sia corretto
+import { ConfirmationDialogComponent } from '../admin/shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-admin-portfolio-manager',
@@ -18,7 +18,6 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
   portfolioItems: PortfolioItem[] = [];
   editingItem: PortfolioItem | null = null;
 
-  selectedNewFiles: File[] = [];
   allImagePreviews: (string | ArrayBuffer | null)[] = [];
 
   loading = false;
@@ -64,17 +63,19 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     return this.portfolioForm.get('images') as FormArray;
   }
 
-  createImageGroup(image?: PortfolioImage): FormGroup {
-    console.log('Creazione FormGroup per immagine:', image);
+  // **MODIFICATO:** Re-inclusi description e alt nel FormGroup per le immagini
+  createImageGroup(image?: PortfolioImage, file?: File): FormGroup {
+    console.log('Creazione FormGroup per immagine:', image, 'File:', file);
     return this.fb.group({
       src: [image ? image.src : undefined],
-      description: [image ? image.description : ''],
-      alt: [image ? image.alt : ''],
-      isNew: [image ? false : true]
+      description: [image ? image.description : ''], // Re-incluso con valore predefinito
+      alt: [image ? image.alt : ''], // Re-incluso con valore predefinito
+      isNew: [image ? false : true],
+      file: [file] // Memorizza l'oggetto File qui se è un nuovo caricamento
     });
   }
 
-  // **MODIFICATO:** Nuova logica per onFilesSelected
+  // **MODIFICATO:** Logica onFilesSelected rivista (senza setTimeout per push iniziale)
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -88,34 +89,31 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      // 1. Aggiungi tutti i FormGroup e i placeholder delle anteprime in modo sincrono
       filesToProcess.forEach((file) => {
-        this.selectedNewFiles.push(file); // Aggiungi il file all'array dei nuovi file
-        this.imagesFormArray.push(this.createImageGroup({ src: undefined, description: '', alt: '', isNew: true }));
-        this.allImagePreviews.push(null); // Placeholder iniziale per l'anteprima
-      });
+        // 1. Aggiungi FormGroup e placeholder anteprima in modo sincrono
+        this.imagesFormArray.push(this.createImageGroup(undefined, file));
+        this.allImagePreviews.push(null);
 
-      // 2. Forza la change detection una volta dopo aver aggiunto tutti i controlli al FormArray
-      this.cdr.detectChanges();
+        // 2. Forza la change detection immediatamente dopo l'aggiunta del FormGroup
+        //    Questo è cruciale per Angular per riconoscere il nuovo controllo nel template
+        this.cdr.detectChanges();
+        console.log('FormGroup aggiunto e change detection forzata.');
 
-      // 3. Ora, carica le anteprime in modo asincrono e aggiorna i FormGroup esistenti
-      filesToProcess.forEach((file, fileIndex) => {
-        // Calcola l'indice corretto nell'array combinato
-        const actualIndex = (this.imagesFormArray.length - filesToProcess.length) + fileIndex;
+        // 3. Ottieni l'indice del FormGroup appena aggiunto
+        const currentFormArrayIndex = this.imagesFormArray.length - 1;
 
+        // 4. Carica l'anteprima in modo asincrono
         const reader = new FileReader();
         reader.onload = () => {
-          const formGroupToUpdate = this.imagesFormArray.at(actualIndex) as FormGroup;
-          if (formGroupToUpdate) {
-            formGroupToUpdate.get('src')?.setValue(reader.result as string);
-            this.allImagePreviews[actualIndex] = reader.result;
-            this.cdr.detectChanges(); // Forza la change detection per ogni anteprima caricata
-          }
+          this.allImagePreviews[currentFormArrayIndex] = reader.result;
+          // Forza la change detection dopo l'aggiornamento dell'anteprima
+          this.cdr.detectChanges();
+          console.log(`Anteprima caricata per indice ${currentFormArrayIndex}`);
         };
         reader.readAsDataURL(file);
       });
 
-      console.log('File selezionati per la galleria:', this.selectedNewFiles.map(f => f.name));
+      console.log('File selezionati per la galleria:', filesToProcess.map(f => f.name));
       console.log('imagesFormArray length dopo selezione file:', this.imagesFormArray.length);
     }
     if (input) input.value = '';
@@ -125,27 +123,16 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
   removeImage(index: number): void {
     console.log('Tentativo di rimuovere immagine all\'indice:', index);
     if (index >= 0 && index < this.imagesFormArray.length) {
-      const removedControl = this.imagesFormArray.at(index);
-      const isNewFile = removedControl.get('isNew')?.value;
-
       this.imagesFormArray.removeAt(index);
 
       if (this.allImagePreviews[index]) {
         this.allImagePreviews.splice(index, 1);
       }
 
-      if (isNewFile) {
-        // Questo è ancora il punto critico se l'ordine in selectedNewFiles non corrisponde esattamente.
-        // Una soluzione più robusta implicherebbe ID univoci per i file.
-        // Per ora, assumiamo che la rimozione per indice sia sufficiente nella maggior parte dei casi.
-        this.selectedNewFiles.splice(index, 1);
-      }
-
+      this.cdr.detectChanges();
       console.log('Immagine rimossa all\'indice:', index);
       console.log('imagesFormArray length dopo remove:', this.imagesFormArray.length);
-      console.log('selectedNewFiles length dopo remove:', this.selectedNewFiles.length);
       console.log('allImagePreviews length dopo remove:', this.allImagePreviews.length);
-      this.cdr.detectChanges();
     } else {
       console.warn('Tentativo di rimuovere un\'immagine con indice non valido:', index);
     }
@@ -156,7 +143,10 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
     this.portfolioService.getPortfolioItems().subscribe({
       next: (items) => {
-        this.portfolioItems = items;
+        this.portfolioItems = items.map(item => ({
+          ...item,
+          coverImageUrl: this.getPrecalculatedCoverImage(item)
+        }));
         this.loading = false;
       },
       error: (err) => {
@@ -167,6 +157,15 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private getPrecalculatedCoverImage(item: PortfolioItem): string {
+    if (item.images && item.images.length > 0) {
+      const randomIndex = Math.floor(Math.random() * item.images.length);
+      return item.images[randomIndex].src || 'assets/placeholder.jpg';
+    }
+    return 'assets/placeholder.jpg';
+  }
+
 
   editItem(item: PortfolioItem): void {
     console.log('Inizio editing per elemento:', item.id);
@@ -180,13 +179,18 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
 
     this.imagesFormArray.clear();
     this.allImagePreviews = [];
-    this.selectedNewFiles = [];
 
     console.log('FormArray e array immagini resettati per editing.');
 
     item.images.forEach(img => {
       console.log('Aggiunta immagine esistente in editing:', img);
-      this.imagesFormArray.push(this.createImageGroup(img));
+      // Per le immagini esistenti, passiamo i loro src, description, alt originali
+      this.imagesFormArray.push(this.createImageGroup({
+        src: img.src,
+        description: img.description,
+        alt: img.alt,
+        isNew: false
+      }, undefined));
       this.allImagePreviews.push(img.src || null);
     });
 
@@ -200,7 +204,6 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     console.log('Resetting form...');
     this.portfolioForm.reset();
     this.editingItem = null;
-    this.selectedNewFiles = [];
     this.imagesFormArray.clear();
     this.allImagePreviews = [];
     if (this.galleryFileInput) this.galleryFileInput.nativeElement.value = '';
@@ -220,7 +223,34 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.imagesFormArray.length === 0 && !this.editingItem) {
+    const newFilesToUpload: File[] = [];
+    const imagesMetadataToSend: PortfolioImage[] = [];
+
+    this.imagesFormArray.controls.forEach(control => {
+      const formGroupValue = control.value;
+      const file = formGroupValue.file;
+
+      if (formGroupValue.isNew && file instanceof File) {
+        newFilesToUpload.push(file);
+        // Per le nuove immagini, inviamo description e alt come stringa vuota
+        imagesMetadataToSend.push({
+          src: undefined,
+          description: '',
+          alt: '',
+          isNew: true
+        });
+      } else {
+        // Per le immagini esistenti, inviamo i loro valori attuali
+        imagesMetadataToSend.push({
+          src: formGroupValue.src,
+          description: formGroupValue.description,
+          alt: formGroupValue.alt,
+          isNew: false
+        });
+      }
+    });
+
+    if (imagesMetadataToSend.length === 0 && !this.editingItem) {
       this.errorMessage = 'Devi aggiungere almeno un\'immagine al portfolio.';
       this.snackBar.open(this.errorMessage, 'Chiudi', { duration: 3000 });
       return;
@@ -232,16 +262,10 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     this.successMessage = null;
 
     const itemData = this.portfolioForm.value;
-    const imagesMetadataToSend: PortfolioImage[] = itemData.images.map((img: PortfolioImage) => ({
-      src: img.src,
-      description: img.description,
-      alt: img.alt,
-      isNew: img.isNew
-    }));
 
     console.log('Dati del form da inviare:', itemData);
     console.log('Metadati immagini da inviare:', imagesMetadataToSend);
-    console.log('Nuovi file selezionati per la galleria:', this.selectedNewFiles.map(f => f.name));
+    console.log('Nuovi file da caricare:', newFilesToUpload.map(f => f.name));
 
 
     try {
@@ -250,7 +274,7 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         await this.portfolioService.updatePortfolioItem(
           this.editingItem.id,
           itemData,
-          this.selectedNewFiles,
+          newFilesToUpload,
           imagesMetadataToSend
         ).toPromise();
         this.successMessage = 'Elemento portfolio aggiornato con successo!';
@@ -258,7 +282,7 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         console.log('Elemento portfolio aggiornato con successo!');
       } else {
         console.log('Aggiunta nuovo elemento portfolio.');
-        if (this.selectedNewFiles.length === 0) {
+        if (newFilesToUpload.length === 0) {
           this.errorMessage = 'Devi selezionare almeno un\'immagine per un nuovo elemento.';
           this.snackBar.open(this.errorMessage, 'Chiudi', { duration: 3000 });
           this.loading = false;
@@ -268,7 +292,7 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
         }
         await this.portfolioService.addPortfolioItem(
           itemData,
-          this.selectedNewFiles,
+          newFilesToUpload,
           imagesMetadataToSend
         ).toPromise();
         this.successMessage = 'Elemento portfolio aggiunto con successo!';

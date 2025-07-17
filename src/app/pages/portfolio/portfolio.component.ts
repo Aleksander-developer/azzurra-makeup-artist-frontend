@@ -32,7 +32,11 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
     this.portfolioSubscription = this.portfolioService.getPortfolioItems().subscribe({
       next: (items: PortfolioItem[]) => {
-        this.portfolioItems = items;
+        // Pre-calcola l'immagine di copertina per ogni elemento
+        this.portfolioItems = items.map(item => ({
+          ...item,
+          coverImageUrl: this.getPrecalculatedCoverImage(item) // Aggiungi la proprietà coverImageUrl
+        }));
         this.isLoading = false;
       },
       error: (err: any) => {
@@ -43,12 +47,11 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     });
   }
 
-  // **NUOVO METODO:** Per ottenere un'immagine casuale da usare come copertina
-  getRandomCoverImage(item: PortfolioItem): string {
+  private getPrecalculatedCoverImage(item: PortfolioItem): string {
     if (item.images && item.images.length > 0) {
       const randomIndex = Math.floor(Math.random() * item.images.length);
-      return item.images[randomIndex].src || 'assets/placeholder.jpg'; // Usa un placeholder se src è undefined
+      return item.images[randomIndex].src || 'assets/placeholder.jpg';
     }
-    return 'assets/placeholder.jpg'; // Immagine placeholder di fallback se non ci sono immagini
+    return 'assets/placeholder.jpg';
   }
 }
