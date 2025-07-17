@@ -19,11 +19,14 @@ import { LoginModule } from './pages/login/login.module';
 import { TruccoSposaModule } from './pages/trucco-sposa/trucco-sposa.module';
 import { AdminModule } from './admin/admin/admin.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CookieConsentComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +41,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     LoginModule,
     TruccoSposaModule,
     AdminModule,
+    ReactiveFormsModule,
+    MatCheckboxModule
+
   ],
   providers: [
     AuthService,

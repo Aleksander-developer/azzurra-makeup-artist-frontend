@@ -1,0 +1,37 @@
+<!-- src/app/cookie-consent/cookie-consent.component.html -->
+<div *ngIf="showBanner" class="cookie-consent-banner" [class.show-customize]="showCustomizeOptions">
+  <div class="banner-content" *ngIf="!showCustomizeOptions">
+    <p>
+      Utilizziamo i cookie per migliorare la tua esperienza di navigazione, analizzare il traffico del sito e personalizzare i contenuti. Cliccando su "Accetta tutti", acconsenti all'uso di tutti i cookie. Puoi gestire le tue preferenze cliccando su "Personalizza".
+      <a href="/privacy-policy" target="_blank" class="privacy-link">Leggi la nostra Privacy Policy</a>.
+    </p>
+    <div class="buttons">
+      <button mat-raised-button color="primary" (click)="acceptAllCookies()">Accetta tutti</button>
+      <button mat-stroked-button color="accent" (click)="rejectAllCookies()">Rifiuta tutti</button>
+      <button mat-button (click)="toggleCustomizeOptions()">Personalizza</button>
+    </div>
+  </div>
+
+  <div class="customize-options" *ngIf="showCustomizeOptions">
+    <h3>Personalizza le tue preferenze sui cookie</h3>
+    <p>Seleziona i tipi di cookie che desideri accettare:</p>
+    <form [formGroup]="cookiePreferencesForm">
+      <mat-checkbox formControlName="essential">
+        Cookie Essenziali (sempre attivi)
+        <span class="cookie-description">Necessari per il funzionamento base del sito.</span>
+      </mat-checkbox>
+      <mat-checkbox formControlName="analytics">
+        Cookie Analitici
+        <span class="cookie-description">Ci aiutano a capire come gli utenti interagiscono con il sito.</span>
+      </mat-checkbox>
+      <mat-checkbox formControlName="marketing">
+        Cookie di Marketing
+        <span class="cookie-description">Utilizzati per mostrarti pubblicità pertinenti ai tuoi interessi.</span>
+      </mat-checkbox>
+    </form>
+    <div class="buttons">
+      <button mat-raised-button color="primary" (click)="savePreferences()">Salva preferenze</button>
+      <button mat-button (click)="toggleCustomizeOptions()">Indietro</button>
+    </div>
+  </div>
+</div>

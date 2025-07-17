@@ -1,0 +1,152 @@
+/* src/app/cookie-consent/cookie-consent.component.scss */
+@use '../../styles/variables' as vars;
+@use '../../styles/mixins' as mixins;
+
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: vars.$color-background-light; // Colore di sfondo chiaro
+  color: vars.$color-text-dark; // Testo scuro
+  padding: vars.$spacing-md vars.$spacing-lg;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999; // Assicurati che sia sopra tutto
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  border-top-left-radius: vars.$border-radius-lg;
+  border-top-right-radius: vars.$border-radius-lg;
+  transition: all 0.3s ease-in-out;
+
+  &.show-customize {
+    padding-bottom: vars.$spacing-xl; // Più spazio quando le opzioni sono visibili
+  }
+
+  .banner-content, .customize-options {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: vars.$spacing-md;
+    color: vars.$color-text-dark;
+
+    .privacy-link {
+      color: vars.$color-accent; // Colore del link
+      text-decoration: none;
+      font-weight: 600;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: vars.$spacing-sm;
+
+    button {
+      border-radius: vars.$border-radius-md;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      min-width: 120px;
+
+      &.mat-raised-button {
+        background-color: vars.$color-primary; // Colore primario
+        color: vars.$color-white;
+        &:hover {
+          background-color: darken(vars.$color-primary, 5%);
+        }
+      }
+
+      &.mat-stroked-button {
+        border-color: vars.$color-accent; // Colore accent
+        color: vars.$color-accent;
+        &:hover {
+          background-color: rgba(vars.$color-accent, 0.1);
+        }
+      }
+
+      &.mat-button {
+        color: vars.$color-text-light; // Testo più chiaro per "Personalizza"
+        &:hover {
+          background-color: rgba(vars.$color-text-light, 0.1);
+        }
+      }
+    }
+  }
+
+  .customize-options {
+    h3 {
+      font-family: vars.$font-family-secondary;
+      color: vars.$color-dark-purple-text;
+      margin-bottom: vars.$spacing-md;
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      margin-bottom: vars.$spacing-md;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: vars.$spacing-sm;
+      margin-bottom: vars.$spacing-md;
+
+      mat-checkbox {
+        color: vars.$color-text-dark;
+        font-size: 1rem;
+        .mat-checkbox-inner-container {
+          border-color: vars.$color-text-light;
+        }
+        .mat-checkbox-checked .mat-checkbox-background {
+          background-color: vars.$color-primary;
+        }
+
+        .cookie-description {
+          display: block;
+          font-size: 0.8rem;
+          color: vars.$color-text-light;
+          margin-top: 0.2rem;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: vars.$breakpoint-sm) {
+  .cookie-consent-banner {
+    padding: vars.$spacing-sm;
+    .buttons {
+      flex-direction: column;
+      button {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+    .customize-options {
+      h3 {
+        font-size: 1.3rem;
+      }
+      p {
+        font-size: 0.85rem;
+      }
+      form mat-checkbox {
+        font-size: 0.9rem;
+        .cookie-description {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
