@@ -1,4 +1,3 @@
-<!-- src/app/admin/admin-portfolio-manager/admin-portfolio-manager.component.html -->
 
 <section class="portfolio-manager-container">
   <h1 class="page-title">
@@ -45,10 +44,10 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Sezione per il caricamento delle immagini della galleria -->
+        <!-- Sezione per il caricamento delle immagini del portfolio -->
         <div class="image-gallery-form">
           <h3>Immagini del Portfolio <span class="required-asterisk">*</span></h3>
-          <p>Carica tutte le immagini per questo lavoro (max 10). La prima immagine caricata sarà la copertina predefinita, ma una casuale verrà mostrata nella lista.</p>
+          <p>Carica tutte le immagini per questo lavoro (massimo 10). Una casuale verrà mostrata nella lista portfolio.</p>
 
           <!-- Input file singolo per la selezione multipla -->
           <input type="file" #galleryFileInput (change)="onFilesSelected($event)" accept="image/*" multiple style="display: none;">
@@ -60,11 +59,13 @@
           </span>
 
           <!-- Loop attraverso i controlli del FormArray per gestire descrizione/alt e mostrare anteprime -->
-          <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index" [formGroupName]="i" class="image-item-group">
+          <!-- **MODIFICATO:** Aggiunto trackBy -->
+          <div *ngFor="let imageGroup of imagesFormArray.controls; let i = index; trackBy: trackByFn" [formGroupName]="i" class="image-item-group">
             <div class="gallery-image-wrapper">
               <!-- Anteprima dell'immagine -->
               <div *ngIf="allImagePreviews[i]" class="image-preview-container">
-                <img [src]="allImagePreviews[i] || ''" alt="Anteprima Immagine {{i + 1}}" class="image-preview">
+                <!-- **MODIFICATO:** Alt text più robusto -->
+                <img [src]="allImagePreviews[i] || ''" [alt]="imageGroup.get('alt')?.value || 'Anteprima Immagine ' + (i + 1)" class="image-preview" onerror="this.src='assets/placeholder.jpg'">
                 <button mat-icon-button color="warn" (click)="removeImage(i)" class="remove-image-button" aria-label="Rimuovi immagine">
                   <mat-icon>cancel</mat-icon>
                 </button>
