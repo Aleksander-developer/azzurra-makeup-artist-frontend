@@ -36,7 +36,7 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     private portfolioService: PortfolioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef // Inietta ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -67,57 +67,73 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     console.log('Creazione FormGroup per immagine:', image, 'File:', file);
     return this.fb.group({
       src: [image ? image.src : undefined],
-      description: [image ? image.description : ''], // Mantenuto per coerenza con il modello, anche se non visibile nel template
-      alt: [image ? image.alt : ''], // Mantenuto per coerenza con il modello, anche se non visibile nel template
+      description: [image ? image.description : ''],
+      alt: [image ? image.alt : ''],
       isNew: [image ? false : true],
-      file: [file] // Memorizza l'oggetto File qui se è un nuovo caricamento
+      file: [file]
     });
   }
 
-  // **MODIFICATO:** Logica onFilesSelected con detach/reattach del ChangeDetectorRef
+  // **MODIFICATO:** Logica onFilesSelected rivista per gestire correttamente file multipli
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const files = Array.from(input.files);
+      const selectedFiles = Array.from(input.files); // Tutti i file selezionati dall'utente
 
-      const maxNewFiles = 10 - this.imagesFormArray.length;
-      const filesToProcess = files.slice(0, maxNewFiles);
+      // Calcola quanti nuovi file possiamo aggiungere (max 10 totali)
+      const maxNewFilesToAdd = 10 - this.imagesFormArray.length;
+      const filesToProcess = selectedFiles.slice(0, maxNewFilesToAdd);
 
       if (filesToProcess.length === 0 && this.imagesFormArray.length >= 10) {
         this.snackBar.open('Massimo 10 immagini consentite per portfolio.', 'Chiudi', { duration: 3000 });
         return;
       }
 
-      filesToProcess.forEach((file) => {
-        // Detach il change detector prima di modificare il FormArray
-        this.cdr.detach();
+      // Salva le immagini esistenti se siamo in modalità di modifica
+      const existingImages = this.editingItem ? [...this.editingItem.images] : [];
 
-        // 1. Aggiungi FormGroup e placeholder anteprima in modo sincrono
-        this.imagesFormArray.push(this.createImageGroup(undefined, file));
-        this.allImagePreviews.push(null);
+      // Pulisci completamente il FormArray e l'array delle anteprime
+      this.imagesFormArray.clear();
+      this.allImagePreviews = [];
 
-        // Reattach e forza la change detection immediatamente dopo aver modificato il FormArray
-        this.cdr.reattach();
-        this.cdr.detectChanges();
-        console.log(`FormGroup aggiunto e change detection forzata.`);
-
-        // Ottieni l'indice del FormGroup appena aggiunto
-        const currentFormArrayIndex = this.imagesFormArray.length - 1;
-
-        // Carica l'anteprima in modo asincrono
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.allImagePreviews[currentFormArrayIndex] = reader.result;
-          // Forza la change detection dopo l'aggiornamento dell'anteprima
-          this.cdr.detectChanges(); // Non serve Promise.resolve().then() qui se detach/reattach funziona
-          console.log(`Anteprima caricata per indice ${currentFormArrayIndex}`);
-        };
-        reader.readAsDataURL(file);
+      // Aggiungi prima le immagini esistenti (se presenti)
+      existingImages.forEach(img => {
+        this.imagesFormArray.push(this.createImageGroup(img, undefined));
+        this.allImagePreviews.push(img.src || null);
       });
 
-      console.log('File selezionati per la galleria:', filesToProcess.map(f => f.name));
+      // Aggiungi i nuovi file selezionati
+      filesToProcess.forEach((file) => {
+        this.imagesFormArray.push(this.createImageGroup(undefined, file));
+        this.allImagePreviews.push(null); // Placeholder per l'anteprima
+      });
+
+      // Forza la change detection UNA VOLTA dopo aver aggiunto tutti i FormGroups
+      this.cdr.detectChanges();
+      console.log(`Tutti i FormGroups aggiunti. Change detection forzata.`);
       console.log('imagesFormArray length dopo selezione file:', this.imagesFormArray.length);
+
+
+      // Carica le anteprime per i file appena aggiunti
+      // Iteriamo su tutti i controlli per trovare quelli che hanno un 'file' (sono nuovi)
+      this.imagesFormArray.controls.forEach((control, index) => {
+        const formGroupValue = control.value;
+        if (formGroupValue.isNew && formGroupValue.file instanceof File) {
+          const file = formGroupValue.file;
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.allImagePreviews[index] = reader.result;
+            // Forza la change detection dopo l'aggiornamento dell'anteprima
+            this.cdr.detectChanges();
+            console.log(`Anteprima caricata per indice ${index}`);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      console.log('File selezionati per la galleria (totali):', filesToProcess.map(f => f.name));
     }
+    // Resetta l'input file per permettere la selezione degli stessi file di nuovo
     if (input) input.value = '';
   }
 
@@ -127,11 +143,12 @@ export class AdminPortfolioManagerComponent implements OnInit, OnDestroy {
     if (index >= 0 && index < this.imagesFormArray.length) {
       this.imagesFormArray.removeAt(index);
 
-      if (this.allImagePreviews[index]) {
+      // Rimuovi l'anteprima corrispondente
+      if (index < this.allImagePreviews.length) { // Controlla il limite per sicurezza
         this.allImagePreviews.splice(index, 1);
       }
 
-      this.cdr.detectChanges();
+      this.cdr.detectChanges(); // Forza l'aggiornamento della vista
       console.log('Immagine rimossa all\'indice:', index);
       console.log('imagesFormArray length dopo remove:', this.imagesFormArray.length);
       console.log('allImagePreviews length dopo remove:', this.allImagePreviews.length);
