@@ -1,21 +1,20 @@
 <!-- src/app/pages/portfolio/portfolio.component.html -->
 <section class="portfolio-container">
   <h1 class="page-title">
-    <mat-icon class="title-icon">brush</mat-icon> Il Mio Portfolio
+    <mat-icon class="title-icon">brush</mat-icon> {{ 'PORTFOLIO.TITLE' | translate }}
   </h1>
-  <p class="page-subtitle">Scopri i miei lavori più recenti e le mie creazioni.</p>
+  <p class="page-subtitle">{{ 'PORTFOLIO.SUBTITLE' | translate }}</p>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner></mat-spinner>
-    <p>Caricamento portfolio...</p>
+    <p>{{ 'PORTFOLIO.LOADING' | translate }}</p>
   </div>
 
   <div *ngIf="errorMessage" class="error-message">
-    <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    <mat-icon>error_outline</mat-icon> {{ 'PORTFOLIO.ERROR_MESSAGE' | translate }}
   </div>
 
   <div class="portfolio-grid" *ngIf="!isLoading && portfolioItems.length > 0">
-    <!-- **MODIFICATO:** Rimosso [routerLink] dalla mat-card -->
     <mat-card *ngFor="let item of portfolioItems" class="portfolio-card">
       <img mat-card-image [src]="item.coverImageUrl" [alt]="item.title" onerror="this.src='assets/placeholder.jpg'">
       <mat-card-content>
@@ -23,16 +22,16 @@
         <mat-card-subtitle>{{ item.category }}</mat-card-subtitle>
         <p>{{ item.subtitle }}</p>
       </mat-card-content>
-      <!-- **NUOVO:** Aggiunto mat-card-actions con il pulsante "Visualizza Album" -->
       <mat-card-actions class="card-actions">
-        <button mat-button color="primary" [routerLink]="['/portfolio', item.id]">
-          <mat-icon>photo_album</mat-icon> Visualizza Album
+        <button mat-button color="primary" [routerLink]="['/portfolio', item.id]"
+                [attr.aria-label]="'PORTFOLIO.VIEW_ALBUM_BUTTON_ARIA' | translate:{title: item.title}">
+          <mat-icon>photo_album</mat-icon> {{ 'PORTFOLIO.VIEW_ALBUM_BUTTON' | translate }}
         </button>
       </mat-card-actions>
     </mat-card>
   </div>
 
   <div *ngIf="!isLoading && portfolioItems.length === 0" class="no-items-message">
-    <mat-icon>info</mat-icon> Nessun lavoro nel portfolio da visualizzare.
+    <mat-icon>info</mat-icon> {{ 'PORTFOLIO.NO_ITEMS_MESSAGE' | translate }}
   </div>
 </section>

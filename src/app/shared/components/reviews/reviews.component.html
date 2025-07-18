@@ -1,1 +1,36 @@
-<p>reviews works!</p>
+
+<section class="reviews-block" @fadeSlideIn>
+  <h5>{{ 'REVIEWS.TITLE' | translate }}</h5>
+
+  <div class="carousel-container">
+    <button mat-icon-button (click)="prev()" [attr.aria-label]="'REVIEWS.PREV_BUTTON_ARIA' | translate">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="review-card" *ngIf="reviews.length > 0 && currentIndex !== null"
+         [@reviewFadeSlide]="currentIndex">
+      <p class="review-text">"{{ reviews[currentIndex].text }}"</p>
+      <div class="review-author">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ reviews[currentIndex].author }}</span>
+      </div>
+      <div class="review-rating">
+        <mat-icon *ngFor="let star of [1,2,3,4,5]; let i = index"
+                  [class.filled]="i < reviews[currentIndex].rating">star</mat-icon>
+      </div>
+    </div>
+
+    <!-- Il blocco dello spinner è stato rimosso.
+         Se reviews.length è 0, non verrà visualizzata alcuna card di recensione. -->
+
+    <button mat-icon-button (click)="next()" [attr.aria-label]="'REVIEWS.NEXT_BUTTON_ARIA' | translate">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <p class="google-link">
+    <a href="https://www.google.com/search?q=azzurra+angius+makeup+artist+roma" target="_blank" rel="noopener noreferrer">
+      {{ 'REVIEWS.GOOGLE_LINK' | translate }}
+    </a>
+  </p>
+</section>

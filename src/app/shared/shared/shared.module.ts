@@ -12,6 +12,7 @@ import { WhyChoseMeComponent } from '../components/why-chose-me/why-chose-me.com
 
 // Importa il tuo MaterialModule (che raggruppa tutti i moduli Material)
 import { MaterialModule } from './material/material.module'; // Assicurati che il percorso sia corretto
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MaterialModule } from './material/material.module'; // Assicurati che i
   imports: [
     CommonModule,
     RouterModule, // Per routerLink
-    MaterialModule // Per tutti i componenti Angular Material usati nei componenti condivisi
+    MaterialModule,
+    TranslateModule
   ],
   // Esporta i componenti e i moduli che devono essere disponibili per altri moduli
   // che importano questo SharedModule (es. AppModule, HomeModule, ContattiModule)
@@ -39,7 +41,8 @@ import { MaterialModule } from './material/material.module'; // Assicurati che i
     WhyChoseMeComponent,
     MaterialModule, // <-- FONDAMENTALE: Esporta MaterialModule
     CommonModule,   // Utile per direttive come *ngIf, *ngFor
-    RouterModule    // Utile se i moduli che importano SharedModule usano routerLink
+    RouterModule,
+    TranslateModule
   ]
 })
 export class SharedModule { }

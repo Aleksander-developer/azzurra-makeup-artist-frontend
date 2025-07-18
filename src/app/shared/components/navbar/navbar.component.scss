@@ -80,6 +80,45 @@ $brand-link-color: vars.$color-white; // Usa il tuo bianco
   color: vars.$color-white; // Mantieni bianco per leggibilità
 }
 
+// **NUOVI STILI PER IL SELETTORE LINGUA**
+.language-selector {
+  display: flex;
+  align-items: center;
+  margin-left: vars.$spacing-md; // Spazio tra nav e selettore
+
+  .flag-icon {
+    width: 28px; // Dimensione delle bandiere
+    height: 28px;
+    border-radius: 50%; // Rendi le bandiere rotonde
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+  }
+
+  button {
+    padding: 0; // Rimuovi padding extra dal mat-icon-button
+    min-width: unset; // Rimuovi min-width
+    width: 40px; // Larghezza del pulsante per contenere la bandiera
+    height: 40px; // Altezza del pulsante
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover .flag-icon {
+      transform: scale(1.1); // Effetto zoom al hover
+    }
+  }
+}
+
+// Stili per le bandiere all'interno del menu mobile
+.flag-icon-menu {
+  width: 24px; // Leggermente più piccole nel menu
+  height: 24px;
+  border-radius: 50%;
+  margin-right: vars.$spacing-sm;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+
 // Media query per dispositivi mobili
 @media (max-width: vars.$breakpoint-md) {
   .desktop-links {
@@ -92,6 +131,19 @@ $brand-link-color: vars.$color-white; // Usa il tuo bianco
 
   .brand-link {
     font-size: 1.2rem;
+  }
+
+  // Nascondi il selettore di lingua desktop su mobile
+  .desktop-lang-selector {
+    display: none;
+  }
+  // Mostra il selettore di lingua mobile nel menu
+  .mobile-lang-selector {
+    display: flex; // O block, a seconda del layout desiderato nel menu
+    flex-direction: column;
+    padding: vars.$spacing-sm 0;
+    border-top: 1px solid rgba(vars.$color-text-light, 0.1); // Separatore
+    margin-top: vars.$spacing-sm;
   }
 }
 

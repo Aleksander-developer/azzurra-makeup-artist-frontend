@@ -6,6 +6,7 @@ import { TruccoSposaComponent } from './trucco-sposa.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
     TruccoSposaRoutingModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    TranslateModule
   ]
 })
 export class TruccoSposaModule { }

@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { PortfolioDetailComponent } from './portfolio-detail/portfolio-detail.component';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatIconModule,
     RouterModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TranslateModule
   ]
 })
 export class PortfolioModule { }

@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-home',
-  // standalone: false, // Questo è gestito dal modulo HomeModule, non qui direttamente
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
@@ -16,6 +15,6 @@ import { Component } from '@angular/core';
     ]),
   ]
 })
-export class HomeComponent { // Rinominato da 'Home' a 'HomeComponent' per convenzione
-  // Puoi aggiungere qui logiche specifiche per la home page, se necessario
+export class HomeComponent {
+  // Nessuna modifica necessaria qui per la traduzione se gestita interamente nel template
 }

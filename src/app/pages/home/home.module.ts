@@ -7,6 +7,8 @@ import { HomeComponent } from './home.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from "../../shared/shared/shared.module";
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    // SharedModule // <-- RIMUOVI O COMMENTA QUESTA RIGA SE PRESENTE
-  ]
+    TranslateModule,
+    SharedModule
+]
 })
 export class HomeModule { }

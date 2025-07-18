@@ -1,53 +1,55 @@
 <!-- src/app/pages/chi-sono/chi-sono.component.html -->
 
 <section class="chi-sono-container">
-  <h1 class="page-title">Chi Sono: La Mia Storia, La Tua Bellezza</h1>
+  <h1 class="page-title">{{ 'CHI_SONO.TITLE' | translate }}</h1>
   <p class="page-subtitle">
-    Sono Azzurra Angius, Make-up Artist e Hair Stylist. La mia passione è trasformare la bellezza, rendendo ogni donna radiosa e sicura di sé.
+    {{ 'CHI_SONO.SUBTITLE' | translate }}
   </p>
 
   <!-- Sezione Introduzione e Filosofia -->
   <div class="about-me-section mat-elevation-z4">
     <div class="about-me-image-container">
-      <img src="https://placehold.co/500x600/F8C8DC/4A2A4A?text=Azzurra+Angius" alt="" class="about-me-image">
+      <!-- Ho usato una placeholder image per immagine.png, se hai l'immagine reale, usa il percorso corretto -->
+      <img src="assets/immagine.png" alt="" class="about-me-image"
+           onerror="this.onerror=null; this.src='https://placehold.co/500x600/F8C8DC/4A2A4A?text=Azzurra+Angius';">
     </div>
     <div class="about-me-content">
-      <h2 class="section-heading">La Mia Visione della Bellezza</h2>
+      <h2 class="section-heading">{{ 'CHI_SONO.SECTION_HEADING_VISION' | translate }}</h2>
       <p>
-        Fin da bambina, sono stata affascinata dal potere trasformativo del make-up. Non si tratta solo di applicare colori, ma di esaltare l'unicità di ogni persona, di far emergere la luce interiore e di infondere fiducia. Credo che il trucco debba essere un'espressione di sé, un modo per celebrare la propria individualità senza mai snaturarla.
+        {{ 'CHI_SONO.VISION_PARAGRAPH_1' | translate }}
       </p>
       <p>
-        Il mio approccio è sempre personalizzato: ascolto attentamente le tue esigenze, i tuoi desideri e il tuo stile, per creare un look che ti faccia sentire autentica e meravigliosa, sia per il tuo giorno speciale che per un evento importante.
+        {{ 'CHI_SONO.VISION_PARAGRAPH_2' | translate }}
       </p>
       <p>
-        Opero con dedizione e professionalità a Roma, in tutta Italia e anche in Sardegna, portando la mia arte direttamente a casa tua o nella location prescelta.
+        {{ 'CHI_SONO.VISION_PARAGRAPH_3' | translate }}
       </p>
     </div>
   </div>
 
   <!-- Sezione Formazione e Qualifiche -->
   <div class="qualifications-section mat-elevation-z4">
-    <h2 class="section-heading">La Mia Formazione</h2>
+    <h2 class="section-heading">{{ 'CHI_SONO.SECTION_HEADING_TRAINING' | translate }}</h2>
     <div class="qualification-item">
       <mat-icon class="qualification-icon">school</mat-icon>
       <p>
-        Sono diplomata come **Make-up Artist e Hair Stylist nel 2021** presso una rinomata Make-up Academy a Roma. Questa formazione mi ha fornito le basi solide e le tecniche avanzate per eccellere nel settore, permettendomi di offrire un servizio completo e professionale.
+        {{ 'CHI_SONO.TRAINING_PARAGRAPH_1' | translate }}
       </p>
     </div>
     <div class="qualification-item">
       <mat-icon class="qualification-icon">stars</mat-icon>
       <p>
-        Continuo ad aggiornarmi costantemente sulle ultime tendenze e tecniche del settore, partecipando a workshop e corsi di perfezionamento per garantirti sempre il meglio.
+        {{ 'CHI_SONO.TRAINING_PARAGRAPH_2' | translate }}
       </p>
     </div>
   </div>
 
   <!-- Call to Action Finale -->
   <div class="cta-section mat-elevation-z4">
-    <h2>Pronta a Iniziare il Tuo Viaggio di Bellezza?</h2>
-    <p>Contattami per una consulenza personalizzata e scopriamo insieme come posso rendere il tuo prossimo evento indimenticabile.</p>
-    <button mat-raised-button color="accent" routerLink="/contatti" aria-label="Contatta Azzurra Angius">
-      Richiedi una Consulenza
+    <h2>{{ 'CHI_SONO.CTA_HEADING' | translate }}</h2>
+    <p>{{ 'CHI_SONO.CTA_DESCRIPTION' | translate }}</p>
+    <button mat-raised-button color="accent" routerLink="/contatti" [attr.aria-label]="'CHI_SONO.CTA_BUTTON_ARIA' | translate">
+      {{ 'CHI_SONO.CTA_BUTTON' | translate }}
       <mat-icon>event</mat-icon>
     </button>
   </div>

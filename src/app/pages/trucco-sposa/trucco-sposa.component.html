@@ -1,68 +1,68 @@
 <!-- src/app/pages/trucco-sposa/trucco-sposa.component.html -->
 
 <section class="trucco-sposa-container">
-  <h1 class="page-title">Il Tuo Giorno Speciale, La Tua Bellezza Indimenticabile</h1>
+  <h1 class="page-title">{{ 'TRUCCO_SPOSA.TITLE' | translate }}</h1>
   <p class="page-subtitle">
-    Ogni sposa merita di sentirsi la versione più splendida di sé stessa nel giorno del matrimonio.
-    Offro servizi di trucco e acconciatura personalizzati, pensati per esaltare la tua bellezza naturale e garantirti un look impeccabile, duraturo e in armonia con il tuo stile unico.
+    {{ 'TRUCCO_SPOSA.SUBTITLE' | translate }}
   </p>
 
   <!-- Sezione Pacchetto "Seguimi" (In Evidenza) -->
   <div class="package-highlight-card mat-elevation-z8">
     <div class="highlight-content">
-      <h2 class="highlight-title">✨ Pacchetto "Seguimi": Bellezza Senza Pensieri, Tutto il Giorno</h2>
+      <h2 class="highlight-title">{{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_TITLE' | translate }}</h2>
       <p class="highlight-description">
-        Questo è il servizio più esclusivo e completo, pensato per la sposa che desidera una presenza e un'assistenza costante.
-        Il pacchetto "Seguimi" include:
+        {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_DESCRIPTION' | translate }}
       </p>
       <ul class="highlight-features">
-        <li><mat-icon>check_circle</mat-icon> Consulenza personalizzata e studio del look</li>
-        <li><mat-icon>check_circle</mat-icon> Prova trucco e acconciatura dettagliata</li>
-        <li><mat-icon>check_circle</mat-icon> Trucco e acconciatura il giorno del matrimonio (a domicilio)</li>
-        <li><mat-icon>check_circle</mat-icon> **Assistenza e ritocchi durante tutta la giornata** (cerimonia, servizio fotografico, ricevimento)</li>
-        <li><mat-icon>check_circle</mat-icon> Prodotti professionali e a lunga tenuta</li>
-        <li><mat-icon>check_circle</mat-icon> Kit ritocco personalizzato per la sposa</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_1' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_2' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_3' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_4' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_5' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_FEATURE_6' | translate }}</li>
       </ul>
-      <button mat-raised-button color="accent" routerLink="/contatti" aria-label="Richiedi informazioni sul Pacchetto Seguimi">
-        Scopri il Pacchetto "Seguimi"
+      <button mat-raised-button color="accent" routerLink="/contatti"
+              [attr.aria-label]="'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_BUTTON_ARIA' | translate">
+        {{ 'TRUCCO_SPOSA.PACKAGE_FOLLOW_ME_BUTTON' | translate }}
         <mat-icon>favorite</mat-icon>
       </button>
     </div>
     <div class="highlight-image-container">
-      <img src="https://placehold.co/600x400/FFC0CB/FFFFFF?text=Sposa+Seguimi" alt="Trucco Sposa Pacchetto Seguimi" class="highlight-image">
+      <img src="../../../assets/trucco-sposa-seguimi.png" alt="" class="highlight-image">
     </div>
   </div>
 
   <!-- Sezione Pacchetto "Trucco Sposa Normale" -->
   <div class="package-card mat-elevation-z4">
     <div class="package-content">
-      <h2 class="package-title">🌸 Pacchetto "Trucco Sposa": Eleganza e Perfezione</h2>
+      <h2 class="package-title">{{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_TITLE' | translate }}</h2>
       <p class="package-description">
-        Il servizio classico per la sposa che desidera un make-up impeccabile per il giorno più bello.
-        Questo pacchetto include:
+        {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_DESCRIPTION' | translate }}
       </p>
       <ul class="package-features">
-        <li><mat-icon>check_circle_outline</mat-icon> Consulenza personalizzata e studio del look</li>
-        <li><mat-icon>check_circle_outline</mat-icon> Prova trucco e acconciatura</li>
-        <li><mat-icon>check_circle_outline</mat-icon> Trucco e acconciatura il giorno del matrimonio (a domicilio)</li>
-        <li><mat-icon>check_circle_outline</mat-icon> Prodotti professionali e a lunga tenuta</li>
+        <li><mat-icon>check_circle_outline</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_FEATURE_1' | translate }}</li>
+        <li><mat-icon>check_circle_outline</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_FEATURE_2' | translate }}</li>
+        <li><mat-icon>check_circle_outline</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_FEATURE_3' | translate }}</li>
+        <li><mat-icon>check_circle_outline</mat-icon> {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_FEATURE_4' | translate }}</li>
       </ul>
-      <button mat-stroked-button color="primary" routerLink="/contatti" aria-label="Richiedi informazioni sul Pacchetto Trucco Sposa">
-        Richiedi Info Pacchetto Standard
+      <button mat-stroked-button color="primary" routerLink="/contatti"
+              [attr.aria-label]="'TRUCCO_SPOSA.PACKAGE_STANDARD_BUTTON_ARIA' | translate">
+        {{ 'TRUCCO_SPOSA.PACKAGE_STANDARD_BUTTON' | translate }}
         <mat-icon>email</mat-icon>
       </button>
     </div>
     <div class="package-image-container">
-      <img src="https://placehold.co/600x400/E6E6FA/333333?text=Sposa+Standard" alt="Trucco Sposa Pacchetto Standard" class="package-image">
+      <img src="../../../assets/trucco-sposa-standard.png" alt="" class="package-image">
     </div>
   </div>
 
   <!-- Call to Action Finale -->
   <div class="cta-section mat-elevation-z4">
-    <h2>Pronta a Brillare?</h2>
-    <p>Contattami per una consulenza gratuita e scopriamo insieme il pacchetto perfetto per te.</p>
-    <button mat-raised-button color="accent" routerLink="/contatti" aria-label="Contatta Azzurra Angius per il tuo trucco sposa">
-      Prenota la Tua Consulenza
+    <h2>{{ 'TRUCCO_SPOSA.CTA_HEADING' | translate }}</h2>
+    <p>{{ 'TRUCCO_SPOSA.CTA_DESCRIPTION' | translate }}</p>
+    <button mat-raised-button color="accent" routerLink="/contatti"
+            [attr.aria-label]="'TRUCCO_SPOSA.CTA_BUTTON_ARIA' | translate">
+      {{ 'TRUCCO_SPOSA.CTA_BUTTON' | translate }}
       <mat-icon>event</mat-icon>
     </button>
   </div>

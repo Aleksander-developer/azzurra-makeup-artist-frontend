@@ -1,62 +1,60 @@
 <!-- src/app/pages/portfolio/portfolio-detail/portfolio-detail.component.html -->
 <section class="portfolio-detail-container">
-  <button mat-icon-button class="back-button" routerLink="/portfolio">
+  <button mat-icon-button class="back-button" routerLink="/portfolio" [attr.aria-label]="'PORTFOLIO_DETAIL.BACK_BUTTON_ARIA' | translate">
     <mat-icon>arrow_back</mat-icon>
   </button>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner></mat-spinner>
-    <p>Caricamento dettagli portfolio...</p>
+    <p>{{ 'PORTFOLIO_DETAIL.LOADING' | translate }}</p>
   </div>
 
   <div *ngIf="errorMessage" class="error-message">
-    <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    <mat-icon>error_outline</mat-icon> {{ 'PORTFOLIO_DETAIL.ERROR_MESSAGE' | translate }}
   </div>
 
   <div *ngIf="portfolioItem && !isLoading" class="portfolio-content">
     <h1 class="item-title">{{ portfolioItem.title }}</h1>
     <h2 class="item-subtitle">{{ portfolioItem.subtitle }}</h2>
-    <p class="item-category">Categoria: {{ portfolioItem.category }}</p>
+    <p class="item-category">{{ 'PORTFOLIO_DETAIL.CATEGORY_LABEL' | translate }} {{ portfolioItem.category }}</p>
     <p class="item-description">{{ portfolioItem.description }}</p>
 
     <!-- Sezione per visualizzare TUTTE le immagini -->
     <div class="image-gallery">
       <div *ngFor="let image of portfolioItem.images; let i = index" class="gallery-image-item">
-        <!-- **MODIFICATO:** Aggiunto click event per aprire il fullscreen -->
         <img [src]="image.src || 'assets/placeholder.jpg'" [alt]="image.alt || portfolioItem.title" class="gallery-image"
              onerror="this.src='assets/placeholder.jpg'" (click)="openFullscreen(i)">
         <p *ngIf="image.description" class="image-description">{{ image.description }}</p>
-        <!-- Opzionale: pulsante fullscreen sull'immagine della galleria -->
-        <button mat-icon-button class="fullscreen-icon" (click)="openFullscreen(i)">
+        <button mat-icon-button class="fullscreen-icon" (click)="openFullscreen(i)" [attr.aria-label]="'PORTFOLIO_DETAIL.FULLSCREEN_BUTTON_ARIA' | translate">
           <mat-icon>fullscreen</mat-icon>
         </button>
       </div>
     </div>
 
     <div class="item-dates">
-      <p>Creato il: {{ portfolioItem.createdAt | date:'shortDate' }}</p>
-      <p>Ultimo aggiornamento: {{ portfolioItem.updatedAt | date:'shortDate' }}</p>
+      <p>{{ 'PORTFOLIO_DETAIL.CREATED_AT_LABEL' | translate }} {{ portfolioItem.createdAt | date:'shortDate' }}</p>
+      <p>{{ 'PORTFOLIO_DETAIL.UPDATED_AT_LABEL' | translate }} {{ portfolioItem.updatedAt | date:'shortDate' }}</p>
     </div>
   </div>
 
   <div *ngIf="!portfolioItem && !isLoading && !errorMessage" class="no-item-found">
-    <mat-icon>sentiment_dissatisfied</mat-icon> Elemento portfolio non trovato.
+    <mat-icon>sentiment_dissatisfied</mat-icon> {{ 'PORTFOLIO_DETAIL.NO_ITEM_FOUND' | translate }}
   </div>
 
-  <!-- **NUOVO:** Overlay per la visualizzazione fullscreen -->
+  <!-- Overlay per la visualizzazione fullscreen -->
   <div *ngIf="showFullscreen && portfolioItem && portfolioItem.images && portfolioItem.images.length > 0" class="fullscreen-overlay" (click)="closeFullscreen()">
-    <button mat-icon-button class="fullscreen-close-button" (click)="closeFullscreen(); $event.stopPropagation();">
+    <button mat-icon-button class="fullscreen-close-button" (click)="closeFullscreen(); $event.stopPropagation();" [attr.aria-label]="'PORTFOLIO_DETAIL.CLOSE_FULLSCREEN_ARIA' | translate">
       <mat-icon>close</mat-icon>
     </button>
-    <button mat-icon-button class="fullscreen-nav-button prev" (click)="prevFullscreenImage(); $event.stopPropagation();">
+    <button mat-icon-button class="fullscreen-nav-button prev" (click)="prevFullscreenImage(); $event.stopPropagation();" [attr.aria-label]="'PORTFOLIO_DETAIL.PREV_IMAGE_ARIA' | translate">
       <mat-icon>chevron_left</mat-icon>
     </button>
     <img [src]="portfolioItem.images[fullscreenImageIndex].src || 'assets/placeholder.jpg'"
          [alt]="portfolioItem.images[fullscreenImageIndex].alt || portfolioItem.title"
          class="fullscreen-image"
          onerror="this.src='assets/placeholder.jpg'"
-         (click)="$event.stopPropagation();"> <!-- Impedisce la chiusura al click sull'immagine -->
-    <button mat-icon-button class="fullscreen-nav-button next" (click)="nextFullscreenImage(); $event.stopPropagation();">
+         (click)="$event.stopPropagation();">
+    <button mat-icon-button class="fullscreen-nav-button next" (click)="nextFullscreenImage(); $event.stopPropagation();" [attr.aria-label]="'PORTFOLIO_DETAIL.NEXT_IMAGE_ARIA' | translate">
       <mat-icon>chevron_right</mat-icon>
     </button>
   </div>

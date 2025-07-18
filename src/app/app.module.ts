@@ -1,13 +1,13 @@
 // src/app/app.module.ts
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration, Title, Meta } from '@angular/platform-browser'; // <-- Importa Title e Meta qui
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared/shared.module';
 import { AuthService } from './auth/auth.service';
-import { provideHttpClient, withFetch } from '@angular/common/http'; // <-- Importante: HttpClient già configurato
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 
 // Importa i moduli delle pagine
 import { HomeModule } from './pages/home/home.module';
@@ -22,6 +22,15 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+
+// **NGX-TRANSLATE IMPORTS**
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// Funzione per caricare i file di traduzione
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -42,14 +51,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     TruccoSposaModule,
     AdminModule,
     ReactiveFormsModule,
-    MatCheckboxModule
-
+    MatCheckboxModule,
+    // **NGX-TRANSLATE CONFIGURATION**
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     AuthService,
-    provideHttpClient(withFetch()), // <-- Questo è il provider per HttpClient
+    provideHttpClient(withFetch()),
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    Title,
+    Meta
   ],
   bootstrap: [AppComponent]
 })

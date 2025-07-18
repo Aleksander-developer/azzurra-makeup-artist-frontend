@@ -1,56 +1,80 @@
 <!-- src/app/pages/servizi/servizi.component.html -->
 
 <section class="servizi-container">
-  <h1 class="page-title">I Miei Servizi di Bellezza</h1>
-  <p class="page-subtitle">Offro un'ampia gamma di servizi di make-up e hairstyling, pensati per ogni tua esigenza speciale.</p>
+  <h1 class="page-title">{{ 'SERVIZI.TITLE' | translate }}</h1>
+  <p class="page-subtitle">{{ 'SERVIZI.SUBTITLE' | translate }}</p>
 
-  <!-- Sezione Trucco Sposa (in evidenza) -->
+  <!-- Sezione Trucco Sposa (in evidenza) - Rimane invariata -->
   <div class="service-highlight-card mat-elevation-z6">
     <div class="highlight-content">
-      <h2 class="highlight-title">✨ Trucco Sposa: Il Tuo Giorno, La Tua Bellezza Perfetta</h2>
+      <h2 class="highlight-title">{{ 'SERVIZI.HIGHLIGHT_TITLE' | translate }}</h2>
       <p class="highlight-description">
-        Il giorno del tuo matrimonio è unico e merita un look indimenticabile. Offro un servizio di trucco sposa personalizzato, studiato per esaltare la tua bellezza naturale e garantirti una tenuta impeccabile per tutta la giornata. Dalla consulenza iniziale alla prova trucco, sarò al tuo fianco per realizzare il make-up dei tuoi sogni, che si adatti perfettamente al tuo abito, al tema del matrimonio e alla tua personalità.
+        {{ 'SERVIZI.HIGHLIGHT_DESCRIPTION' | translate }}
       </p>
-      <button mat-raised-button color="accent" routerLink="/trucco-sposa" aria-label="Scopri di più sul Trucco Sposa">
-        Scopri il Servizio Trucco Sposa
+      <button mat-raised-button color="accent" routerLink="/trucco-sposa"
+              [attr.aria-label]="'SERVIZI.HIGHLIGHT_BUTTON_ARIA' | translate">
+        {{ 'SERVIZI.HIGHLIGHT_BUTTON' | translate }}
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
     <div class="highlight-image-container">
-      <img src="https://placehold.co/600x400/FFC0CB/FFFFFF?text=Trucco+Sposa" alt="Trucco Sposa" class="highlight-image">
+      <img src="assets/trucco-sposa-seguimi.png" [alt]="'SERVIZI.HIGHLIGHT_IMAGE_ALT' | translate" class="highlight-image"
+           onerror="this.onerror=null; this.src='https://placehold.co/600x400/FFC0CB/FFFFFF?text=Trucco+Sposa';">
     </div>
   </div>
 
-  <!-- Sezioni Altri Servizi -->
+  <!-- Sezioni Altri Servizi - MODIFICATO PER LAYOUT AFFIANCATO E CAROUSEL -->
   <div class="other-services-grid">
-    <!-- Card Servizio Cerimonia -->
-    <mat-card class="service-card mat-elevation-z3">
-      <mat-card-header>
-        <mat-card-title>🌸 Trucco Cerimonia</mat-card-title>
-        <mat-card-subtitle>Eleganza per ogni occasione speciale</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://placehold.co/400x250/E6E6FA/333333?text=Trucco+Cerimonia" alt="Trucco Cerimonia">
-      <mat-card-content>
-        <p>Che tu sia invitata a un matrimonio, una laurea o un evento importante, realizzo un make-up sofisticato che ti farà sentire a tuo agio e radiosa.</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary" routerLink="/contatti" aria-label="Richiedi informazioni sul Trucco Cerimonia">Richiedi Info</button>
-      </mat-card-actions>
-    </mat-card>
+    <mat-card class="service-card mat-elevation-z3"
+              *ngFor="let service of services; let i = index"
+              [ngClass]="{'image-left': i % 2 === 0, 'image-right': i % 2 !== 0}">
+      <div class="service-card-image-container">
+        <img [src]="service.images[service.currentIndex]"
+             [alt]="service.imageAltKey | translate"
+             class="service-image"
+             onerror="this.onerror=null; this.src='https://placehold.co/400x250/E6E6FA/333333?text=Immagine+Servizio';">
 
-    <!-- Card Servizio Eventi -->
-    <mat-card class="service-card mat-elevation-z3">
-      <mat-card-header>
-        <mat-card-title>🎉 Trucco Eventi & Servizi Fotografici</mat-card-title>
-        <mat-card-subtitle>Per essere impeccabile sotto i riflettori</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://placehold.co/400x250/FFB6C1/333333?text=Trucco+Eventi" alt="Trucco Eventi">
-      <mat-card-content>
-        <p>Dal make-up per eventi serali, feste a tema, fino ai servizi fotografici e video, creo look d'impatto e duraturi, perfetti per ogni tipo di illuminazione.</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary" routerLink="/contatti" aria-label="Richiedi informazioni sul Trucco Eventi">Richiedi Info</button>
-      </mat-card-actions>
+        <div class="carousel-controls">
+          <button mat-icon-button (click)="prevImage(service); $event.stopPropagation()"
+                  [attr.aria-label]="'COMMON.PREV_IMAGE_ARIA' | translate">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-icon-button (click)="nextImage(service); $event.stopPropagation()"
+                  [attr.aria-label]="'COMMON.NEXT_IMAGE_ARIA' | translate">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+        <button mat-icon-button class="fullscreen-button"
+                (click)="openFullscreen(service.images[service.currentIndex], service.imageAltKey); $event.stopPropagation()"
+                [attr.aria-label]="'COMMON.FULLSCREEN_IMAGE_ARIA' | translate">
+          <mat-icon>fullscreen</mat-icon>
+        </button>
+      </div>
+      <div class="service-card-content-wrapper">
+        <mat-card-header>
+          <mat-card-title>{{ service.titleKey | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ service.subtitleKey | translate }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ service.descriptionKey | translate }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" routerLink="/contatti"
+                  [attr.aria-label]="service.buttonAriaKey | translate">
+            {{ 'SERVIZI.CEREMONY_BUTTON' | translate }} <!-- Il testo del bottone è lo stesso per entrambi -->
+          </button>
+        </mat-card-actions>
+      </div>
     </mat-card>
   </div>
 </section>
+
+<!-- Fullscreen Modal -->
+<div class="fullscreen-overlay" *ngIf="isFullscreen" (click)="closeFullscreen()">
+  <button mat-icon-button class="close-fullscreen-button" (click)="closeFullscreen(); $event.stopPropagation()"
+          [attr.aria-label]="'COMMON.CLOSE_FULLSCREEN_ARIA' | translate">
+    <mat-icon>close</mat-icon>
+  </button>
+  <img [src]="fullscreenImageUrl" [alt]="fullscreenImageAlt" class="fullscreen-image"
+       onerror="this.onerror=null; this.src='https://placehold.co/800x600/CCCCCC/333333?text=Immagine+Non+Trovata';">
+</div>

@@ -1,0 +1,142 @@
+@import '../../../../styles/variables'; // Percorso corretto
+@import '../../../../styles/mixins';    // Percorso corretto
+
+.reviews-block {
+  margin-top: $spacing-xxl; // Spazio superiore coerente
+  padding: $spacing-xl $spacing-md; // Padding generoso
+  background-color: rgba($color-vibrant-fuchsia, 0.05); // Rosa molto chiaro e trasparente
+  border-radius: $border-radius-lg; // Bordi arrotondati
+  text-align: center;
+  color: $color-dark-violet-text; // Viola scuro delicato
+  max-width: 900px; // Limita la larghezza del blocco
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: $color-shadow-light; // Ombra leggera
+}
+
+h5 {
+  @include elegant-heading; // Usa il mixin per i titoli eleganti
+  font-size: 2rem;
+  margin-bottom: $spacing-xl; // Spazio maggiore sotto il titolo
+  color: $color-vibrant-fuchsia; // Fucsia acceso per il titolo
+  @include responsive-text(1.6rem, 2rem);
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md; // Spazio tra pulsanti e card
+  margin-bottom: $spacing-lg;
+
+  button.mat-icon-button {
+    color: $color-vibrant-fuchsia; // Fucsia per le icone dei pulsanti
+    background-color: rgba($color-vibrant-fuchsia, 0.1); // Sfondo leggero
+    border-radius: 50%;
+    width: 48px; // Dimensione fissa
+    height: 48px; // Dimensione fissa
+    transition: all $transition-speed-normal $transition-ease;
+
+    mat-icon {
+      font-size: 32px; // Dimensione icona
+    }
+
+    &:hover {
+      background-color: $color-vibrant-fuchsia; // Sfondo pieno al hover
+      color: $color-white; // Testo bianco al hover
+      transform: scale(1.1);
+    }
+  }
+}
+
+.review-card {
+  @include card-style($padding: $spacing-lg); // Usa il mixin per lo stile della card
+  flex: 0 0 450px; // Larghezza fissa per la card, ma flessibile per mobile
+  max-width: 90%; // Assicura che non superi la larghezza del genitore su mobile
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: $color-text-dark;
+  font-style: italic;
+  min-height: 180px; // Altezza minima per le card
+  text-align: left; // Testo allineato a sinistra all'interno della card
+
+  .review-text {
+    font-size: 1.1rem;
+    margin-bottom: $spacing-md;
+    line-height: $line-height-base;
+    color: $color-text-light;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-weight: 600;
+    color: $color-dark-violet-text; // Viola scuro delicato
+    margin-top: $spacing-sm;
+
+    mat-icon {
+      font-size: 24px;
+      color: $color-vibrant-fuchsia; // Fucsia per l'icona dell'autore
+    }
+  }
+
+  .review-rating {
+    margin-top: $spacing-sm;
+    text-align: right; // Allinea le stelle a destra
+
+    mat-icon {
+      font-size: 24px; // Stelle più grandi
+      color: $color-border; // Colore grigio per stelle non piene
+
+      &.filled {
+        color: $color-accent; // Fucsia per stelle piene
+      }
+    }
+  }
+}
+
+.google-link {
+  margin-top: $spacing-lg;
+  font-size: 1.1rem;
+
+  a {
+    color: $color-vibrant-fuchsia; // Fucsia acceso per il link
+    font-weight: 600;
+    text-decoration: underline;
+    &:hover {
+      color: darken($color-vibrant-fuchsia, 10%);
+    }
+  }
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+  .reviews-block {
+    padding: $spacing-lg $spacing-sm;
+    margin-top: $spacing-xl;
+  }
+
+  .carousel-container {
+    flex-direction: column; // Impila pulsanti e card su mobile
+    gap: $spacing-md;
+  }
+
+  .review-card {
+    flex: 0 0 100%; // Occupa tutta la larghezza disponibile
+    max-width: 100%;
+    padding: $spacing-md;
+    min-height: 160px;
+  }
+
+  h5 {
+    font-size: 1.5rem;
+  }
+  .review-text {
+    font-size: 1rem;
+  }
+  .google-link {
+    font-size: 1rem;
+  }
+}

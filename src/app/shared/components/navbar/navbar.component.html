@@ -3,29 +3,39 @@
 
   <!-- Sezione sinistra (solo desktop) -->
   <div class="nav-links-container desktop-links">
-    <a mat-button routerLink="/home" aria-label="Vai alla Home Page">Home</a>
-    <a mat-button routerLink="/trucco-sposa" aria-label="Scopri i servizi di Trucco Sposa">Trucco Sposa</a>
-    <a mat-button routerLink="/portfolio" aria-label="Esplora il mio Portfolio">Portfolio</a>
-    <a mat-button *ngIf="isLoggedIn" routerLink="/admin/portfolio-manager" aria-label="Gestisci Portfolio (Area Admin)">Gestione Portfolio</a>
+    <a mat-button routerLink="/home" [attr.aria-label]="'NAV.HOME_ARIA' | translate">{{ 'NAV.HOME' | translate }}</a>
+    <a mat-button routerLink="/trucco-sposa" [attr.aria-label]="'NAV.BRIDE_MAKEUP_ARIA' | translate">{{ 'NAV.BRIDE_MAKEUP' | translate }}</a>
+    <a mat-button routerLink="/portfolio" [attr.aria-label]="'NAV.PORTFOLIO_ARIA' | translate">{{ 'NAV.PORTFOLIO' | translate }}</a>
+    <a mat-button *ngIf="isLoggedIn" routerLink="/admin/portfolio-manager" [attr.aria-label]="'NAV.ADMIN_PORTFOLIO_ARIA' | translate">{{ 'NAV.ADMIN_PORTFOLIO' | translate }}</a>
   </div>
 
   <!-- Logo centrale -->
-  <a routerLink="/home" class="brand-link" aria-label="Torna alla Home Page - Azzurra Angius">
+  <a routerLink="/home" class="brand-link" [attr.aria-label]="'NAV.BRAND_ARIA' | translate">
     Azzurra Angius
   </a>
 
   <!-- Sezione destra (solo desktop) -->
   <div class="nav-links-container desktop-links">
-    <a mat-button routerLink="/servizi" aria-label="Visualizza tutti i Servizi">Servizi</a>
-    <a mat-button routerLink="/contatti" aria-label="Contatta Azzurra Angius">Contatti</a>
-    <a mat-button routerLink="/chi-sono" aria-label="Scopri di più su Chi Sono">Chi sono</a>
+    <a mat-button routerLink="/servizi" [attr.aria-label]="'NAV.SERVICES_ARIA' | translate">{{ 'NAV.SERVICES' | translate }}</a>
+    <a mat-button routerLink="/contatti" [attr.aria-label]="'NAV.CONTACTS_ARIA' | translate">{{ 'NAV.CONTACTS' | translate }}</a>
+    <a mat-button routerLink="/chi-sono" [attr.aria-label]="'NAV.ABOUT_ME_ARIA' | translate">{{ 'NAV.ABOUT_ME' | translate }}</a>
 
-    <button *ngIf="!isLoggedIn" mat-stroked-button color="accent" routerLink="/login" aria-label="Accedi all'area riservata">Login</button>
-    <button *ngIf="isLoggedIn" mat-stroked-button color="warn" (click)="logout()" aria-label="Effettua il Logout">Logout</button>
+    <button *ngIf="!isLoggedIn" mat-stroked-button color="accent" routerLink="/login" [attr.aria-label]="'NAV.LOGIN_ARIA' | translate">{{ 'NAV.LOGIN' | translate }}</button>
+    <button *ngIf="isLoggedIn" mat-stroked-button color="warn" (click)="logout()" [attr.aria-label]="'NAV.LOGOUT_ARIA' | translate">{{ 'NAV.LOGOUT' | translate }}</button>
+
+    <!-- Selettore Lingua per Desktop -->
+    <div class="language-selector desktop-lang-selector">
+      <button mat-icon-button (click)="changeLanguage('it')" [attr.aria-label]="'NAV.CHANGE_LANG_IT_ARIA' | translate">
+        <img src="assets/flags/it.png" alt="Bandiera Italiana" class="flag-icon">
+      </button>
+      <button mat-icon-button (click)="changeLanguage('en')" [attr.aria-label]="'NAV.CHANGE_LANG_EN_ARIA' | translate">
+        <img src="assets/flags/en.png" alt="English Flag" class="flag-icon">
+      </button>
+    </div>
   </div>
 
   <!-- Bottone menu (solo mobile) -->
-  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button" aria-label="Apri menu di navigazione">
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button" [attr.aria-label]="'NAV.OPEN_MENU_ARIA' | translate">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -33,13 +43,23 @@
 
 <!-- Menu mobile -->
 <mat-menu #menu="matMenu">
-  <button mat-menu-item routerLink="/home" aria-label="Vai alla Home Page (Mobile)">Home</button>
-  <button mat-menu-item routerLink="/trucco-sposa" aria-label="Scopri i servizi di Trucco Sposa (Mobile)">Trucco Sposa</button>
-  <button mat-menu-item routerLink="/portfolio" aria-label="Esplora il mio Portfolio (Mobile)">Portfolio</button>
-  <button mat-menu-item routerLink="/servizi" aria-label="Visualizza tutti i Servizi (Mobile)">Servizi</button>
-  <button mat-menu-item routerLink="/contatti" aria-label="Contatta Azzurra Angius (Mobile)">Contatti</button>
-  <button mat-menu-item routerLink="/chi-sono" aria-label="Scopri di più su Chi Sono (Mobile)">Chi sono</button>
-  <button *ngIf="isLoggedIn" mat-menu-item routerLink="/admin/portfolio-manager" aria-label="Gestisci Portfolio (Area Admin Mobile)">Gestione Portfolio</button>
-  <button *ngIf="!isLoggedIn" mat-menu-item routerLink="/login" aria-label="Accedi (Mobile)">Login</button>
-  <button *ngIf="isLoggedIn" mat-menu-item (click)="logout()" aria-label="Esci (Mobile)">Logout</button>
+  <button mat-menu-item routerLink="/home" [attr.aria-label]="'NAV.HOME_ARIA_MOBILE' | translate">{{ 'NAV.HOME' | translate }}</button>
+  <button mat-menu-item routerLink="/trucco-sposa" [attr.aria-label]="'NAV.BRIDE_MAKEUP_ARIA_MOBILE' | translate">{{ 'NAV.BRIDE_MAKEUP' | translate }}</button>
+  <button mat-menu-item routerLink="/portfolio" [attr.aria-label]="'NAV.PORTFOLIO_ARIA_MOBILE' | translate">{{ 'NAV.PORTFOLIO' | translate }}</button>
+  <button mat-menu-item routerLink="/servizi" [attr.aria-label]="'NAV.SERVICES_ARIA_MOBILE' | translate">{{ 'NAV.SERVICES' | translate }}</button>
+  <button mat-menu-item routerLink="/contatti" [attr.aria-label]="'NAV.CONTACTS_ARIA_MOBILE' | translate">{{ 'NAV.CONTACTS' | translate }}</button>
+  <button mat-menu-item routerLink="/chi-sono" [attr.aria-label]="'NAV.ABOUT_ME_ARIA_MOBILE' | translate">{{ 'NAV.ABOUT_ME' | translate }}</button>
+  <button *ngIf="isLoggedIn" mat-menu-item routerLink="/admin/portfolio-manager" [attr.aria-label]="'NAV.ADMIN_PORTFOLIO_ARIA_MOBILE' | translate">{{ 'NAV.ADMIN_PORTFOLIO' | translate }}</button>
+  <button *ngIf="!isLoggedIn" mat-menu-item routerLink="/login" [attr.aria-label]="'NAV.LOGIN_ARIA_MOBILE' | translate">{{ 'NAV.LOGIN' | translate }}</button>
+  <button *ngIf="isLoggedIn" mat-menu-item (click)="logout()" [attr.aria-label]="'NAV.LOGOUT_ARIA_MOBILE' | translate">{{ 'NAV.LOGOUT' | translate }}</button>
+
+  <!-- Selettore Lingua per Mobile (nel menu) -->
+  <div class="language-selector mobile-lang-selector">
+    <button mat-menu-item (click)="changeLanguage('it')" [attr.aria-label]="'NAV.CHANGE_LANG_IT_ARIA' | translate">
+      <img src="assets/flags/it.png" alt="Bandiera Italiana" class="flag-icon-menu">
+    </button>
+    <button mat-menu-item (click)="changeLanguage('en')" [attr.aria-label]="'NAV.CHANGE_LANG_EN_ARIA' | translate">
+      <img src="assets/flags/en.png" alt="English Flag" class="flag-icon-menu">
+    </button>
+  </div>
 </mat-menu>

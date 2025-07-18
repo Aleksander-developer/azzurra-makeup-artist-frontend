@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon'; // Assicurati che sia qui se usato direttamente
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { MatIconModule } from '@angular/material/icon'; // Assicurati che sia qu
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    // SharedModule // <-- RIMUOVI O COMMENTA QUESTA RIGA SE PRESENTE
+    TranslateModule
   ]
 })
 export class ContattiModule { }
