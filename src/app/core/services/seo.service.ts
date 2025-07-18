@@ -10,11 +10,10 @@ import { filter } from 'rxjs/operators';
 })
 export class SeoService {
 
-  // URL base del tuo sito, importante per i percorsi assoluti nei meta tag
-  private baseUrl = 'https://azzurraangius.com/'; // Assicurati che questo sia il tuo dominio finale
+  // URL base del tuo sito, DEVE essere il tuo dominio finale
+  private baseUrl = 'https://azzurraangius.com/'; // CORRETTO: Ora punta al dominio finale
 
-  // URL base per le immagini, se le gestisci su un CDN come Cloudinary
-  // CORREZIONE: Questo è l'URL pubblico per gli asset su Cloudinary
+  // URL base per le immagini su Cloudinary (questo è corretto)
   private baseImageUrl = 'https://res.cloudinary.com/ddqilzddj/image/upload/v1752847726/'; 
 
   constructor(
@@ -28,8 +27,7 @@ export class SeoService {
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe(() => {
-        // La logica di aggiornamento dei meta tag per le singole pagine
-        // è gestita dai componenti stessi chiamando setPageSeo in ngOnInit
+          // Non è necessario fare nulla qui, i componenti di pagina chiameranno setPageSeo
       });
     }
   }
@@ -86,7 +84,6 @@ export class SeoService {
     this.metaService.updateTag({ name: 'twitter:image', content: fullImageUrl });
     this.metaService.updateTag({ name: 'twitter:image:alt', content: imageAlt });
 
-    // Rimuovi eventuali meta tag vecchi che non sono stati aggiornati (opzionale)
     this.metaService.removeTag('name="robots"');
   }
 }
