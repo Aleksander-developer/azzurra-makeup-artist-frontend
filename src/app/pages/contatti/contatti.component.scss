@@ -3,9 +3,9 @@
 @use '../../../styles/mixins' as mixins;
 
 .contatti-container {
-  max-width: 900px; /* Aumentato: da 800px a 900px */
-  margin: vars.$spacing-xl auto; /* Ridotto: da xxl a xl */
-  padding: 1.5rem;
+  max-width: 900px;
+  margin: vars.$spacing-xl auto;
+  padding: 1.5rem; /* Padding per desktop */
   background: vars.$color-white;
   color: vars.$color-text-dark;
   border-radius: vars.$border-radius-lg;
@@ -45,7 +45,7 @@
 form.contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Ridotto: da 1.5rem a 1rem */
+  gap: 1rem;
   margin-bottom: vars.$spacing-xl;
 
   mat-form-field {
@@ -172,7 +172,7 @@ form.contact-form {
 
 /* --- Sezione Info Dirette --- */
 .direct-contact-info {
-  margin-top: vars.$spacing-xl; /* Ridotto: da xxl a xl */
+  margin-top: vars.$spacing-xl;
   text-align: center;
 
   h2 {
@@ -186,8 +186,8 @@ form.contact-form {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: vars.$spacing-sm; /* Ridotto: da md a sm */
-    max-width: 700px; /* Aumentato: da 600px a 700px */
+    gap: vars.$spacing-sm;
+    max-width: 700px;
     margin: 0 auto;
   }
 
@@ -207,7 +207,7 @@ form.contact-form {
     min-width: 120px;
 
     mat-icon, .fab {
-      font-size: 36px;
+      font-size: 36px; /* Dimensione desktop */
       color: vars.$color-vibrant-fuchsia;
       margin-bottom: vars.$spacing-xs;
     }
@@ -215,9 +215,8 @@ form.contact-form {
     span {
       font-size: 1rem;
       font-weight: 500;
-      // Rimosso white-space: nowrap; per permettere il wrapping
-      overflow-wrap: break-word; // Permette il wrapping di parole lunghe
-      text-align: center; // Centra il testo su più righe
+      overflow-wrap: break-word;
+      text-align: center;
     }
 
     &:hover {
@@ -229,7 +228,7 @@ form.contact-form {
 }
 
 /* Responsive adjustments */
-@media (max-width: vars.$breakpoint-lg) {
+@media (max-width: vars.$breakpoint-lg) { /* 992px */
   .contatti-container {
     padding: 2rem;
   }
@@ -241,10 +240,10 @@ form.contact-form {
   }
 }
 
-@media (max-width: vars.$breakpoint-md) {
+@media (max-width: vars.$breakpoint-md) { /* 768px */
   .contatti-container {
     margin: vars.$spacing-xl auto;
-    padding: 1.5rem;
+    padding: 1.5rem vars.$spacing-md; /* Riduci padding orizzontale */
   }
   .page-title {
     font-size: 2rem;
@@ -267,20 +266,27 @@ form.contact-form {
   .direct-contact-info {
     margin-top: vars.$spacing-xl;
     .contact-methods {
-      flex-direction: column;
+      flex-direction: column; /* Già impostato, ma lo confermo */
       gap: vars.$spacing-sm;
-      max-width: 100%;
+      max-width: 100%; /* Occupa tutta la larghezza disponibile */
     }
     .contact-method-item {
-      width: 100%;
-      max-width: none;
+      width: 100%; /* Occupa tutta la larghezza disponibile */
+      max-width: none; /* Rimuovi max-width fisso */
+      padding: vars.$spacing-sm; /* Riduci padding interno degli item */
+      mat-icon, .fab {
+        font-size: 32px; /* Riduci dimensione icone */
+      }
+      span {
+        font-size: 0.95rem; /* Leggermente più piccolo */
+      }
     }
   }
 }
 
-@media (max-width: vars.$breakpoint-sm) {
+@media (max-width: vars.$breakpoint-sm) { /* 576px */
   .contatti-container {
-    padding: vars.$spacing-md;
+    padding: vars.$spacing-md vars.$spacing-xs; /* Riduci ulteriormente padding orizzontale */
     margin: vars.$spacing-lg auto;
   }
   .page-title {
@@ -295,8 +301,13 @@ form.contact-form {
   .direct-contact-info h2 {
     font-size: 1.5rem;
   }
-  // Regolazione specifica per l'email su schermi molto piccoli
-  .direct-contact-info .contact-method-item span {
-    font-size: 0.85rem; // Riduci la dimensione del font per l'email su schermi piccoli
+  .direct-contact-info .contact-method-item {
+    padding: vars.$spacing-xs; /* Padding minimo per gli item su schermi molto piccoli */
+    mat-icon, .fab {
+      font-size: 28px; /* Ulteriore riduzione dimensione icone */
+    }
+    span {
+      font-size: 0.8rem; /* Riduci la dimensione del font per l'email su schermi piccoli */
+    }
   }
 }

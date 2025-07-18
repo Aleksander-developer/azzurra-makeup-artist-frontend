@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 64px);
-  padding: vars.$spacing-md; /* Ridotto: da lg a md */
+  padding: vars.$spacing-md; /* Padding generale per desktop */
   text-align: center;
   background-color: vars.$color-light-pink-bg;
   color: vars.$color-text-dark;
@@ -43,8 +43,8 @@ p {
   line-height: vars.$line-height-base;
 }
 
-/* Responsive per i titoli e paragrafi */
-@media (max-width: 768px) {
+/* Responsive per i titoli e paragrafi (Tablet) */
+@media (max-width: vars.$breakpoint-md) { /* 768px */
   h1 {
     font-size: 2.2rem;
   }
@@ -73,9 +73,9 @@ p {
 .animated-block {
   background: rgba(vars.$color-white, 0.85);
   border-radius: vars.$border-radius-lg;
-  padding: vars.$spacing-md vars.$spacing-xl; /* Ridotto: da lg/xxl a md/xl */
-  max-width: 700px; /* Aumentato: da 600px a 700px */
-  margin: vars.$spacing-md auto; /* Ridotto: da lg a md */
+  padding: vars.$spacing-md vars.$spacing-xl; /* Padding per desktop */
+  max-width: 700px;
+  margin: vars.$spacing-md auto;
   box-shadow: 0 8px 20px rgba(vars.$color-vibrant-fuchsia, 0.2);
   color: vars.$color-dark-purple-text;
   font-family: vars.$font-family-primary;
@@ -109,7 +109,7 @@ p {
     letter-spacing: 0.08em;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: vars.$breakpoint-md) { /* 768px */
     padding: vars.$spacing-lg vars.$spacing-md;
     max-width: 90%;
     h5 {
@@ -126,8 +126,8 @@ p {
 
 // garanzie
 .guarantees-block {
-  margin-top: vars.$spacing-xl; /* Ridotto: da xxl a xl */
-  padding: vars.$spacing-md vars.$spacing-sm; /* Ridotto: da lg/md a md/sm */
+  margin-top: vars.$spacing-xl;
+  padding: vars.$spacing-md vars.$spacing-sm; /* Padding per desktop */
   background-color: rgba(vars.$color-vibrant-fuchsia, 0.05);
   border-radius: vars.$border-radius-md;
   text-align: center;
@@ -144,7 +144,7 @@ p {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: vars.$spacing-md; /* Ridotto: da lg a md */
+    gap: vars.$spacing-md;
 
     .guarantee-item {
       flex: 1 1 200px;
@@ -155,7 +155,7 @@ p {
       gap: vars.$spacing-xs;
 
       mat-icon {
-        font-size: 40px;
+        font-size: 40px; /* Dimensione desktop */
         color: vars.$color-vibrant-fuchsia;
       }
 
@@ -175,13 +175,64 @@ p {
   }
 }
 
-@media (max-width: 600px) {
-  .guarantees-list {
-    flex-direction: column;
-    gap: vars.$spacing-md;
+/* Media query per schermi piccoli (Smartphone) */
+@media (max-width: vars.$breakpoint-sm) { /* 576px */
+  :host {
+    padding: vars.$spacing-sm vars.$spacing-xs; /* Ridotto: Padding orizzontale molto stretto */
+  }
 
-    .guarantee-item {
-      max-width: 100%;
+  h1 {
+    font-size: 1.8rem; /* Titolo più piccolo */
+  }
+
+  h3 {
+    font-size: 1.3rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    padding: 0 vars.$spacing-xxs; /* Padding minimo per i paragrafi */
+  }
+
+  .animated-block {
+    padding: vars.$spacing-md vars.$spacing-sm; /* Padding interno ridotto */
+    max-width: 95%; /* Leggermente più largo */
+    margin: vars.$spacing-md auto; /* Margine ridotto */
+    h5 {
+      font-size: 1.1rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+    span {
+      font-size: 0.9rem;
+      padding: 0.2rem vars.$spacing-sm;
+    }
+  }
+
+  .guarantees-block {
+    margin-top: vars.$spacing-lg; /* Margine superiore ridotto */
+    padding: vars.$spacing-md vars.$spacing-sm; /* Padding interno ridotto */
+    .guarantees-list {
+      flex-direction: column; /* Elementi in colonna */
+      gap: vars.$spacing-md; /* Spazio tra gli elementi */
+
+      .guarantee-item {
+        max-width: 100%; /* Larghezza piena */
+        mat-icon {
+          font-size: 32px; /* Ridotto: Dimensione icona per smartphone */
+        }
+        h6 {
+          font-size: 1rem;
+        }
+        p {
+          font-size: 0.85rem;
+        }
+      }
     }
   }
 }

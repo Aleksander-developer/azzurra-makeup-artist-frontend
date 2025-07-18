@@ -253,7 +253,7 @@
     flex-direction: row;
   }
 
-  &.image-right {
+  &.amp-image-right {
     flex-direction: row-reverse;
   }
 }
@@ -356,7 +356,7 @@
     .service-card-content-wrapper {
       width: 100%;
       padding: vars.$spacing-md; /* Padding simmetrico per il contenuto */
-      text-align: center !important; /* Testo centrato */
+      text-align: center; /* Testo centrato */
       box-sizing: border-box;
     }
 
@@ -400,7 +400,7 @@
 
 @media (max-width: vars.$breakpoint-md) { /* breakpoint-md è 768px */
   .servizi-container {
-    padding: vars.$spacing-md vars.$spacing-sm;
+    padding: vars.$spacing-md vars.$spacing-sm; /* Riduci padding orizzontale */
     margin-top: vars.$spacing-xl;
   }
   .page-title {
@@ -430,25 +430,38 @@
   .service-card {
     padding: vars.$spacing-sm;
     .service-card-image-container {
-      aspect-ratio: 4/3; /* Meno "wide" su schermi più piccoli */
+      aspect-ratio: 4/3;
     }
     mat-card-header {
       mat-card-title {
-        font-size: 1.6rem; /* AUMENTATO: Più grande per schermi medi */
+        font-size: 1.6rem;
       }
       mat-card-subtitle {
-        font-size: 1rem; /* AUMENTATO: Più grande per schermi medi */
+        font-size: 1rem;
       }
     }
     mat-card-content p {
-      font-size: 1.1rem; /* AUMENTATO: Più grande per schermi medi */
+      font-size: 1.1rem;
     }
     mat-card-actions button {
-      font-size: 1rem; /* AUMENTATO: Più grande per schermi medi */
+      font-size: 1rem;
+    }
+    // AUMENTA LO SPAZIO INTERNO E RIDUCI I MARGINI ESTERNI PER IL CONTENUTO
+    .service-card-content-wrapper {
+      padding: vars.$spacing-md vars.$spacing-sm; /* Aumenta padding verticale, riduci orizzontale */
+    }
+    // Aumenta la dimensione delle icone all'interno dei testi
+    mat-card-content p mat-icon { /* Se le icone sono dentro i paragrafi */
+      font-size: 1.2em; /* Rendi le icone leggermente più grandi del testo circostante */
+      vertical-align: middle; /* Allinea verticalmente con il testo */
+      margin-right: vars.$spacing-xxs; /* Piccolo spazio a destra */
     }
   }
 }
 @media (max-width: vars.$breakpoint-sm) { /* breakpoint-sm è 576px */
+  .servizi-container {
+    padding: vars.$spacing-md vars.$spacing-xs; /* Riduci ulteriormente padding orizzontale */
+  }
   .page-title {
     font-size: 1.5rem;
   }
@@ -461,23 +474,29 @@
   .service-card {
     padding: vars.$spacing-xs;
     .service-card-image-container {
-      aspect-ratio: 1/1; /* Quadrato su schermi molto piccoli */
+      aspect-ratio: 1/1;
     }
     .service-card-content-wrapper {
-      padding: vars.$spacing-xs;
+      padding: vars.$spacing-sm vars.$spacing-xs; /* Aumenta padding verticale, riduci orizzontale */
     }
     mat-card-header mat-card-title {
-      font-size: 1.3rem; /* AUMENTATO: Più grande per schermi piccoli */
+      font-size: 1.3rem;
     }
     mat-card-header mat-card-subtitle {
-      font-size: 0.9rem; /* AUMENTATO: Più grande per schermi piccoli */
+      font-size: 0.9rem;
     }
     mat-card-content p {
-      font-size: 1rem; /* AUMENTATO: Più grande per schermi piccoli */
+      font-size: 1rem;
     }
     mat-card-actions button {
-      font-size: 0.9rem; /* AUMENTATO: Più grande per schermi piccoli */
+      font-size: 0.9rem;
       padding: 0.5rem 1.2rem;
+    }
+    // Aumenta la dimensione delle icone all'interno dei testi
+    mat-card-content p mat-icon { /* Se le icone sono dentro i paragrafi */
+      font-size: 1.2em; /* Rendi le icone leggermente più grandi del testo circostante */
+      vertical-align: middle; /* Allinea verticalmente con il testo */
+      margin-right: vars.$spacing-xxs; /* Piccolo spazio a destra */
     }
   }
 }

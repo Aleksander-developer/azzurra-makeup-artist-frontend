@@ -4,7 +4,7 @@
 @use '../../../styles/mixins' as mixins;
 
 .portfolio-page-container {
-  padding: vars.$spacing-xl vars.$spacing-lg;
+  padding: vars.$spacing-xl vars.$spacing-lg; /* Padding per desktop */
   max-width: 1200px;
   margin: vars.$spacing-xxl auto;
   background-color: rgba(vars.$color-background-light, 0.95);
@@ -64,7 +64,7 @@
 
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Desktop default */
   gap: vars.$spacing-lg;
   justify-content: center;
   margin-top: vars.$spacing-xl;
@@ -88,7 +88,7 @@
   img {
     width: 100%;
     height: 200px; /* Altezza fissa per le immagini */
-    object-fit: cover; /* Assicura che l'immagine copra l'area */
+    object-fit: cover;
     border-bottom: 1px solid vars.$color-border;
   }
 
@@ -125,7 +125,7 @@
 
   mat-card-actions {
     padding: vars.$spacing-sm vars.$spacing-md vars.$spacing-md;
-    justify-content: flex-end; /* Allinea il bottone a destra */
+    justify-content: flex-end;
 
     button {
       background-color: vars.$color-accent;
@@ -142,9 +142,9 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: vars.$breakpoint-md) {
+@media (max-width: vars.$breakpoint-lg) { /* 992px */
   .portfolio-page-container {
-    padding: vars.$spacing-lg vars.$spacing-md;
+    padding: vars.$spacing-lg vars.$spacing-md; /* Riduci padding orizzontale */
     margin-top: vars.$spacing-xl;
   }
   .page-title {
@@ -158,7 +158,7 @@
     margin-bottom: vars.$spacing-xl;
   }
   .portfolio-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Adatta minmax per schermi medi */
     gap: vars.$spacing-md;
   }
   .portfolio-card img {
@@ -169,9 +169,9 @@
   }
 }
 
-@media (max-width: vars.$breakpoint-sm) {
+@media (max-width: vars.$breakpoint-md) { /* 768px */
   .portfolio-page-container {
-    padding: vars.$spacing-md;
+    padding: vars.$spacing-md vars.$spacing-sm; /* Riduci ulteriormente padding orizzontale */
     margin: vars.$spacing-lg auto;
   }
   .page-title {
@@ -181,9 +181,55 @@
     }
   }
   .page-subtitle {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   .portfolio-grid {
-    grid-template-columns: 1fr; /* Una colonna su mobile */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adatta minmax per schermi più piccoli */
+    gap: vars.$spacing-sm;
+  }
+  .portfolio-card img {
+    height: 160px; /* Riduci altezza immagine */
+  }
+  .portfolio-card .card-title {
+    font-size: 1.2rem;
+  }
+  .portfolio-card .card-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: vars.$breakpoint-sm) { /* 576px */
+  .portfolio-page-container {
+    padding: vars.$spacing-md vars.$spacing-xs; /* Padding minimo per schermi molto piccoli */
+    margin: vars.$spacing-lg auto;
+  }
+  .page-title {
+    font-size: 1.8rem;
+    .title-icon {
+      font-size: 1.8rem; /* Riduci anche l'icona del titolo */
+    }
+  }
+  .page-subtitle {
+    font-size: 0.85rem;
+  }
+  .portfolio-grid {
+    grid-template-columns: 1fr; /* Una singola colonna su mobile */
+    gap: vars.$spacing-md; /* Aumenta leggermente il gap tra le card in colonna */
+  }
+  .portfolio-card img {
+    height: 200px; /* Potresti voler mantenere un'altezza decente per le card singole */
+  }
+  .portfolio-card mat-card-content {
+    padding: vars.$spacing-sm; /* Riduci il padding interno delle card */
+  }
+  .portfolio-card .card-title {
+    font-size: 1.1rem;
+  }
+  .portfolio-card .card-subtitle {
+    font-size: 0.8rem;
+  }
+  .portfolio-card .card-category {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
   }
 }

@@ -4,10 +4,10 @@
 @use '../../../styles/mixins' as mixins;
 
 .trucco-sposa-container {
-  padding: vars.$spacing-xl vars.$spacing-lg;
+  padding: vars.$spacing-xl vars.$spacing-lg; /* Padding per desktop */
   max-width: 1200px;
-  margin: vars.$spacing-xxl auto; /* Margine superiore per distacco dalla navbar */
-  background-color: rgba(vars.$color-background-light, 0.95); /* Sfondo leggermente opaco */
+  margin: vars.$spacing-xxl auto;
+  background-color: rgba(vars.$color-background-light, 0.95);
   border-radius: vars.$border-radius-lg;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: vars.$color-text-dark;
@@ -41,10 +41,10 @@
   gap: vars.$spacing-xl;
   background: linear-gradient(135deg, vars.$color-light-pink-bg 0%, lighten(vars.$color-light-pink-bg, 5%) 100%);
   border: 1px solid rgba(vars.$color-vibrant-fuchsia, 0.3);
-  border-radius: vars.$border-radius-xl; /* Più arrotondato */
-  padding: vars.$spacing-xxl; /* Padding generoso */
+  border-radius: vars.$border-radius-xl;
+  padding: vars.$spacing-xxl; /* Padding generoso per desktop */
   margin-bottom: vars.$spacing-xxl;
-  box-shadow: 0 10px 30px rgba(vars.$color-vibrant-fuchsia, 0.3); /* Ombra più pronunciata e fucsia */
+  box-shadow: 0 10px 30px rgba(vars.$color-vibrant-fuchsia, 0.3);
   text-align: left;
 
   .highlight-content {
@@ -54,16 +54,16 @@
 
   .highlight-title {
     font-family: vars.$font-family-secondary;
-    font-size: 2.8rem; /* Titolo più grande */
+    font-size: 2.8rem;
     color: vars.$color-vibrant-fuchsia;
     margin-bottom: vars.$spacing-md;
-    text-shadow: 0 0 12px rgba(vars.$color-vibrant-fuchsia, 0.5); /* Ombra luminosa */
+    text-shadow: 0 0 12px rgba(vars.$color-vibrant-fuchsia, 0.5);
   }
 
   .highlight-description {
     font-size: 1.2rem;
     line-height: vars.$line-height-base;
-    color: vars.$color-dark-purple-text; /* Testo più scuro per contrasto */
+    color: vars.$color-dark-purple-text;
     margin-bottom: vars.$spacing-lg;
   }
 
@@ -80,16 +80,16 @@
       mat-icon {
         color: vars.$color-vibrant-fuchsia;
         margin-right: vars.$spacing-xs;
-        font-size: 20px;
+        font-size: 20px; /* Dimensione icona desktop */
       }
     }
   }
 
   .highlight-image-container {
     flex-shrink: 0;
-    width: 45%; /* Immagine leggermente più grande */
+    width: 45%;
     max-width: 500px;
-    border-radius: vars.$border-radius-xl; /* Molto arrotondato */
+    border-radius: vars.$border-radius-xl;
     overflow: hidden;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
@@ -103,7 +103,7 @@
   button {
     font-size: 1.2rem;
     padding: vars.$spacing-sm vars.$spacing-lg;
-    border-radius: vars.$border-radius-xl; /* Bottone a pillola */
+    border-radius: vars.$border-radius-xl;
     transition: all vars.$transition-speed-normal vars.$transition-ease;
     mat-icon {
       margin-left: vars.$spacing-xs;
@@ -123,9 +123,9 @@
   align-items: center;
   gap: vars.$spacing-xl;
   background-color: vars.$color-white;
-  border: 1px solid rgba(vars.$color-secondary, 0.3); /* Bordo lavanda delicato */
+  border: 1px solid rgba(vars.$color-secondary, 0.3);
   border-radius: vars.$border-radius-lg;
-  padding: vars.$spacing-xl;
+  padding: vars.$spacing-xl; /* Padding generoso per desktop */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: left;
 
@@ -137,7 +137,7 @@
   .package-title {
     font-family: vars.$font-family-secondary;
     font-size: 2.2rem;
-    color: vars.$color-dark-purple-text; /* Viola scuro */
+    color: vars.$color-dark-purple-text;
     margin-bottom: vars.$spacing-md;
   }
 
@@ -159,9 +159,9 @@
       font-size: 1rem;
       color: vars.$color-text-dark;
       mat-icon {
-        color: vars.$color-secondary; /* Icone lavanda */
+        color: vars.$color-secondary;
         margin-right: vars.$spacing-xs;
-        font-size: 18px;
+        font-size: 18px; /* Dimensione icona desktop */
       }
     }
   }
@@ -199,22 +199,22 @@
 
 /* --- Call to Action Finale --- */
 .cta-section {
-  background: linear-gradient(45deg, vars.$color-primary 0%, darken(vars.$color-primary, 10%) 100%); /* Gradiente rosa chiaro */
+  background: linear-gradient(45deg, vars.$color-primary 0%, darken(vars.$color-primary, 10%) 100%);
   color: vars.$color-text-dark;
   text-align: center;
-  padding: vars.$spacing-xxl vars.$spacing-lg;
+  padding: vars.$spacing-xxl vars.$spacing-lg; /* Padding generoso per desktop */
   margin-top: vars.$spacing-xxl;
   border-radius: vars.$border-radius-xl;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0px 8px 25px rgba(vars.$color-primary, 0.4); /* Ombra rosata */
+  box-shadow: 0px 8px 25px rgba(vars.$color-primary, 0.4);
 
   h2 {
     font-family: vars.$font-family-secondary;
     font-size: 2.5rem;
     margin-bottom: vars.$spacing-md;
-    color: vars.$color-dark-pink-text; /* Testo rosa scuro */
+    color: vars.$color-dark-pink-text;
   }
   p {
     font-size: 1.3rem;
@@ -225,7 +225,7 @@
     font-size: 1.3rem;
     padding: 1rem 3rem;
     border-radius: vars.$border-radius-xl;
-    background-color: vars.$color-vibrant-fuchsia; /* Fucsia acceso */
+    background-color: vars.$color-vibrant-fuchsia;
     color: vars.$color-white;
     border: 2px solid vars.$color-vibrant-fuchsia;
     transition: all vars.$transition-speed-normal vars.$transition-ease;
@@ -239,7 +239,11 @@
 }
 
 /* --- Responsive Adjustments --- */
-@media (max-width: vars.$breakpoint-lg) {
+@media (max-width: vars.$breakpoint-lg) { /* 992px */
+  .trucco-sposa-container {
+    padding: vars.$spacing-lg vars.$spacing-md; /* Riduci padding orizzontale */
+    margin-top: vars.$spacing-xl;
+  }
   .page-title {
     font-size: 2.5rem;
   }
@@ -254,6 +258,8 @@
   }
   .package-highlight-card, .package-card {
     flex-direction: column; /* Stack colonne su schermi medi */
+    padding: vars.$spacing-xl; /* Mantieni padding interno generoso */
+    gap: vars.$spacing-lg; /* Riduci gap */
     .highlight-content, .package-content {
       padding-right: 0;
       padding-left: 0;
@@ -265,29 +271,32 @@
       margin-top: vars.$spacing-lg;
     }
   }
-  .cta-section h2 {
-    font-size: 2rem;
-  }
-  .cta-section p {
-    font-size: 1.1rem;
+  .cta-section {
+    padding: vars.$spacing-xl vars.$spacing-md;
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.1rem;
+    }
   }
 }
 
-@media (max-width: vars.$breakpoint-md) {
+@media (max-width: vars.$breakpoint-md) { /* 768px */
   .trucco-sposa-container {
-    padding: vars.$spacing-lg vars.$spacing-md;
-    margin-top: vars.$spacing-xl;
+    padding: vars.$spacing-md vars.$spacing-sm; /* Riduci ulteriormente padding orizzontale */
+    margin-top: vars.$spacing-lg;
   }
   .page-title {
     font-size: 2rem;
   }
   .page-subtitle {
-    font-size: 1rem;
-    margin-bottom: vars.$spacing-xl;
+    font-size: 0.95rem;
+    margin-bottom: vars.$spacing-lg;
   }
   .package-highlight-card, .package-card {
-    padding: vars.$spacing-lg;
-    gap: vars.$spacing-lg;
+    padding: vars.$spacing-lg vars.$spacing-md; /* Riduci padding interno */
+    gap: vars.$spacing-md;
     .highlight-title {
       font-size: 1.8rem;
     }
@@ -295,19 +304,30 @@
       font-size: 1.6rem;
     }
     .highlight-description, .package-description {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+    }
+    .highlight-features li, .package-features li {
+      font-size: 0.9rem; /* Riduci dimensione font per le feature */
+      mat-icon {
+        font-size: 18px; /* Riduci dimensione icona */
+      }
     }
     .highlight-image-container, .package-image-container {
-      width: 95%;
+      width: 90%; /* Occupa più larghezza */
+      max-width: none; /* Rimuovi max-width fisso */
+    }
+    button {
+      font-size: 1rem;
+      padding: vars.$spacing-sm vars.$spacing-md;
     }
   }
   .cta-section {
-    padding: vars.$spacing-xl vars.$spacing-md;
+    padding: vars.$spacing-lg vars.$spacing-sm; /* Riduci padding CTA */
     h2 {
       font-size: 1.8rem;
     }
     p {
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     button {
       font-size: 1rem;
@@ -316,27 +336,54 @@
   }
 }
 
-@media (max-width: vars.$breakpoint-sm) {
+@media (max-width: vars.$breakpoint-sm) { /* 576px */
+  .trucco-sposa-container {
+    padding: vars.$spacing-md vars.$spacing-xs; /* Padding minimo per schermi molto piccoli */
+    margin: vars.$spacing-lg auto;
+  }
   .page-title {
     font-size: 1.8rem;
   }
-  .highlight-title {
-    font-size: 1.5rem;
+  .page-subtitle {
+    font-size: 0.85rem;
   }
-  .package-title {
-    font-size: 1.4rem;
+  .package-highlight-card, .package-card {
+    padding: vars.$spacing-md vars.$spacing-xs; /* Padding minimo interno */
+    gap: vars.$spacing-sm;
+    .highlight-title {
+      font-size: 1.5rem;
+    }
+    .package-title {
+      font-size: 1.3rem;
+    }
+    .highlight-description, .package-description {
+      font-size: 0.85rem;
+    }
+    .highlight-features li, .package-features li {
+      font-size: 0.8rem; /* Ulteriore riduzione per le feature */
+      mat-icon {
+        font-size: 16px; /* Ulteriore riduzione icona */
+      }
+    }
+    .highlight-image-container, .package-image-container {
+      width: 100%; /* Piena larghezza */
+    }
+    button {
+      font-size: 0.9rem;
+      padding: vars.$spacing-xs vars.$spacing-sm;
+    }
   }
-  .highlight-features li, .package-features li {
-    font-size: 0.9rem;
-  }
-  .package-highlight-card button, .package-card button {
-    font-size: 0.9rem;
-    padding: vars.$spacing-xs vars.$spacing-sm;
-  }
-  .cta-section h2 {
-    font-size: 1.5rem;
-  }
-  .cta-section p {
-    font-size: 0.9rem;
+  .cta-section {
+    padding: vars.$spacing-md vars.$spacing-xs;
+    h2 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+    button {
+      font-size: 0.9rem;
+      padding: 0.7rem 1.5rem;
+    }
   }
 }
