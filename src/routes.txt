@@ -1,0 +1,7 @@
+/
+/chi-sono
+/servizi
+/contatti
+/trucco-sposa
+/admin
+/login
