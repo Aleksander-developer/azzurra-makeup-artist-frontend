@@ -3,77 +3,100 @@
 @use '../../../styles/mixins' as mixins;
 
 :host {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 64px);
-  padding: vars.$spacing-md; /* Padding generale per desktop */
+  display: block;
+  padding: 0;
   text-align: center;
   background-color: vars.$color-light-pink-bg;
   color: vars.$color-text-dark;
 }
 
-h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  color: vars.$color-vibrant-fuchsia;
-  margin-bottom: vars.$spacing-sm;
-}
-
-h3 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: vars.$spacing-xs;
-  color: vars.$color-text-dark;
-}
-
-h4 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-bottom: vars.$spacing-md;
-  color: vars.$color-text-light;
-}
-
-p {
-  font-size: 1.125rem;
-  max-width: 600px;
-  margin-bottom: vars.$spacing-sm;
-  color: vars.$color-text-dark;
-  line-height: vars.$line-height-base;
-}
-
-/* Responsive per i titoli e paragrafi (Tablet) */
-@media (max-width: vars.$breakpoint-md) { /* 768px */
-  h1 {
-    font-size: 2.2rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
-  h4 {
-    font-size: 1.2rem;
-  }
-
-  p {
-    font-size: 1rem;
-    padding: 0 vars.$spacing-sm;
-  }
-}
-
-.extra-info {
+/* --- Hero Section --- */
+.hero-section {
+  display: flex; /* Layout affiancato per desktop (>992px) */
   width: 100%;
-  max-width: 800px;
-  margin-top: vars.$spacing-lg;
+  height: 100vh; // Fa in modo che la sezione hero riempia l'altezza del viewport
+  padding-top: 80px; // Aggiunge spazio per la navbar fissa (regola questo valore se la tua navbar ha un'altezza diversa)
+  box-sizing: border-box; // Assicura che il padding sia incluso nell'altezza totale
+  background-color: vars.$color-light-pink-bg; // Sfondo per la sezione testuale
+
+  .hero-image-container {
+    flex: 1; // Occupa metà dello spazio a sinistra
+    position: relative;
+    overflow: hidden;
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // Copre l'area mantenendo l'aspect ratio
+      display: block;
+    }
+  }
+
+  .hero-text-content {
+    flex: 1; // Occupa l'altra metà dello spazio a destra
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; // Allinea a sinistra il testo su desktop
+    padding: vars.$spacing-xl; // Padding interno
+    text-align: left; // Assicurati che il testo sia allineato a sinistra
+
+    .hero-title {
+      font-family: vars.$font-family-secondary;
+      font-size: 3.8rem;
+      font-weight: 700;
+      margin-bottom: vars.$spacing-xs;
+      color: vars.$color-dark-purple-text; // Colore del titolo dalla foto
+    }
+
+    .hero-subtitle {
+      font-family: vars.$font-family-primary;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: vars.$spacing-xl;
+      color: vars.$color-text-light;
+    }
+
+    .book-now-button {
+      background-color: vars.$color-vibrant-fuchsia;
+      color: vars.$color-white;
+      font-size: 1.3rem;
+      padding: vars.$spacing-md vars.$spacing-xxl;
+      border-radius: vars.$border-radius-xl;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: all vars.$transition-speed-normal vars.$transition-ease;
+
+      &:hover {
+        background-color: darken(vars.$color-vibrant-fuchsia, 10%);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(vars.$color-vibrant-fuchsia, 0.4);
+      }
+    }
+  }
 }
 
-// animazioni
+/* --- Main Content Wrapper (per il contenuto esistente sotto l'hero) --- */
+.main-content-wrapper {
+  max-width: 1200px; // Limita la larghezza del contenuto
+  margin: vars.$spacing-xxl auto; // Centra il wrapper e aggiungi margini
+  padding: vars.$spacing-lg; // Padding interno per il wrapper
+  text-align: center; // Centra il testo all'interno
+
+  .main-description {
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: vars.$spacing-sm auto; // Centra i paragrafi
+    color: vars.$color-text-dark;
+    line-height: vars.$line-height-base;
+  }
+}
+
+// animazioni (stili esistenti, leggermente adattati)
 .animated-block {
   background: rgba(vars.$color-white, 0.85);
   border-radius: vars.$border-radius-lg;
-  padding: vars.$spacing-md vars.$spacing-xl; /* Padding per desktop */
+  padding: vars.$spacing-md vars.$spacing-xl;
   max-width: 700px;
   margin: vars.$spacing-md auto;
   box-shadow: 0 8px 20px rgba(vars.$color-vibrant-fuchsia, 0.2);
@@ -108,26 +131,12 @@ p {
     border-radius: 25px;
     letter-spacing: 0.08em;
   }
-
-  @media (max-width: vars.$breakpoint-md) { /* 768px */
-    padding: vars.$spacing-lg vars.$spacing-md;
-    max-width: 90%;
-    h5 {
-      font-size: 1.3rem;
-    }
-    p {
-      font-size: 0.95rem;
-    }
-    span {
-      font-size: 1rem;
-    }
-  }
 }
 
-// garanzie
+// garanzie (stili esistenti, leggermente adattati)
 .guarantees-block {
   margin-top: vars.$spacing-xl;
-  padding: vars.$spacing-md vars.$spacing-sm; /* Padding per desktop */
+  padding: vars.$spacing-md vars.$spacing-sm;
   background-color: rgba(vars.$color-vibrant-fuchsia, 0.05);
   border-radius: vars.$border-radius-md;
   text-align: center;
@@ -155,7 +164,7 @@ p {
       gap: vars.$spacing-xs;
 
       mat-icon {
-        font-size: 40px; /* Dimensione desktop */
+        font-size: 40px;
         color: vars.$color-vibrant-fuchsia;
       }
 
@@ -175,33 +184,145 @@ p {
   }
 }
 
-/* Media query per schermi piccoli (Smartphone) */
-@media (max-width: vars.$breakpoint-sm) { /* 576px */
-  :host {
-    padding: vars.$spacing-sm vars.$spacing-xs; /* Ridotto: Padding orizzontale molto stretto */
+/* Sezione Recensioni (app-reviews) */
+.reviews-section {
+  margin-top: vars.$spacing-xxl;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: vars.$spacing-xl vars.$spacing-lg;
+  background-color: rgba(vars.$color-background-light, 0.95);
+  border-radius: vars.$border-radius-lg;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: vars.$breakpoint-lg) { /* 992px */
+  .hero-section {
+    flex-direction: column; // Stack immagine e testo verticalmente sotto i 992px
+    height: auto; // Altezza automatica per adattarsi al contenuto
+    padding-top: 0; // Rimuovi padding-top quando in modalità colonna, l'immagine sarà sopra
+    .hero-image-container {
+      width: 100%;
+      height: 50vh; // Altezza fissa per l'immagine su tablet
+    }
+    .hero-text-content {
+      width: 100%;
+      padding: vars.$spacing-lg vars.$spacing-md;
+      align-items: center; // Centra il testo quando è in colonna
+      text-align: center;
+      .hero-title {
+        font-size: 3rem;
+      }
+      .hero-subtitle {
+        font-size: 1.5rem;
+      }
+      .book-now-button {
+        font-size: 1.1rem;
+        padding: vars.$spacing-sm vars.$spacing-xl;
+      }
+    }
   }
 
-  h1 {
-    font-size: 1.8rem; /* Titolo più piccolo */
+  .main-content-wrapper {
+    padding: vars.$spacing-md;
+    margin-top: vars.$spacing-xl;
+  }
+}
+
+@media (max-width: vars.$breakpoint-md) { /* 768px */
+  .hero-section {
+    .hero-image-container {
+      height: 45vh; // Leggermente più piccola su schermi più piccoli
+    }
+    .hero-text-content {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+      .book-now-button {
+        font-size: 1rem;
+        padding: vars.$spacing-xs vars.$spacing-lg;
+      }
+    }
   }
 
-  h3 {
-    font-size: 1.3rem;
-  }
-
-  h4 {
-    font-size: 1rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    padding: 0 vars.$spacing-xxs; /* Padding minimo per i paragrafi */
+  .main-content-wrapper {
+    padding: vars.$spacing-sm;
+    margin-top: vars.$spacing-lg;
   }
 
   .animated-block {
-    padding: vars.$spacing-md vars.$spacing-sm; /* Padding interno ridotto */
-    max-width: 95%; /* Leggermente più largo */
-    margin: vars.$spacing-md auto; /* Margine ridotto */
+    padding: vars.$spacing-lg vars.$spacing-md;
+    max-width: 90%;
+    h5 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 0.95rem;
+    }
+    span {
+      font-size: 1rem;
+    }
+  }
+
+  .guarantees-block {
+    padding: vars.$spacing-md vars.$spacing-sm;
+    .guarantees-list {
+      flex-direction: column;
+      gap: vars.$spacing-md;
+      .guarantee-item {
+        max-width: 100%;
+        mat-icon {
+          font-size: 32px;
+        }
+        h6 {
+          font-size: 1rem;
+        }
+        p {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: vars.$breakpoint-sm) { /* 576px */
+  .hero-section {
+    .hero-image-container {
+      height: 40vh; // Riduci altezza immagine su mobile
+    }
+    .hero-text-content {
+      padding: vars.$spacing-md vars.$spacing-xs;
+      .hero-title {
+        font-size: 2rem;
+      }
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      .book-now-button {
+        font-size: 0.9rem;
+        padding: vars.$spacing-xxs vars.$spacing-md;
+      }
+    }
+  }
+
+  .main-content-wrapper {
+    padding: vars.$spacing-xs;
+    margin-top: vars.$spacing-md;
+  }
+
+  .main-description {
+    font-size: 0.9rem;
+    padding: 0 vars.$spacing-xxs;
+  }
+
+  .animated-block {
+    padding: vars.$spacing-md vars.$spacing-sm;
     h5 {
       font-size: 1.1rem;
     }
@@ -215,30 +336,17 @@ p {
   }
 
   .guarantees-block {
-    margin-top: vars.$spacing-lg; /* Margine superiore ridotto */
-    padding: vars.$spacing-md vars.$spacing-sm; /* Padding interno ridotto */
-    .guarantees-list {
-      flex-direction: column; /* Elementi in colonna */
-      gap: vars.$spacing-md; /* Spazio tra gli elementi */
-
-      .guarantee-item {
-        max-width: 100%; /* Larghezza piena */
-        mat-icon {
-          font-size: 32px; /* Ridotto: Dimensione icona per smartphone */
-        }
-        h6 {
-          font-size: 1rem;
-        }
-        p {
-          font-size: 0.85rem;
-        }
-      }
+    padding: vars.$spacing-md vars.$spacing-sm;
+    h5 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 0.85rem;
     }
   }
-}
 
-/* Sezione Recensioni (app-reviews) */
-.reviews-section {
-  margin-top: vars.$spacing-xxl;
-  width: 100%;
+  .reviews-section {
+    margin-top: vars.$spacing-lg;
+    padding: vars.$spacing-md vars.$spacing-sm;
+  }
 }

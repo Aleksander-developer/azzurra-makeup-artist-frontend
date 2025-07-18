@@ -1,59 +1,72 @@
 <!-- src/app/pages/home/home.component.html -->
 
-<h1>{{ 'HOME.TITLE_AZZURRA' | translate }}</h1>
-<h3>{{ 'HOME.SUBTITLE_MAKEUP_HAIR' | translate }}</h3>
-<h4>{{ 'HOME.LOCATION_ROME' | translate }}</h4>
-<p>{{ 'HOME.DESCRIPTION_SPECIALIZED' | translate }}</p>
-<p>{{ 'HOME.DESCRIPTION_HAIRSTYLE' | translate }}</p>
-
-<!-- animazioni -->
-
-<div class="animated-block" @fadeSlideIn>
-  <h5>{{ 'HOME.LOOKING_FOR_SERVICE_QUESTION' | translate }}</h5>
-  <p>
-    {{ 'HOME.SERVICE_DESCRIPTION_PART1' | translate }}
-  </p>
-  <p>
-    {{ 'HOME.SERVICE_DESCRIPTION_PART2' | translate }}
-  </p>
-  <span>
-    {{ 'HOME.NO_STRESS_PRIVACY' | translate }}
-  </span>
-  <p>
-    {{ 'HOME.GOAL_BEAUTIFUL' | translate }}
-  </p>
+<!-- Nuova Sezione Hero -->
+<div class="hero-section">
+  <div class="hero-image-container">
+    <!-- L'immagine sarà gestita come un tag img -->
+    <img src="../../../assets/trucco-cerimonia.png" alt="Azzurra Angius Make-up Artist" class="hero-image">
+  </div>
+  <div class="hero-text-content">
+    <h1 class="hero-title">Azzurra Angius</h1> <!-- Testo diretto come nella foto -->
+    <h3 class="hero-subtitle">MAKE-UP ARTIST</h3> <!-- Testo diretto come nella foto -->
+    <button mat-raised-button color="accent" class="book-now-button" routerLink="/contatti">
+      {{ 'HOME.HERO_BUTTON' | translate }}
+    </button>
+  </div>
 </div>
 
-<!-- garanzie -->
 
-<section class="guarantees-block" @fadeSlideIn>
-  <h5>{{ 'HOME.GUARANTEES_TITLE' | translate }}</h5>
-  <div class="guarantees-list">
-    <div class="guarantee-item">
-      <mat-icon>verified</mat-icon>
-      <h6>{{ 'HOME.GUARANTEE_QUALITY_PRODUCTS_TITLE' | translate }}</h6>
-      <p>{{ 'HOME.GUARANTEE_QUALITY_PRODUCTS_DESCRIPTION' | translate }}</p>
-    </div>
-    <div class="guarantee-item">
-      <mat-icon>event_available</mat-icon>
-      <h6>{{ 'HOME.GUARANTEE_PUNCTUALITY_TITLE' | translate }}</h6>
-      <p>{{ 'HOME.GUARANTEE_PUNCTUALITY_DESCRIPTION' | translate }}</p>
-    </div>
-    <div class="guarantee-item">
-      <mat-icon>face</mat-icon>
-      <h6>{{ 'HOME.GUARANTEE_PERSONALIZED_LOOK_TITLE' | translate }}</h6>
-      <p>{{ 'HOME.GUARANTEE_PERSONALIZED_LOOK_DESCRIPTION' | translate }}</p>
-    </div>
-    <div class="guarantee-item">
-      <mat-icon>support_agent</mat-icon>
-      <h6>{{ 'HOME.GUARANTEE_DEDICATED_ASSISTANCE_TITLE' | translate }}</h6>
-      <p>{{ 'HOME.GUARANTEE_DEDICATED_ASSISTANCE_DESCRIPTION' | translate }}</p>
-    </div>
+<!-- Contenuto Esistente (ora racchiuso in un wrapper) -->
+<div class="main-content-wrapper">
+  <p class="main-description">{{ 'HOME.DESCRIPTION_SPECIALIZED' | translate }}</p>
+  <p class="main-description">{{ 'HOME.DESCRIPTION_HAIRSTYLE' | translate }}</p>
+
+  <!-- animazioni -->
+  <div class="animated-block" @fadeSlideIn>
+    <h5>{{ 'HOME.LOOKING_FOR_SERVICE_QUESTION' | translate }}</h5>
+    <p>
+      {{ 'HOME.SERVICE_DESCRIPTION_PART1' | translate }}
+    </p>
+    <p>
+      {{ 'HOME.SERVICE_DESCRIPTION_PART2' | translate }}
+    </p>
+    <span>
+      {{ 'HOME.NO_STRESS_PRIVACY' | translate }}
+    </span>
+    <p>
+      {{ 'HOME.GOAL_BEAUTIFUL' | translate }}
+    </p>
   </div>
-</section>
 
-<!-- home.component.html -->
+  <!-- garanzie -->
+  <section class="guarantees-block" @fadeSlideIn>
+    <h5>{{ 'HOME.GUARANTEES_TITLE' | translate }}</h5>
+    <div class="guarantees-list">
+      <div class="guarantee-item">
+        <mat-icon>verified</mat-icon>
+        <h6>{{ 'HOME.GUARANTEE_QUALITY_PRODUCTS_TITLE' | translate }}</h6>
+        <p>{{ 'HOME.GUARANTEE_QUALITY_PRODUCTS_DESCRIPTION' | translate }}</p>
+      </div>
+      <div class="guarantee-item">
+        <mat-icon>event_available</mat-icon>
+        <h6>{{ 'HOME.GUARANTEE_PUNCTUALITY_TITLE' | translate }}</h6>
+        <p>{{ 'HOME.GUARANTEE_PUNCTUALITY_DESCRIPTION' | translate }}</p>
+      </div>
+      <div class="guarantee-item">
+        <mat-icon>face</mat-icon>
+        <h6>{{ 'HOME.GUARANTEE_PERSONALIZED_LOOK_TITLE' | translate }}</h6>
+        <p>{{ 'HOME.GUARANTEE_PERSONALIZED_LOOK_DESCRIPTION' | translate }}</p>
+      </div>
+      <div class="guarantee-item">
+        <mat-icon>support_agent</mat-icon>
+        <h6>{{ 'HOME.GUARANTEE_DEDICATED_ASSISTANCE_TITLE' | translate }}</h6>
+        <p>{{ 'HOME.GUARANTEE_DEDICATED_ASSISTANCE_DESCRIPTION' | translate }}</p>
+      </div>
+    </div>
+  </section>
+</div>
 
+<!-- Sezione Recensioni (app-reviews) -->
 <section class="reviews-section">
   <app-reviews></app-reviews>
 </section>
