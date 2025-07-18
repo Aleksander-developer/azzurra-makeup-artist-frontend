@@ -27,6 +27,9 @@
   "COMMON.NEXT_IMAGE_ARIA": "Immagine successiva",
   "COMMON.FULLSCREEN_IMAGE_ARIA": "Visualizza immagine a schermo intero",
   "COMMON.CLOSE_FULLSCREEN_ARIA": "Chiudi visualizzazione a schermo intero",
+  "COMMON.SITE_NAME": "Azzurra Angius MakeUp Artist",
+  "COMMON.KEYWORDS": "trucco sposa roma, make-up artist roma, trucco cerimonia, servizi fotografici trucco, trucco eventi, azzurra angius",
+  "COMMON.SITE_DESCRIPTION": "Azzurra Angius MakeUp Artist a Roma: trucco sposa, cerimonia, eventi e servizi fotografici. Valorizza la tua bellezza con un make-up professionale e personalizzato.",
 
   "HEADER.ABOUT_ME": "Chi Sono",
   "HEADER.SERVICES": "Servizi",
@@ -189,11 +192,11 @@
   "SEO.DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
   "SEO.OG_TITLE": "Azzurra Angius Make-Up Artist - Trucco Sposa e Cerimonie a Roma e Sardegna",
   "SEO.OG_DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
-  "SEO.OG_IMAGE": "https://azzurra-makeup-artist.netlify.app/assets/logo.png",
-  "SEO.OG_URL": "https://azzurra-makeup-artist.netlify.app/",
+  "SEO.OG_IMAGE": "logo_dhzlmi.png",
+  "SEO.OG_URL": "https://azzurraangius.com/",
   "SEO.OG_SITE_NAME": "Azzurra Angius Make-Up Artist",
   "SEO.TWITTER_TITLE": "Azzurra Angius Make-Up Artist - Trucco Sposa e Cerimonie a Roma",
   "SEO.TWITTER_DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
-  "SEO.TWITTER_IMAGE": "https://azzurra-makeup-artist.netlify.app/assets/logo.png",
+  "SEO.TWITTER_IMAGE": "logo_dhzlmi.png",
   "SEO.TWITTER_IMAGE_ALT": "Logo Azzurra Angius Make-Up Artist"
 }

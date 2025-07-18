@@ -27,6 +27,9 @@
   "COMMON.NEXT_IMAGE_ARIA": "Next image",
   "COMMON.FULLSCREEN_IMAGE_ARIA": "View image in fullscreen",
   "COMMON.CLOSE_FULLSCREEN_ARIA": "Close fullscreen view",
+  "COMMON.SITE_NAME": "Azzurra Angius MakeUp Artist",
+  "COMMON.KEYWORDS": "wedding makeup rome, make-up artist rome, ceremony makeup, photoshoot makeup services, event makeup, azzurra angius",
+  "COMMON.SITE_DESCRIPTION": "Azzurra Angius MakeUp Artist in Rome: bridal makeup, ceremony, events, and photoshoot services. Enhance your beauty with professional and personalized makeup.",
 
   "HEADER.ABOUT_ME": "About Me",
   "HEADER.SERVICES": "Services",
@@ -189,11 +192,11 @@
   "SEO.DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
   "SEO.OG_TITLE": "Azzurra Angius Make-Up Artist - Bridal Makeup and Ceremonies in Rome and Sardinia",
   "SEO.OG_DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
-  "SEO.OG_IMAGE": "https://azzurra-makeup-artist.netlify.app/assets/logo.png",
-  "SEO.OG_URL": "https://azzurra-makeup-artist.netlify.app/",
+  "SEO.OG_IMAGE": "logo_dhzlmi.png",
+  "SEO.OG_URL": "https://azzurraangius.com/",
   "SEO.OG_SITE_NAME": "Azzurra Angius Make-Up Artist",
   "SEO.TWITTER_TITLE": "Azzurra Angius Make-Up Artist - Bridal Makeup and Ceremonies in Rome",
   "SEO.TWITTER_DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
-  "SEO.TWITTER_IMAGE": "https://azzurra-makeup-artist.netlify.app/assets/logo.png",
+  "SEO.TWITTER_IMAGE": "logo_dhzlmi.png",
   "SEO.TWITTER_IMAGE_ALT": "Azzurra Angius Make-Up Artist Logo"
 }
