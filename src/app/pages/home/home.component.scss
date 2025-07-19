@@ -14,8 +14,8 @@
 .hero-section {
   display: flex; /* Layout affiancato per desktop (>992px) */
   width: 100%;
-  height: 100vh; // Fa in modo che la sezione hero riempia l'altezza del viewport
-  padding-top: 80px; // Aggiunge spazio per la navbar fissa (regola questo valore se la tua navbar ha un'altezza diversa)
+  // Altezza calcolata per riempire lo spazio sotto la navbar fissa
+  height: calc(100vh - 80px); // <-- Regola 80px con l'altezza esatta della tua navbar
   box-sizing: border-box; // Assicura che il padding sia incluso nell'altezza totale
   background-color: vars.$color-light-pink-bg; // Sfondo per la sezione testuale
 
@@ -23,12 +23,49 @@
     flex: 1; // Occupa metà dello spazio a sinistra
     position: relative;
     overflow: hidden;
+    background-color: vars.$color-white; // <-- Aggiunto sfondo per riempire lo spazio se object-fit: contain lascia bordi
 
     .hero-image {
       width: 100%;
       height: 100%;
-      object-fit: cover; // Copre l'area mantenendo l'aspect ratio
+      object-fit: contain; // <-- CAMBIATO DA 'cover' A 'contain' per non tagliare la foto
       display: block;
+      transition: opacity 0.5s ease-in-out; // Animazione per il cambio immagine
+    }
+
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(vars.$color-dark-purple-text, 0.5); // Sfondo semitrasparente
+      color: vars.$color-white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10; // Assicura che i pulsanti siano sopra l'immagine
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(vars.$color-dark-purple-text, 0.8);
+      }
+
+      mat-icon {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+      }
+
+      &.prev {
+        left: 10px;
+      }
+
+      &.next {
+        right: 10px;
+      }
     }
   }
 
@@ -203,10 +240,10 @@
   .hero-section {
     flex-direction: column; // Stack immagine e testo verticalmente sotto i 992px
     height: auto; // Altezza automatica per adattarsi al contenuto
-    padding-top: 0; // Rimuovi padding-top quando in modalità colonna, l'immagine sarà sopra
+    padding-top: 0; // Rimuovi padding-top quando in modalità colonna
     .hero-image-container {
       width: 100%;
-      height: 50vh; // Altezza fissa per l'immagine su tablet
+      height: 60vh; // Altezza leggermente aumentata per ridurre il taglio su tablet
     }
     .hero-text-content {
       width: 100%;
@@ -235,7 +272,7 @@
 @media (max-width: vars.$breakpoint-md) { /* 768px */
   .hero-section {
     .hero-image-container {
-      height: 45vh; // Leggermente più piccola su schermi più piccoli
+      height: 55vh; // Altezza leggermente aumentata per ridurre il taglio su schermi medi
     }
     .hero-text-content {
       .hero-title {
@@ -294,7 +331,7 @@
 @media (max-width: vars.$breakpoint-sm) { /* 576px */
   .hero-section {
     .hero-image-container {
-      height: 40vh; // Riduci altezza immagine su mobile
+      height: 50vh; // Altezza leggermente aumentata per ridurre il taglio su mobile
     }
     .hero-text-content {
       padding: vars.$spacing-md vars.$spacing-xs;

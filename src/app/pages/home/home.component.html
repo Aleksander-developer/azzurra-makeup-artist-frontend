@@ -4,7 +4,14 @@
 <div class="hero-section">
   <div class="hero-image-container">
     <!-- L'immagine sarà gestita come un tag img -->
-    <img src="../../../assets/trucco-cerimonia.png" alt="Azzurra Angius Make-up Artist" class="hero-image">
+    <img [src]="currentHeroImage" alt="Azzurra Angius Make-up Artist" class="hero-image">
+    <!-- Controlli del Carousel -->
+    <button mat-icon-button class="carousel-button prev" (click)="prevImage()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button class="carousel-button next" (click)="nextImage()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
   </div>
   <div class="hero-text-content">
     <h1 class="hero-title">Azzurra Angius</h1> <!-- Testo diretto come nella foto -->

@@ -185,34 +185,34 @@
   },
   "FOOTER": {
     "COPYRIGHT": "© {{year}} Azzurra Angius.",
-    "DEVELOPED_BY_PREFIX": "Realizzato da",
-    "EMAIL_ARIA": "Invia email ad Azzurra Angius",
-    "LINKEDIN_ARIA": "Profilo LinkedIn di Azzurra Angius",
-    "INSTAGRAM_ARIA": "Profilo Instagram di Azzurra Angius",
-    "FACEBOOK_ARIA": "Profilo Facebook di Azzurra Angius",
-    "WHATSAPP_ARIA": "Chatta su WhatsApp con Azzurra Angius",
-    "PHONE_ARIA": "Chiama Azzurra Angius",
+    "DEVELOPED_BY_PREFIX": "Developed by",
+    "EMAIL_ARIA": "Send email to Azzurra Angius",
+    "LINKEDIN_ARIA": "LinkedIn Profile of Azzurra Angius",
+    "INSTAGRAM_ARIA": "Instagram Profile of Azzurra Angius",
+    "FACEBOOK_ARIA": "Facebook Profile of Azzurra Angius",
+    "WHATSAPP_ARIA": "WhatsApp Chat with Azzurra Angius",
+    "PHONE_ARIA": "Call Azzurra Angius",
     "DEVELOPER_NAME": "Aleksander Nikolli"
   },
   "REVIEWS": {
-    "TITLE": "Cosa dicono di me",
-    "PREV_BUTTON_ARIA": "Recensione precedente",
-    "NEXT_BUTTON_ARIA": "Prossima recensione",
-    "GOOGLE_LINK": "Leggi tutte le recensioni su Google",
-    "LOADING": "Caricamento recensioni...",
-    "ERROR_MESSAGE": "Si è verificato un errore durante il caricamento delle recensioni. Riprova più tardi."
+    "TITLE": "What they say about me",
+    "PREV_BUTTON_ARIA": "Previous review",
+    "NEXT_BUTTON_ARIA": "Next review",
+    "GOOGLE_LINK": "Read all reviews on Google",
+    "LOADING": "Loading reviews...",
+    "ERROR_MESSAGE": "An error occurred while loading the reviews. Please try again later."
   },
   "SEO": {
-    "TITLE": "Azzurra Angius MakeUp Trucco Sposa Roma",
-    "DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
-    "OG_TITLE": "Azzurra Angius Make-Up Artist - Trucco Sposa e Cerimonie a Roma e Sardegna",
-    "OG_DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
+    "TITLE": "Azzurra Angius MakeUp Bridal Makeup Rome",
+    "DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
+    "OG_TITLE": "Azzurra Angius Make-Up Artist - Bridal Makeup and Ceremonies in Rome and Sardinia",
+    "OG_DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
     "OG_IMAGE": "logo_dhzlmi.png",
     "OG_URL": "https://azzurraangius.com/",
     "OG_SITE_NAME": "Azzurra Angius Make-Up Artist",
-    "TWITTER_TITLE": "Azzurra Angius Make-Up Artist - Trucco Sposa e Cerimonie a Roma",
-    "TWITTER_DESCRIPTION": "Scopri i servizi professionali di Azzurra Angius e scegli il tuo pacchetto ideale.",
+    "TWITTER_TITLE": "Azzurra Angius Make-Up Artist - Bridal Makeup and Ceremonies in Rome",
+    "TWITTER_DESCRIPTION": "Discover Azzurra Angius' professional services and choose your ideal package.",
     "TWITTER_IMAGE": "logo_dhzlmi.png",
-    "TWITTER_IMAGE_ALT": "Logo Azzurra Angius Make-Up Artist"
+    "TWITTER_IMAGE_ALT": "Azzurra Angius Make-Up Artist Logo"
   }
 }
